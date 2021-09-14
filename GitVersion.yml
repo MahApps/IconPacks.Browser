@@ -1,0 +1,21 @@
+assembly-versioning-scheme: Major
+assembly-file-versioning-scheme: MajorMinorPatchTag
+next-version: 1.0.0
+mode: ContinuousDeployment
+branches:
+  master:
+    regex: ^main
+    mode: ContinuousDeployment
+    tag: rc
+    prevent-increment-of-merged-branch-version: true
+    track-merge-target: true
+    is-release-branch: false
+  develop:
+    mode: ContinuousDeployment
+    tag: alpha
+    prevent-increment-of-merged-branch-version: true
+    track-merge-target: true
+  pull-request:
+    mode: ContinuousDelivery
+ignore:
+  sha: []

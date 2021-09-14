@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net47;netcoreapp3.1;net5.0-windows</TargetFrameworks>
+        <OutputType>WinExe</OutputType>
+        <UseWPF>true</UseWPF>
+        <AssemblyName>IconPacks.Browser</AssemblyName>
+        <RootNamespace>IconPacks.Browser</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <ApplicationIcon>..\..\resources\Icon.ico</ApplicationIcon>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MahApps.Metro.IconPacks" Version="4.*" />
+        <PackageReference Include="MahApps.Metro" Version="2.*" />
+        <PackageReference Include="ControlzEx" Version="4.*" />
+        <PackageReference Include="AsyncAwaitBestPractices" Version="4.*" />
+        <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
+    </ItemGroup>
+    <ItemGroup Condition="$(DefineConstants.Contains(NETCOREAPP)) == true">
+        <PackageReference Include="MaterialDesignThemes" Version="4.1.*" />
+        <PackageReference Include="MaterialDesignColors" Version="2.0.*" />
+    </ItemGroup>
+    <ItemGroup Condition="$(DefineConstants.Contains(NETCOREAPP)) == false">
+        <PackageReference Include="MaterialDesignThemes" Version="3.0.*" />
+        <PackageReference Include="MaterialDesignColors" Version="1.2.*" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <_SettingsFiles Remove="Properties\Settings.settings" />
+        <None Update="ExportTemplates\Bitmap.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="ExportTemplates\Clipboard.Content.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="ExportTemplates\Clipboard.Path.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="ExportTemplates\Clipboard.PathData.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="ExportTemplates\Clipboard.UWP.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="ExportTemplates\Clipboard.WPF.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="ExportTemplates\ReadMe.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="ExportTemplates\SVG.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="ExportTemplates\UWP.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="ExportTemplates\WPF.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+</Project>

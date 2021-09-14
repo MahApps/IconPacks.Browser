@@ -1,0 +1,17 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <!-- AssemblyInfo -->
+    <PropertyGroup>
+        <Company>MahApps</Company>
+        <Product>IconPacks.Browser</Product>
+        <Copyright>Copyright © 2016 - $([System.DateTime]::Today.ToString(yyyy)) MahApps.Metro</Copyright>
+        <Description>The Browser for all available Icon packages from MahApps.Metro.IconPacks</Description>
+
+        <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+        <Version>1.0.0.0</Version>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
+        <InformationalVersion>1.0.0.0</InformationalVersion>
+    </PropertyGroup>
+
+</Project>

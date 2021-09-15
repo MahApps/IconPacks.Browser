@@ -1,11 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:behaviours="http://metro.mahapps.com/winfx/xaml/shared"
-                    xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                     xmlns:converter="clr-namespace:MahApps.Metro.IconPacks.Converter;assembly=MahApps.Metro.IconPacks.Core"
                     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                     xmlns:viewModels="clr-namespace:IconPacks.Browser.ViewModels"
-                    xmlns:virtualizing="clr-namespace:IconPacks.Browser.Controls">
+                    xmlns:controls="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel">
 
     <SolidColorBrush x:Key="TabItemPanelBackgroundBrush" Color="{DynamicResource MahApps.Colors.Gray8}" />
     <SolidColorBrush x:Key="TabItemBackgroundIsSelectedBrush" Color="{DynamicResource MahApps.Colors.Gray2}" />
@@ -575,9 +575,9 @@
                          Margin="10 0 10 5"
                          HorizontalAlignment="Left"
                          VerticalAlignment="Bottom"
-                         controls:TextBoxHelper.ClearTextButton="False"
-                         controls:TextBoxHelper.UseFloatingWatermark="True"
-                         controls:TextBoxHelper.Watermark="Filter by..."
+                         mah:TextBoxHelper.ClearTextButton="False"
+                         mah:TextBoxHelper.UseFloatingWatermark="True"
+                         mah:TextBoxHelper.Watermark="Filter by..."
                          Background="Transparent"
                          BorderThickness="0 0 0 1"
                          SnapsToDevicePixels="True"
@@ -661,10 +661,21 @@
                      ItemsSource="{Binding Icons}"
                      SelectedValue="{Binding SelectedIcon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False, NotifyOnValidationError=False}"
                      Style="{DynamicResource MahApps.Styles.ListBox.Virtualized}"
+                     VirtualizingPanel.CacheLengthUnit="Item"
+                     VirtualizingPanel.ScrollUnit="Item"
+                     VirtualizingPanel.VirtualizationMode="Recycling"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
                      Validation.ErrorTemplate="{x:Null}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <virtualizing:VirtualizingTilePanel ChildSize="128" IsItemsHost="True" />
+                        <controls:VirtualizingWrapPanel Orientation="Vertical"
+                                                        SpacingMode="BetweenItemsOnly"
+                                                        StretchItems="False"
+                                                        ScrollLineDelta="1"
+                                                        MouseWheelDelta="1"
+                                                        IsItemsHost="True"
+                                                        ItemSize="128,128" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
@@ -1266,16 +1277,16 @@
                                 KeyboardNavigation.TabIndex="2"
                                 KeyboardNavigation.TabNavigation="Local"
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-                            <controls:TransitioningContentControl behaviours:ReloadBehavior.OnSelectedTabChanged="True"
+                            <mah:TransitioningContentControl behaviours:ReloadBehavior.OnSelectedTabChanged="True"
                                                                   RestartTransitionOnContentChange="True"
-                                                                  Transition="{TemplateBinding controls:TabControlHelper.Transition}"
+                                                                  Transition="{TemplateBinding mah:TabControlHelper.Transition}"
                                                                   UseLayoutRounding="True">
                                 <ContentPresenter x:Name="PART_SelectedContentHost"
                                                   Margin="{TemplateBinding Padding}"
                                                   ContentSource="SelectedContent"
                                                   SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                                   UseLayoutRounding="False" />
-                            </controls:TransitioningContentControl>
+                            </mah:TransitioningContentControl>
                         </Border>
                     </DockPanel>
                     <ControlTemplate.Triggers>

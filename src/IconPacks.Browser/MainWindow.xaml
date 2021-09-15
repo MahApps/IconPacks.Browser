@@ -5,12 +5,10 @@
                  xmlns:ctrls="clr-namespace:IconPacks.Browser.Controls"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                 xmlns:local="clr-namespace:IconPacks.Browser"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                 xmlns:model="clr-namespace:IconPacks.Browser.Model"
-                 xmlns:sys="clr-namespace:System;assembly=System.Runtime"
                  xmlns:viewModels="clr-namespace:IconPacks.Browser.ViewModels"
+                 xmlns:controls="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
                  Title="IconPacks Browser"
                  Width="1200"
                  Height="800"
@@ -281,12 +279,23 @@
                          FocusVisualStyle="{x:Null}"
                          ItemsSource="{Binding ElementName=NavigationListBox, Path=SelectedItem.Icons, Mode=OneWay}"
                          SelectedValue="{Binding ElementName=NavigationListBox, Path=SelectedItem.SelectedIcon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False, NotifyOnValidationError=False}"
-                         Style="{DynamicResource MahApps.Styles.ListBox}"
                          ItemTemplate="{StaticResource IconPacksBrowser.DataTemplates.ListBox.IconViewModel}"
+                         Style="{DynamicResource MahApps.Styles.ListBox.Virtualized}"
+                         VirtualizingPanel.CacheLengthUnit="Item"
+                         VirtualizingPanel.ScrollUnit="Item"
+                         VirtualizingPanel.VirtualizationMode="Recycling"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                          Validation.ErrorTemplate="{x:Null}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <ctrls:VirtualizingTilePanel ChildSize="128" IsItemsHost="True" />
+                            <controls:VirtualizingWrapPanel Orientation="Vertical"
+                                                            SpacingMode="BetweenItemsOnly"
+                                                            StretchItems="False"
+                                                            ScrollLineDelta="1"
+                                                            MouseWheelDelta="1"
+                                                            IsItemsHost="True"
+                                                            ItemSize="128,128" />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                 </ListBox>

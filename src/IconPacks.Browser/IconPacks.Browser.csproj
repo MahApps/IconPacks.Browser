@@ -24,6 +24,7 @@
         <PackageReference Include="ControlzEx" Version="4.*" />
         <PackageReference Include="AsyncAwaitBestPractices" Version="4.*" />
         <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
+        <PackageReference Include="VirtualizingWrapPanel" Version="1.5.*" />
     </ItemGroup>
     <ItemGroup Condition="$(DefineConstants.Contains(NETCOREAPP)) == true">
         <PackageReference Include="MaterialDesignThemes" Version="4.1.*" />

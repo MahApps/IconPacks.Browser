@@ -1,11 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:System="clr-namespace:System;assembly=mscorlib"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib"
                     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                     xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
 
-    <System:Double x:Key="IconPacksBrowser.Sizes.ScrollBar.Height">14</System:Double>
-    <System:Double x:Key="IconPacksBrowser.Sizes.ScrollBar.Width">14</System:Double>
+    <system:Double x:Key="IconPacksBrowser.Sizes.ScrollBar.Height">14</system:Double>
+    <system:Double x:Key="IconPacksBrowser.Sizes.ScrollBar.Width">14</system:Double>
 
     <QuinticEase x:Key="ScrollBarEaseInOut"
                  EasingMode="EaseInOut"
@@ -132,7 +132,7 @@
                        Grid.Row="1"
                        IsDirectionReversed="True">
                     <Track.Resources>
-                        <System:Double x:Key="{x:Static SystemParameters.VerticalScrollBarButtonHeightKey}">50</System:Double>
+                        <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarButtonHeightKey}">50</system:Double>
                     </Track.Resources>
                     <Track.DecreaseRepeatButton>
                         <RepeatButton x:Name="VerticalLargeDecrease"

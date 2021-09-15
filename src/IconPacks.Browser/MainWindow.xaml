@@ -40,49 +40,35 @@
         <CollectionViewSource x:Key="IconPacksBrowser.Collections.IconPacks" Source="{Binding IconPacks}" />
         <CollectionViewSource x:Key="IconPacksBrowser.Collections.All" Source="{Binding AllIconPacksCollection}" />
 
-        <DataTemplate x:Key="IconPacksBrowser.DataTemplates.Content" DataType="{x:Type viewModels:IconPackViewModel}">
-            <ListBox Grid.Column="0"
-                     Margin="2"
-                     FocusVisualStyle="{x:Null}"
-                     ItemsSource="{Binding Icons}"
-                     SelectedValue="{Binding SelectedIcon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False, NotifyOnValidationError=False}"
-                     Style="{DynamicResource MahApps.Styles.ListBox.Virtualized}"
-                     Validation.ErrorTemplate="{x:Null}">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <ctrls:VirtualizingTilePanel ChildSize="128" IsItemsHost="True" />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type viewModels:IIconViewModel}">
-                        <Grid x:Name="Root"
+        <DataTemplate x:Key="IconPacksBrowser.DataTemplates.ListBox.IconViewModel" DataType="{x:Type viewModels:IIconViewModel}">
+            <Grid x:Name="Root"
                               Width="128"
                               Height="128"
                               Background="Transparent">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <iconPacks:PackIconControl Grid.Row="0"
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <iconPacks:PackIconControl Grid.Row="0"
                                                        Width="32"
                                                        Height="32"
                                                        HorizontalAlignment="Center"
                                                        VerticalAlignment="Center"
                                                        Kind="{Binding Value, Mode=OneWay, Converter={converter:NullToUnsetValueConverter}}"
                                                        SnapsToDevicePixels="True" />
-                            <Grid x:Name="Copy2ClipboardActions"
+                <Grid x:Name="Copy2ClipboardActions"
                                   Grid.Row="0"
                                   HorizontalAlignment="Center"
                                   VerticalAlignment="Top"
                                   Focusable="False"
                                   Visibility="Collapsed">
-                                <Rectangle RadiusX="11" RadiusY="11">
-                                    <Rectangle.Fill>
-                                        <SolidColorBrush Opacity=".2" Color="{DynamicResource MahApps.Colors.ThemeBackground}" />
-                                    </Rectangle.Fill>
-                                </Rectangle>
-                                <StackPanel Margin="11 0" Orientation="Horizontal">
-                                    <Button Grid.Column="0"
+                    <Rectangle RadiusX="11" RadiusY="11">
+                        <Rectangle.Fill>
+                            <SolidColorBrush Opacity=".2" Color="{DynamicResource MahApps.Colors.ThemeBackground}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <StackPanel Margin="11 0" Orientation="Horizontal">
+                        <Button Grid.Column="0"
                                             Width="22"
                                             Height="22"
                                             HorizontalAlignment="Center"
@@ -92,19 +78,19 @@
                                             Focusable="False"
                                             IsTabStop="False"
                                             Style="{StaticResource CustomMetroCircleButtonStyle}">
-                                        <Button.ToolTip>
-                                            <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as element'}" />
-                                        </Button.ToolTip>
-                                        <StackPanel Orientation="Horizontal">
-                                            <iconPacks:PackIconMaterial Width="7"
+                            <Button.ToolTip>
+                                <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as element'}" />
+                            </Button.ToolTip>
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconMaterial Width="7"
                                                                         Margin="1 0"
                                                                         Kind="ChevronLeft" />
-                                            <iconPacks:PackIconMaterial Width="7"
+                                <iconPacks:PackIconMaterial Width="7"
                                                                         Margin="1 0"
                                                                         Kind="ChevronRight" />
-                                        </StackPanel>
-                                    </Button>
-                                    <Button Width="22"
+                            </StackPanel>
+                        </Button>
+                        <Button Width="22"
                                             Height="22"
                                             BorderThickness="0"
                                             Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
@@ -112,14 +98,14 @@
                                             Focusable="False"
                                             IsTabStop="False"
                                             Style="{StaticResource CustomMetroCircleButtonStyle}">
-                                        <Button.ToolTip>
-                                            <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as content'}" />
-                                        </Button.ToolTip>
-                                        <iconPacks:PackIconMaterial Width="14"
+                            <Button.ToolTip>
+                                <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as content'}" />
+                            </Button.ToolTip>
+                            <iconPacks:PackIconMaterial Width="14"
                                                                     Height="14"
                                                                     Kind="CodeBraces" />
-                                    </Button>
-                                    <Button Width="22"
+                        </Button>
+                        <Button Width="22"
                                             Height="22"
                                             BorderThickness="0"
                                             Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
@@ -127,14 +113,14 @@
                                             Focusable="False"
                                             IsTabStop="False"
                                             Style="{StaticResource CustomMetroCircleButtonStyle}">
-                                        <Button.ToolTip>
-                                            <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as PathIcon element'}" />
-                                        </Button.ToolTip>
-                                        <iconPacks:PackIconFontAwesome Width="14"
+                            <Button.ToolTip>
+                                <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as PathIcon element'}" />
+                            </Button.ToolTip>
+                            <iconPacks:PackIconFontAwesome Width="14"
                                                                        Height="14"
                                                                        Kind="DrawPolygonSolid" />
-                                    </Button>
-                                    <Button Width="22"
+                        </Button>
+                        <Button Width="22"
                                             Height="22"
                                             BorderThickness="0"
                                             Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
@@ -142,29 +128,26 @@
                                             Focusable="False"
                                             IsTabStop="False"
                                             Style="{StaticResource CustomMetroCircleButtonStyle}">
-                                        <Button.ToolTip>
-                                            <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as Geometry'}" />
-                                        </Button.ToolTip>
-                                        <iconPacks:PackIconMaterial Width="14"
+                            <Button.ToolTip>
+                                <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as Geometry'}" />
+                            </Button.ToolTip>
+                            <iconPacks:PackIconMaterial Width="14"
                                                                     Height="14"
                                                                     Kind="Draw" />
-                                    </Button>
-                                </StackPanel>
-                            </Grid>
-                            <TextBlock Grid.Row="1"
+                        </Button>
+                    </StackPanel>
+                </Grid>
+                <TextBlock Grid.Row="1"
                                        Margin="2"
                                        HorizontalAlignment="Center"
                                        Text="{Binding Name, Mode=OneWay}"
                                        TextTrimming="CharacterEllipsis" />
-                        </Grid>
-                        <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
-                                <Setter TargetName="Copy2ClipboardActions" Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            </Grid>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                    <Setter TargetName="Copy2ClipboardActions" Property="Visibility" Value="Visible" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
         </DataTemplate>
 
     </mah:MetroWindow.Resources>
@@ -293,7 +276,20 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <mah:TransitioningContentControl Content="{Binding ElementName=NavigationListBox, Path=SelectedItem}" ContentTemplate="{StaticResource IconPacksBrowser.DataTemplates.Content}" />
+                <ListBox Grid.Column="0"
+                         Margin="2"
+                         FocusVisualStyle="{x:Null}"
+                         ItemsSource="{Binding ElementName=NavigationListBox, Path=SelectedItem.Icons, Mode=OneWay}"
+                         SelectedValue="{Binding ElementName=NavigationListBox, Path=SelectedItem.SelectedIcon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False, NotifyOnValidationError=False}"
+                         Style="{DynamicResource MahApps.Styles.ListBox}"
+                         ItemTemplate="{StaticResource IconPacksBrowser.DataTemplates.ListBox.IconViewModel}"
+                         Validation.ErrorTemplate="{x:Null}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ctrls:VirtualizingTilePanel ChildSize="128" IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
 
                 <ctrls:SidebarExpander Grid.Column="1"
                                        mah:HeaderedControlHelper.HeaderBackground="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"

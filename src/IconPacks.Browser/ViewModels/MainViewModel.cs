@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using MahApps.Metro.Controls;
 using MahApps.Metro.IconPacks;
 
 namespace IconPacks.Browser.ViewModels
@@ -74,9 +75,9 @@ namespace IconPacks.Browser.ViewModels
 
             this.IconPacks = new ObservableCollection<IconPackViewModel>();
 
-            foreach (var (EnumType, IconPackType) in availableIconPacks)
+            foreach (var (enumType, iconPackType) in availableIconPacks)
             {
-                IconPacks.Add(new IconPackViewModel(this, EnumType, IconPackType, dialogCoordinator));
+                IconPacks.Add(new IconPackViewModel(this, enumType, iconPackType, dialogCoordinator));
             }
 
             this.AllIconPacksCollection = new List<IconPackViewModel>(1)

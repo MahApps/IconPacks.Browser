@@ -25,4 +25,4 @@
 
 </div>
 
-![iconbrowserfinal](./resources/iconpacks_latest.gif)
+![iconbrowserfinal](./resources/iconpacks_browser_new.gif)

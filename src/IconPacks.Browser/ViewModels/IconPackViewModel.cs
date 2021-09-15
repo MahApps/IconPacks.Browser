@@ -70,9 +70,9 @@ namespace IconPacks.Browser.ViewModels
             var collection = await Task.Run(() => GetIcons(enumType, packType).OrderBy(i => i.Name, StringComparer.InvariantCultureIgnoreCase).ToList());
 
             this.Icons = new ObservableCollection<IIconViewModel>(collection);
-            this.IconCount = ((ICollection)this.Icons).Count;
+            this.IconCount = collection.Count;
             this.PrepareFiltering();
-            this.SelectedIcon = this.Icons.First();
+            this.SelectedIcon = this.Icons.FirstOrDefault();
         }
 
         private async Task LoadAllEnumsAsync(Type[] enumTypes, Type[] packTypes)

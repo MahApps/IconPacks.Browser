@@ -8,6 +8,11 @@
         <RootNamespace>IconPacks.Browser</RootNamespace>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        <PublishSingleFile>true</PublishSingleFile>
+    </PropertyGroup>
+
     <PropertyGroup>
         <ApplicationIcon>..\..\resources\Icon.ico</ApplicationIcon>
         <ApplicationManifest>app.manifest</ApplicationManifest>

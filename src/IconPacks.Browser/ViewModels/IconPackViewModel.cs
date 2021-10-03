@@ -13,13 +13,13 @@ using AsyncAwaitBestPractices;
 using Microsoft.Win32;
 using MahApps.Metro.Controls.Dialogs;
 using System.Globalization;
+using System.Windows.Controls;
 using MahApps.Metro.Controls;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using io = System.IO;
 using IconPacks.Browser.Properties;
 using System.Windows.Media.Imaging;
-using System.Windows.Markup;
 using MahApps.Metro.IconPacks;
 
 namespace IconPacks.Browser.ViewModels
@@ -35,7 +35,6 @@ namespace IconPacks.Browser.ViewModels
         private string _licenseUrl;
         private readonly IDialogCoordinator dialogCoordinator;
 
-
         private IconPackViewModel(MainViewModel mainViewModel, IDialogCoordinator dialogCoordinator)
         {
             this.MainViewModel = mainViewModel;
@@ -45,7 +44,10 @@ namespace IconPacks.Browser.ViewModels
             SaveAsSvg_Command = new SimpleCommand((_) => SaveAsSvg_Execute(), (_) => SelectedIcon is IconViewModel);
             SaveAsWpf_Command = new SimpleCommand((_) => SaveAsWpf_Execute(), (_) => !(SelectedIcon is null));
             SaveAsUwp_Command = new SimpleCommand((_) => SaveAsUwp_Execute(), (_) => !(SelectedIcon is null));
-            SaveAsBitmap_Command = new SimpleCommand((_) => SaveAsBitmap_Execute(), (_) => !(SelectedIcon is null));
+            
+            SaveAsPngCommand = new SimpleCommand((_) => SaveAsBitmapExecute(new PngBitmapEncoder()), (_) => !(SelectedIcon is null));
+            SaveAsJpegCommand = new SimpleCommand((_) => SaveAsBitmapExecute(new JpegBitmapEncoder()), (_) => !(SelectedIcon is null));
+            SaveAsBmpCommand = new SimpleCommand((_) => SaveAsBitmapExecute(new BmpBitmapEncoder()), (_) => !(SelectedIcon is null));
         }
 
         public IconPackViewModel(MainViewModel mainViewModel, Type enumType, Type packType, IDialogCoordinator dialogCoordinator) : this(mainViewModel, dialogCoordinator)
@@ -421,9 +423,13 @@ namespace IconPacks.Browser.ViewModels
         }
 
 
-        public ICommand SaveAsBitmap_Command { get; }
+        public ICommand SaveAsPngCommand { get; }
 
-        private async void SaveAsBitmap_Execute()
+        public ICommand SaveAsJpegCommand { get; }
+        
+        public ICommand SaveAsBmpCommand { get; }
+
+        private async void SaveAsBitmapExecute(BitmapEncoder encoder)
         {
             var progress = await dialogCoordinator.ShowProgressAsync(MainViewModel, "Export", "Saving selected icon as bitmap image");
             progress.SetIndeterminate();
@@ -434,59 +440,45 @@ namespace IconPacks.Browser.ViewModels
                 {
                     AddExtension = true,
                     FileName = $"{SelectedIcon.IconPackName}-{SelectedIcon.Name}",
-                    Filter = "PNG-File (*.png)|*.png|JPEG-File (*.jpg)|*.jpg|BMP-File (*.bmp)|*.bmp",
                     OverwritePrompt = true
+                };
+
+                fileSaveDialog.Filter = encoder switch
+                {
+                    PngBitmapEncoder => "Png-File (*.png)|*.png",
+                    JpegBitmapEncoder => "Jpeg-File (*.jpg)|*.jpg",
+                    BmpBitmapEncoder => "Bmp-File (*.bmp)|*.bmp",
+                    _ => fileSaveDialog.Filter
                 };
 
                 if (fileSaveDialog.ShowDialog() == true && SelectedIcon is IconViewModel icon)
                 {
-                    string wpfContent;
-
-                    var iconContol = icon.GetPackIconControlBase();
-
-                    iconContol.BeginInit();
-                    iconContol.Width = Settings.Default.IconPreviewSize;
-                    iconContol.Height = Settings.Default.IconPreviewSize;
-                    iconContol.EndInit();
-                    iconContol.ApplyTemplate();
-
-                    var iconPath = iconContol.FindChild<Path>();
-
-                    var T = iconPath.LayoutTransform.Value;
-
-                    var bitmapTemplate = ExportHelper.BitmapImageTemplate;
-
-                    var parameters = new ExportParameters(SelectedIcon)
+                    var canvas = new Canvas
                     {
-                        FillColor = Settings.Default.IconForeground.ToString(CultureInfo.InvariantCulture),
-                        PageHeight = Settings.Default.IconPreviewSize.ToString(CultureInfo.InvariantCulture),
-                        PageWidth = Settings.Default.IconPreviewSize.ToString(CultureInfo.InvariantCulture),
-                        PathData = iconContol.Data,
-                        StrokeWidth = iconPath.Stroke is null ? "0" : iconPath.StrokeThickness.ToString(CultureInfo.InvariantCulture),
-                        StrokeLineCap = iconPath.StrokeEndLineCap.ToString().ToLower(),
-                        StrokeLineJoin = iconPath.StrokeLineJoin.ToString().ToLower(),
-                        TranformMatrix = T.ToString(CultureInfo.InvariantCulture)
+                        Width = Settings.Default.IconPreviewSize,
+                        Height = Settings.Default.IconPreviewSize,
+                        Background = new SolidColorBrush(Settings.Default.IconBackground)
                     };
 
-                    wpfContent = ExportHelper.FillTemplate(bitmapTemplate, parameters);
+                    var packIconControl = new PackIconControl();
+                    packIconControl.BeginInit();
+                    packIconControl.Kind = icon.Value as Enum;
+                    packIconControl.Width= Settings.Default.IconPreviewSize;
+                    packIconControl.Height= Settings.Default.IconPreviewSize;
+                    packIconControl.Foreground = new SolidColorBrush(Settings.Default.IconForeground);
 
+                    packIconControl.EndInit();
+                    packIconControl.ApplyTemplate();
 
-                    var pathHolder = (UIElement)XamlReader.Parse(wpfContent);
-
+                    canvas.Children.Add(packIconControl);
 
                     var size = new Size(Settings.Default.IconPreviewSize, Settings.Default.IconPreviewSize);
-                    pathHolder.Measure(size);
-                    pathHolder.Arrange(new Rect(size));
+                    canvas.Measure(size);
+                    canvas.Arrange(new Rect(size));
 
                     var renderTargetBitmap = new RenderTargetBitmap((int)size.Width, (int)size.Height, 96, 96, PixelFormats.Pbgra32);
-                    renderTargetBitmap.Render(pathHolder);
-                    BitmapEncoder encoder = (io.Path.GetExtension(fileSaveDialog.FileName).ToLowerInvariant()) switch
-                    {
-                        ".png" => new PngBitmapEncoder(),
-                        ".jpg" => new JpegBitmapEncoder(),
-                        ".bmp" => new BmpBitmapEncoder(),
-                        _ => throw new io.FileFormatException($"You selected a wrong file type. Currently images of type \"{io.Path.GetExtension(fileSaveDialog.FileName)}\" are not supported"),
-                    };
+                    renderTargetBitmap.Render(canvas);
+
                     encoder.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
 
                     using var fileStream = new io.FileStream(fileSaveDialog.FileName, io.FileMode.Create);

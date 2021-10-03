@@ -219,7 +219,9 @@
                         <Button Command="{Binding SaveAsSvg_Command}" Content="Save as svg" />
                         <Button Command="{Binding SaveAsWpf_Command}" Content="Save as XAML (WPF)" />
                         <Button Command="{Binding SaveAsUwp_Command}" Content="Save as XAML (UWP)" />
-                        <Button Command="{Binding SaveAsBitmap_Command}" Content="Save as Bitmap" />
+                        <Button Command="{Binding SaveAsPngCommand}" Content="Save as Png" />
+                        <Button Command="{Binding SaveAsJpegCommand}" Content="Save as Jpeg" />
+                        <Button Command="{Binding SaveAsBmpCommand}" Content="Save as Bmp" />
                     </StackPanel>
                 </Expander>
             </StackPanel>

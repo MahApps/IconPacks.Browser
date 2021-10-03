@@ -10,11 +10,9 @@ namespace IconPacks.Browser.Model
 {
     internal class ExportHelper
     {
-
         // SVG-File
         private static string _SvgFileTemplate;
         internal static string SvgFileTemplate => _SvgFileTemplate ??= LoadTemplateString("SVG.xml");
-
 
         // XAML-File (WPF)
         private static string _WpfFileTemplate;
@@ -24,20 +22,14 @@ namespace IconPacks.Browser.Model
         private static string _UwpFileTemplate;
         internal static string UwpFileTemplate => _UwpFileTemplate ??= LoadTemplateString("WPF.xml");
 
-        // Bitmap-Image
-        private static string _BitmapImageTemplate;
-        internal static string BitmapImageTemplate => _BitmapImageTemplate ??= LoadTemplateString("Bitmap.xml");
-
-        
         // Clipboard - WPF
         private static string _ClipboardWpf;
         internal static string ClipboardWpf => _ClipboardWpf ??= File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExportTemplates", "Clipboard.WPF.xml"));
 
-
         // Clipboard - UWP
         private static string _ClipboardUwp;
         internal static string ClipboardUwp => _ClipboardUwp ??= File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExportTemplates", "Clipboard.UWP.xml"));
-        
+
         // Clipboard - Content
         private static string _ClipboardContent;
         internal static string ClipboardContent => _ClipboardContent ??= File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExportTemplates", "Clipboard.Content.xml"));
@@ -46,30 +38,28 @@ namespace IconPacks.Browser.Model
         private static string _ClipboardData;
         internal static string ClipboardData => _ClipboardData ??= File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExportTemplates", "Clipboard.PathData.xml"));
 
-
-        internal static string FillTemplate(string template, ExportParameters parameters) 
+        internal static string FillTemplate(string template, ExportParameters parameters)
         {
             return template.Replace("@IconKind", parameters.IconKind)
-                           .Replace("@IconPackName", parameters.IconPackName)
-                           .Replace("@IconPackHomepage", parameters.IconPackHomepage)
-                           .Replace("@IconPackLicense", parameters.IconPackLicense)
-                           .Replace("@PageWidth", parameters.PageWidth)
-                           .Replace("@PageHeight", parameters.PageHeight)
-                           .Replace("@PathData", parameters.PathData)
-                           .Replace("@FillColor", parameters.FillColor)
-                           .Replace("@Background", parameters.Background)
-                           .Replace("@StrokeColor", parameters.StrokeColor)
-                           .Replace("@StrokeWidth", parameters.StrokeWidth)
-                           .Replace("@StrokeLineCap", parameters.StrokeLineCap)
-                           .Replace("@StrokeLineJoin", parameters.StrokeLineJoin)
-                           .Replace("@TranformMatrix", parameters.TranformMatrix);
+                .Replace("@IconPackName", parameters.IconPackName)
+                .Replace("@IconPackHomepage", parameters.IconPackHomepage)
+                .Replace("@IconPackLicense", parameters.IconPackLicense)
+                .Replace("@PageWidth", parameters.PageWidth)
+                .Replace("@PageHeight", parameters.PageHeight)
+                .Replace("@PathData", parameters.PathData)
+                .Replace("@FillColor", parameters.FillColor)
+                .Replace("@Background", parameters.Background)
+                .Replace("@StrokeColor", parameters.StrokeColor)
+                .Replace("@StrokeWidth", parameters.StrokeWidth)
+                .Replace("@StrokeLineCap", parameters.StrokeLineCap)
+                .Replace("@StrokeLineJoin", parameters.StrokeLineJoin)
+                .Replace("@TranformMatrix", parameters.TranformMatrix);
         }
 
         internal static string LoadTemplateString(string fileName)
         {
             if (string.IsNullOrWhiteSpace(Settings.Default.ExportTemplatesDir) || !File.Exists(Path.Combine(Settings.Default.ExportTemplatesDir, fileName)))
             {
-
                 return File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExportTemplates", fileName));
             }
             else
@@ -79,10 +69,8 @@ namespace IconPacks.Browser.Model
         }
     }
 
-
     internal struct ExportParameters
     {
-
         /// <summary>
         /// Provides a default set of Export parameters. You should edit this to your needs. 
         /// </summary>
@@ -92,7 +80,7 @@ namespace IconPacks.Browser.Model
             var metaData = Attribute.GetCustomAttribute(icon.IconPackType, typeof(MetaDataAttribute)) as MetaDataAttribute;
 
             this.IconKind = icon.Name;
-            this.IconPackName = icon.IconPackType.Name.Replace("PackIcon","");
+            this.IconPackName = icon.IconPackType.Name.Replace("PackIcon", "");
             this.PageWidth = Settings.Default.IconPreviewSize.ToString(CultureInfo.InvariantCulture);
             this.PageHeight = Settings.Default.IconPreviewSize.ToString(CultureInfo.InvariantCulture);
             this.FillColor = Settings.Default.IconForeground.ToString(CultureInfo.InvariantCulture);
@@ -103,7 +91,6 @@ namespace IconPacks.Browser.Model
             this.StrokeLineJoin = PenLineJoin.Round.ToString();
             this.PathData = null;
             this.TranformMatrix = Matrix.Identity.ToString(CultureInfo.InvariantCulture);
-
 
             this.IconPackHomepage = metaData?.ProjectUrl;
             this.IconPackLicense = metaData?.LicenseUrl;
@@ -123,5 +110,5 @@ namespace IconPacks.Browser.Model
         internal string StrokeLineCap { get; set; }
         internal string StrokeLineJoin { get; set; }
         internal string TranformMatrix { get; set; }
-    }            
+    }
 }

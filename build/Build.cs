@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI;
+using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
@@ -16,6 +17,14 @@ using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
+[GitHubActions(
+    "ci",
+    GitHubActionsImage.WindowsLatest,
+    AutoGenerate = true,
+    OnPushBranches = new[] { "main", "release/*" },
+    OnPullRequestBranches = new[] { "main" },
+    InvokedTargets = new[] { nameof(Compile) }
+    )]
 [CheckBuildProjectConfigurations]
 [ShutdownDotNetAfterServerBuild]
 class Build : NukeBuild

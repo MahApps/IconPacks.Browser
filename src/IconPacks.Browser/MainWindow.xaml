@@ -257,6 +257,7 @@
             <mah:SplitView.Pane>
                 <ListBox Name="NavigationListBox"
                          SelectedIndex="0"
+                         SelectedItem="{Binding SelectedIconPack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Style="{DynamicResource IconPacksBrowser.Styles.ListBox.Navigation}">
                     <ListBox.ItemsSource>
                         <CompositeCollection>
@@ -353,7 +354,7 @@
                         <Button Margin="0 0 4 0"
                                 VerticalAlignment="Center"
                                 Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
-                                CommandParameter="{Binding ProjectUrl}"
+                                CommandParameter="{Binding SelectedIcon.MetaData.ProjectUrl, Mode=OneWay}"
                                 Style="{StaticResource LinkButtonStyle}">
                             <Button.ContentTemplate>
                                 <DataTemplate>
@@ -370,7 +371,7 @@
                                 </DataTemplate>
                             </Button.ContentTemplate>
                             <Button.ToolTip>
-                                <TextBlock Text="{Binding ProjectUrl, StringFormat='{}Visit: {0}'}" />
+                                <TextBlock Text="{Binding SelectedIcon.MetaData.ProjectUrl, Mode=OneWay, StringFormat='{}Visit: {0}'}" />
                             </Button.ToolTip>
                         </Button>
                     </DataTemplate>
@@ -385,7 +386,7 @@
                         <Button Margin="0 0 4 0"
                                 VerticalAlignment="Center"
                                 Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
-                                CommandParameter="{Binding LicenseUrl}"
+                                CommandParameter="{Binding SelectedIcon.MetaData.LicenseUrl, Mode=OneWay}"
                                 Style="{StaticResource LinkButtonStyle}">
                             <Button.ContentTemplate>
                                 <DataTemplate>
@@ -402,7 +403,7 @@
                                 </DataTemplate>
                             </Button.ContentTemplate>
                             <Button.ToolTip>
-                                <TextBlock Text="{Binding LicenseUrl, StringFormat='{}License: {0}'}" />
+                                <TextBlock Text="{Binding SelectedIcon.MetaData.LicenseUrl, Mode=OneWay, StringFormat='{}License: {0}'}" />
                             </Button.ToolTip>
                         </Button>
                     </DataTemplate>

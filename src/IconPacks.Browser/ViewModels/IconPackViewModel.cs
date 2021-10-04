@@ -1,26 +1,27 @@
-﻿using IconPacks.Browser.Model;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using AsyncAwaitBestPractices;
-using Microsoft.Win32;
-using MahApps.Metro.Controls.Dialogs;
-using System.Globalization;
-using System.Windows.Controls;
-using MahApps.Metro.Controls;
-using System.Windows.Shapes;
 using System.Windows.Media;
-using io = System.IO;
-using IconPacks.Browser.Properties;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using AsyncAwaitBestPractices;
+using IconPacks.Browser.Model;
+using IconPacks.Browser.Properties;
+using JetBrains.Annotations;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using MahApps.Metro.IconPacks;
+using Microsoft.Win32;
+using io = System.IO;
 
 namespace IconPacks.Browser.ViewModels
 {
@@ -31,8 +32,6 @@ namespace IconPacks.Browser.ViewModels
         private ICollectionView _iconsCollectionView;
         private string _filterText;
         private IIconViewModel _selectedIcon;
-        private string _projectUrl;
-        private string _licenseUrl;
         private readonly IDialogCoordinator dialogCoordinator;
 
         private IconPackViewModel(MainViewModel mainViewModel, IDialogCoordinator dialogCoordinator)
@@ -41,27 +40,31 @@ namespace IconPacks.Browser.ViewModels
             this.dialogCoordinator = dialogCoordinator;
 
             // Export commands
-            SaveAsSvg_Command = new SimpleCommand((_) => SaveAsSvg_Execute(), (_) => SelectedIcon is IconViewModel);
-            SaveAsWpf_Command = new SimpleCommand((_) => SaveAsWpf_Execute(), (_) => !(SelectedIcon is null));
-            SaveAsUwp_Command = new SimpleCommand((_) => SaveAsUwp_Execute(), (_) => !(SelectedIcon is null));
-            
-            SaveAsPngCommand = new SimpleCommand((_) => SaveAsBitmapExecute(new PngBitmapEncoder()), (_) => !(SelectedIcon is null));
-            SaveAsJpegCommand = new SimpleCommand((_) => SaveAsBitmapExecute(new JpegBitmapEncoder()), (_) => !(SelectedIcon is null));
-            SaveAsBmpCommand = new SimpleCommand((_) => SaveAsBitmapExecute(new BmpBitmapEncoder()), (_) => !(SelectedIcon is null));
+            SaveAsSvgCommand = new SimpleCommand((_) => SaveAsSvg_Execute(), (_) => SelectedIcon is IconViewModel);
+            SaveAsWpfCommand = new SimpleCommand((_) => SaveAsWpf_Execute(), (_) => SelectedIcon is not null);
+            SaveAsUwpCommand = new SimpleCommand((_) => SaveAsUwp_Execute(), (_) => SelectedIcon is not null);
+
+            SaveAsPngCommand = new SimpleCommand((_) => SaveAsBitmapExecute(new PngBitmapEncoder()), (_) => SelectedIcon is not null);
+            SaveAsJpegCommand = new SimpleCommand((_) => SaveAsBitmapExecute(new JpegBitmapEncoder()), (_) => SelectedIcon is not null);
+            SaveAsBmpCommand = new SimpleCommand((_) => SaveAsBitmapExecute(new BmpBitmapEncoder()), (_) => SelectedIcon is not null);
         }
 
-        public IconPackViewModel(MainViewModel mainViewModel, Type enumType, Type packType, IDialogCoordinator dialogCoordinator) : this(mainViewModel, dialogCoordinator)
+        public IconPackViewModel(MainViewModel mainViewModel, Type enumType, Type packType, IDialogCoordinator dialogCoordinator)
+            : this(mainViewModel, dialogCoordinator)
         {
             // Get the Name of the IconPack via Attributes
-            var attributes = Attribute.GetCustomAttribute(packType, typeof(MetaDataAttribute)) as MetaDataAttribute;
-            this.Caption = attributes.Name;
+            this.MetaData = Attribute.GetCustomAttribute(packType, typeof(MetaDataAttribute)) as MetaDataAttribute;
+
+            this.Caption = this.MetaData?.Name;
 
             this.LoadEnumsAsync(enumType, packType).SafeFireAndForget();
         }
 
-        public IconPackViewModel(MainViewModel mainViewModel, string caption, Type[] enumTypes, Type[] packTypes, IDialogCoordinator dialogCoordinator) : this(mainViewModel, dialogCoordinator)
+        public IconPackViewModel(MainViewModel mainViewModel, string caption, Type[] enumTypes, Type[] packTypes, IDialogCoordinator dialogCoordinator)
+            : this(mainViewModel, dialogCoordinator)
         {
             this.MainViewModel = mainViewModel;
+
             this.Caption = caption;
 
             this.LoadAllEnumsAsync(enumTypes, packTypes).SafeFireAndForget();
@@ -99,10 +102,10 @@ namespace IconPacks.Browser.ViewModels
         private void PrepareFiltering()
         {
             this._iconsCollectionView = CollectionViewSource.GetDefaultView(this.Icons);
-            this._iconsCollectionView.Filter = o => this.FilterIconsPredicate(this.FilterText, (IIconViewModel)o);
+            this._iconsCollectionView.Filter = o => FilterIconsPredicate(this.FilterText, (IIconViewModel)o);
         }
 
-        private bool FilterIconsPredicate(string filterText, IIconViewModel iconViewModel)
+        private static bool FilterIconsPredicate(string filterText, IIconViewModel iconViewModel)
         {
             if (string.IsNullOrWhiteSpace(filterText))
             {
@@ -110,11 +113,11 @@ namespace IconPacks.Browser.ViewModels
             }
             else
             {
-                var filterSubStrings = filterText.Split(new char[] { '+', ',', ';', '&' }, StringSplitOptions.RemoveEmptyEntries);
+                var filterSubStrings = filterText.Split(new[] { '+', ',', ';', '&' }, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (var filterSubString in filterSubStrings)
                 {
-                    var filterOrSubStrings = filterSubString.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                    var filterOrSubStrings = filterSubString.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
                     var isInName = filterOrSubStrings.Any(x => iconViewModel.Name.IndexOf(x.Trim(), StringComparison.CurrentCultureIgnoreCase) >= 0);
                     var isInDescription = filterOrSubStrings.Any(x => (iconViewModel.Description?.IndexOf(x.Trim(), StringComparison.CurrentCultureIgnoreCase) ?? -1) >= 0);
@@ -126,36 +129,26 @@ namespace IconPacks.Browser.ViewModels
             }
         }
 
-        private static string GetDescription(Enum value)
+        private static MetaDataAttribute GetMetaData(Type packType)
         {
-            var fieldInfo = value.GetType().GetField(value.ToString());
-            return fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false).FirstOrDefault() is DescriptionAttribute attribute ? attribute.Description : value.ToString();
+            var metaData = Attribute.GetCustomAttribute(packType, typeof(MetaDataAttribute)) as MetaDataAttribute;
+            return metaData;
         }
 
         private static IEnumerable<IIconViewModel> GetIcons(Type enumType, Type packType)
         {
+            var metaData = GetMetaData(packType);
             return Enum.GetValues(enumType)
-                       .OfType<Enum>()
-                       .Where(k => k.ToString() != "None")
-                       .Select(k => GetIconViewModel(enumType, packType, k));
-        }
-
-        private static IIconViewModel GetIconViewModel(Type enumType, Type packType, Enum k)
-        {
-            var description = GetDescription(k);
-            return new IconViewModel()
-            {
-                Name = k.ToString(),
-                Description = description,
-                IconPackType = packType,
-                IconType = enumType,
-                Value = k
-            };
+                .OfType<Enum>()
+                .Where(k => k.ToString() != "None")
+                .Select(k => new IconViewModel(enumType, packType, k, metaData));
         }
 
         public MainViewModel MainViewModel { get; }
 
         public string Caption { get; }
+
+        [CanBeNull] public MetaDataAttribute MetaData { get; }
 
         public IEnumerable<IIconViewModel> Icons
         {
@@ -169,18 +162,6 @@ namespace IconPacks.Browser.ViewModels
             set => Set(ref _iconCount, value);
         }
 
-        public string ProjectUrl
-        {
-            get => _projectUrl;
-            set => Set(ref _projectUrl, value);
-        }
-
-        public string LicenseUrl
-        {
-            get => _licenseUrl;
-            set => Set(ref _licenseUrl, value);
-        }
-
         public string FilterText
         {
             get => _filterText;
@@ -189,7 +170,7 @@ namespace IconPacks.Browser.ViewModels
                 if (Set(ref _filterText, value))
                 {
                     this._iconsCollectionView?.Refresh();
-
+                    this.OnPropertyChanged(nameof(SelectedIcon));
                 }
             }
         }
@@ -199,16 +180,14 @@ namespace IconPacks.Browser.ViewModels
             get => _selectedIcon;
             set
             {
-                if (Set(ref _selectedIcon, value) && !(_selectedIcon is null))
+                if (Set(ref _selectedIcon, value))
                 {
-                    var metaData = Attribute.GetCustomAttribute(_selectedIcon.IconPackType, typeof(MetaDataAttribute)) as MetaDataAttribute;
-                    this.ProjectUrl = metaData != null ? metaData.ProjectUrl : string.Empty;
-                    this.LicenseUrl = metaData != null ? metaData.LicenseUrl : string.Empty;
+                    CommandManager.InvalidateRequerySuggested();
                 }
             }
         }
 
-        public ICommand SaveAsSvg_Command { get; }
+        public ICommand SaveAsSvgCommand { get; }
 
         private async void SaveAsSvg_Execute()
         {
@@ -228,17 +207,15 @@ namespace IconPacks.Browser.ViewModels
 
                 if (fileSaveDialog.ShowDialog() == true && SelectedIcon is IconViewModel icon)
                 {
-                    string svgFileContent;
+                    var iconControl = icon.GetPackIconControlBase();
 
-                    var iconContol = icon.GetPackIconControlBase();
+                    iconControl.BeginInit();
+                    iconControl.Width = Settings.Default.IconPreviewSize;
+                    iconControl.Height = Settings.Default.IconPreviewSize;
+                    iconControl.EndInit();
+                    iconControl.ApplyTemplate();
 
-                    iconContol.BeginInit();
-                    iconContol.Width = Settings.Default.IconPreviewSize;
-                    iconContol.Height = Settings.Default.IconPreviewSize;
-                    iconContol.EndInit();
-                    iconContol.ApplyTemplate();
-
-                    var iconPath = iconContol.FindChild<Path>();
+                    var iconPath = iconControl.FindChild<Path>();
 
                     var bBox = iconPath.Data.Bounds;
 
@@ -246,10 +223,9 @@ namespace IconPacks.Browser.ViewModels
                     var scaleFactor = Settings.Default.IconPreviewSize / svgSize;
                     var T = iconPath.LayoutTransform.Value;
 
-                    T.Translate(-bBox.Left - (T.M11 < 0 ? bBox.Width : 0) + Math.Sign(T.M11) * (svgSize - bBox.Width)/2 , 
-                                -bBox.Top - (T.M22 < 0 ? bBox.Height : 0) + Math.Sign(T.M22) * (svgSize - bBox.Height) / 2);
+                    T.Translate(-bBox.Left - (T.M11 < 0 ? bBox.Width : 0) + Math.Sign(T.M11) * (svgSize - bBox.Width) / 2,
+                        -bBox.Top - (T.M22 < 0 ? bBox.Height : 0) + Math.Sign(T.M22) * (svgSize - bBox.Height) / 2);
                     T.Scale(scaleFactor, scaleFactor);
-
 
                     var transform = string.Join(",", new[]
                     {
@@ -257,28 +233,28 @@ namespace IconPacks.Browser.ViewModels
                         T.M21.ToString(CultureInfo.InvariantCulture),
                         T.M12.ToString(CultureInfo.InvariantCulture),
                         T.M22.ToString(CultureInfo.InvariantCulture),
-                        (Math.Sign(T.M11)*T.OffsetX).ToString(CultureInfo.InvariantCulture),
-                        (Math.Sign(T.M22)*T.OffsetY).ToString(CultureInfo.InvariantCulture)
+                        (Math.Sign(T.M11) * T.OffsetX).ToString(CultureInfo.InvariantCulture),
+                        (Math.Sign(T.M22) * T.OffsetY).ToString(CultureInfo.InvariantCulture)
                     });
 
                     var parameters = new ExportParameters(SelectedIcon)
                     {
-                        FillColor = iconPath.Fill is Brush ? Settings.Default.IconForeground.ToString(CultureInfo.InvariantCulture).Remove(1, 2) : "none", // We need to remove the alpha channel for svg
+                        FillColor = iconPath.Fill is not null ? Settings.Default.IconForeground.ToString(CultureInfo.InvariantCulture).Remove(1, 2) : "none", // We need to remove the alpha channel for svg
                         Background = Settings.Default.IconBackground.ToString(CultureInfo.InvariantCulture).Remove(1, 2),
-                        PathData = iconContol.Data,
-                        StrokeColor = iconPath.Stroke is Brush ? Settings.Default.IconForeground.ToString(CultureInfo.InvariantCulture).Remove(1, 2) : "none", // We need to remove the alpha channel for svg
+                        PathData = iconControl.Data,
+                        StrokeColor = iconPath.Stroke is not null ? Settings.Default.IconForeground.ToString(CultureInfo.InvariantCulture).Remove(1, 2) : "none", // We need to remove the alpha channel for svg
                         StrokeWidth = iconPath.Stroke is null ? "0" : (scaleFactor * iconPath.StrokeThickness).ToString(CultureInfo.InvariantCulture),
                         StrokeLineCap = iconPath.StrokeEndLineCap.ToString().ToLower(),
                         StrokeLineJoin = iconPath.StrokeLineJoin.ToString().ToLower(),
-                        TranformMatrix = transform
+                        TransformMatrix = transform
                     };
 
                     var svgFileTemplate = ExportHelper.SvgFileTemplate;
 
-                    svgFileContent = ExportHelper.FillTemplate(svgFileTemplate, parameters);
+                    var svgFileContent = ExportHelper.FillTemplate(svgFileTemplate, parameters);
 
                     using io.StreamWriter file = new io.StreamWriter(fileSaveDialog.FileName);
-                    file.Write(svgFileContent);
+                    await file.WriteAsync(svgFileContent);
                 }
             }
             catch (Exception e)
@@ -289,8 +265,8 @@ namespace IconPacks.Browser.ViewModels
             await progress.CloseAsync();
         }
 
+        public ICommand SaveAsWpfCommand { get; }
 
-        public ICommand SaveAsWpf_Command { get; }
         private async void SaveAsWpf_Execute()
         {
             var progress = await dialogCoordinator.ShowProgressAsync(MainViewModel, "Export", "Saving selected icon as WPF-XAML-file");
@@ -309,17 +285,15 @@ namespace IconPacks.Browser.ViewModels
 
                 if (fileSaveDialog.ShowDialog() == true && SelectedIcon is IconViewModel icon)
                 {
-                    string wpfFileContent;
+                    var iconControl = icon.GetPackIconControlBase();
 
-                    var iconContol = icon.GetPackIconControlBase();
+                    iconControl.BeginInit();
+                    iconControl.Width = Settings.Default.IconPreviewSize;
+                    iconControl.Height = Settings.Default.IconPreviewSize;
+                    iconControl.EndInit();
+                    iconControl.ApplyTemplate();
 
-                    iconContol.BeginInit();
-                    iconContol.Width = Settings.Default.IconPreviewSize;
-                    iconContol.Height = Settings.Default.IconPreviewSize;
-                    iconContol.EndInit();
-                    iconContol.ApplyTemplate();
-
-                    var iconPath = iconContol.FindChild<Path>();
+                    var iconPath = iconControl.FindChild<Path>();
 
                     var bBox = iconPath.Data.Bounds;
 
@@ -332,31 +306,31 @@ namespace IconPacks.Browser.ViewModels
 
                     var parameters = new ExportParameters(SelectedIcon)
                     {
-                        FillColor = iconPath.Fill is Brush ? Settings.Default.IconForeground.ToString(CultureInfo.InvariantCulture) : "{x:Null}",
-                        PathData = iconContol.Data,
-                        StrokeColor = iconPath.Stroke is Brush ? Settings.Default.IconForeground.ToString(CultureInfo.InvariantCulture) : "{x:Null}",
+                        FillColor = iconPath.Fill is not null ? Settings.Default.IconForeground.ToString(CultureInfo.InvariantCulture) : "{x:Null}",
+                        PathData = iconControl.Data,
+                        StrokeColor = iconPath.Stroke is not null ? Settings.Default.IconForeground.ToString(CultureInfo.InvariantCulture) : "{x:Null}",
                         StrokeWidth = iconPath.Stroke is null ? "0" : (scaleFactor * iconPath.StrokeThickness).ToString(CultureInfo.InvariantCulture),
                         StrokeLineCap = iconPath.StrokeEndLineCap.ToString().ToLower(),
                         StrokeLineJoin = iconPath.StrokeLineJoin.ToString().ToLower(),
-                        TranformMatrix = T.ToString(CultureInfo.InvariantCulture)
+                        TransformMatrix = T.ToString(CultureInfo.InvariantCulture)
                     };
 
-                    wpfFileContent = ExportHelper.FillTemplate(wpfFileTemplate, parameters);
-
+                    var wpfFileContent = ExportHelper.FillTemplate(wpfFileTemplate, parameters);
 
                     using io.StreamWriter file = new io.StreamWriter(fileSaveDialog.FileName);
-                    file.Write(wpfFileContent);
-
+                    await file.WriteAsync(wpfFileContent);
                 }
             }
             catch (Exception e)
             {
                 await dialogCoordinator.ShowMessageAsync(MainViewModel, "Error", e.Message);
             }
+
             await progress.CloseAsync();
         }
 
-        public ICommand SaveAsUwp_Command { get; }
+        public ICommand SaveAsUwpCommand { get; }
+
         private async void SaveAsUwp_Execute()
         {
             var progress = await dialogCoordinator.ShowProgressAsync(MainViewModel, "Export", "Saving selected icon as WPF-XAML-file");
@@ -375,17 +349,15 @@ namespace IconPacks.Browser.ViewModels
 
                 if (fileSaveDialog.ShowDialog() == true && SelectedIcon is IconViewModel icon)
                 {
-                    string wpfFileContent;
+                    var iconControl = icon.GetPackIconControlBase();
 
-                    var iconContol = icon.GetPackIconControlBase();
+                    iconControl.BeginInit();
+                    iconControl.Width = Settings.Default.IconPreviewSize;
+                    iconControl.Height = Settings.Default.IconPreviewSize;
+                    iconControl.EndInit();
+                    iconControl.ApplyTemplate();
 
-                    iconContol.BeginInit();
-                    iconContol.Width = Settings.Default.IconPreviewSize;
-                    iconContol.Height = Settings.Default.IconPreviewSize;
-                    iconContol.EndInit();
-                    iconContol.ApplyTemplate();
-
-                    var iconPath = iconContol.FindChild<Path>();
+                    var iconPath = iconControl.FindChild<Path>();
 
                     var bBox = iconPath.Data.Bounds;
 
@@ -393,40 +365,37 @@ namespace IconPacks.Browser.ViewModels
                     var scaleFactor = Settings.Default.IconPreviewSize / xamlSize;
                     var T = iconPath.LayoutTransform.Value;
 
-
                     var wpfFileTemplate = ExportHelper.UwpFileTemplate;
 
                     var parameters = new ExportParameters(SelectedIcon)
                     {
-                        FillColor = iconPath.Fill is Brush ? iconPath.Fill.ToString(CultureInfo.InvariantCulture) : "{x:Null}",
-                        PathData = iconContol.Data,
-                        StrokeColor = iconPath.Stroke is Brush ? iconPath.Stroke.ToString(CultureInfo.InvariantCulture) : "{x:Null}",
+                        FillColor = iconPath.Fill is not null ? iconPath.Fill.ToString(CultureInfo.InvariantCulture) : "{x:Null}",
+                        PathData = iconControl.Data,
+                        StrokeColor = iconPath.Stroke is not null ? iconPath.Stroke.ToString(CultureInfo.InvariantCulture) : "{x:Null}",
                         StrokeWidth = iconPath.Stroke is null ? "0" : (scaleFactor * iconPath.StrokeThickness).ToString(CultureInfo.InvariantCulture),
                         StrokeLineCap = iconPath.StrokeEndLineCap.ToString().ToLower(),
                         StrokeLineJoin = iconPath.StrokeLineJoin.ToString().ToLower(),
-                        TranformMatrix = T.ToString(CultureInfo.InvariantCulture)
+                        TransformMatrix = T.ToString(CultureInfo.InvariantCulture)
                     };
 
-                    wpfFileContent = ExportHelper.FillTemplate(wpfFileTemplate, parameters);
-
+                    var wpfFileContent = ExportHelper.FillTemplate(wpfFileTemplate, parameters);
 
                     using io.StreamWriter file = new io.StreamWriter(fileSaveDialog.FileName);
-                    file.Write(wpfFileContent);
-
+                    await file.WriteAsync(wpfFileContent);
                 }
             }
             catch (Exception e)
             {
                 await dialogCoordinator.ShowMessageAsync(MainViewModel, "Error", e.Message);
             }
+
             await progress.CloseAsync();
         }
-
 
         public ICommand SaveAsPngCommand { get; }
 
         public ICommand SaveAsJpegCommand { get; }
-        
+
         public ICommand SaveAsBmpCommand { get; }
 
         private async void SaveAsBitmapExecute(BitmapEncoder encoder)
@@ -463,8 +432,8 @@ namespace IconPacks.Browser.ViewModels
                     var packIconControl = new PackIconControl();
                     packIconControl.BeginInit();
                     packIconControl.Kind = icon.Value as Enum;
-                    packIconControl.Width= Settings.Default.IconPreviewSize;
-                    packIconControl.Height= Settings.Default.IconPreviewSize;
+                    packIconControl.Width = Settings.Default.IconPreviewSize;
+                    packIconControl.Height = Settings.Default.IconPreviewSize;
                     packIconControl.Foreground = new SolidColorBrush(Settings.Default.IconForeground);
 
                     packIconControl.EndInit();
@@ -489,6 +458,7 @@ namespace IconPacks.Browser.ViewModels
             {
                 await dialogCoordinator.ShowMessageAsync(MainViewModel, "Error", e.Message);
             }
+
             await progress.CloseAsync();
         }
     }
@@ -501,13 +471,23 @@ namespace IconPacks.Browser.ViewModels
         Type IconPackType { get; set; }
         Type IconType { get; set; }
         object Value { get; set; }
-
+        MetaDataAttribute MetaData { get; set; }
+        string CopyToClipboardText { get; }
+        string CopyToClipboardAsContentText { get; }
+        string CopyToClipboardAsPathIconText { get; }
+        string CopyToClipboardAsGeometryText { get; }
     }
 
-    public class IconViewModel : ViewModelBase, IIconViewModel
+    public class IconViewModel : IIconViewModel
     {
-        public IconViewModel()
+        public IconViewModel(Type enumType, Type packType, Enum k, MetaDataAttribute metaData)
         {
+            Name = k.ToString();
+            Description = GetDescription(k);
+            IconPackType = packType;
+            IconType = enumType;
+            Value = k;
+            MetaData = metaData;
         }
 
         public string CopyToClipboardText => ExportHelper.FillTemplate(ExportHelper.ClipboardWpf, new ExportParameters(this)); // $"<iconPacks:{IconPackType.Name} Kind=\"{Name}\" />";
@@ -530,15 +510,22 @@ namespace IconPacks.Browser.ViewModels
 
         public object Value { get; set; }
 
+        public MetaDataAttribute MetaData { get; set; }
 
         internal PackIconControlBase GetPackIconControlBase()
         {
-            if (!(Activator.CreateInstance(IconPackType) is PackIconControlBase iconPack)) return null;
+            if (Activator.CreateInstance(IconPackType) is not PackIconControlBase iconPack) return null;
             var kindProperty = IconPackType.GetProperty("Kind");
             if (kindProperty == null) return null;
             kindProperty.SetValue(iconPack, Value);
 
             return iconPack;
+        }
+
+        internal static string GetDescription(Enum value)
+        {
+            var fieldInfo = value.GetType().GetField(value.ToString());
+            return fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false).FirstOrDefault() is DescriptionAttribute attribute ? attribute.Description : value.ToString();
         }
     }
 }

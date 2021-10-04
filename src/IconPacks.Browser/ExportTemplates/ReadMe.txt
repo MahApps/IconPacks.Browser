@@ -9,7 +9,7 @@ You can use the following parameters inside the template:
   - @StrokeWidth
   - @StrokeLineCap
   - @StrokeLineJoin
-  - @TranformMatrix
+  - @TransformMatrix
   - @Background
   
  Additionaly you can provide these informations e.g. as a comment

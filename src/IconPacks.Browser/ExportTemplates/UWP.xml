@@ -21,7 +21,7 @@ Iconpack-License:	@IconPackLicense
         Width="@PageWidth" 
         Height="@PageHeight">
     <Canvas.RenderTransform>
-        <MatrixTransform Matrix="@TranformMatrix" />
+        <MatrixTransform Matrix="@TransformMatrix" />
     </Canvas.RenderTransform>
     <Path Data="@PathData"
           Stroke="@StrokeColor"

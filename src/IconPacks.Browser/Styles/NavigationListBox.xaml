@@ -5,7 +5,7 @@
                     xmlns:model="clr-namespace:IconPacks.Browser.Model"
                     xmlns:vm="clr-namespace:IconPacks.Browser.ViewModels">
 
-    <model:NavigationItemTemplateSelector x:Key="iconPacksBrowser.DataTemplateSelector.Navigation">
+    <model:NavigationItemTemplateSelector x:Key="IconPacksBrowser.DataTemplateSelector.Navigation">
         <model:NavigationItemTemplateSelector.IconPackTempalte>
             <DataTemplate DataType="{x:Type vm:IconPackViewModel}">
                 <Grid Height="40"
@@ -30,7 +30,6 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="MinHeight" Value="0" />
-        <Setter Property="Padding" Value="0" />
         <Setter Property="Padding" Value="10 0 5 0" />
         <Setter Property="RenderOptions.ClearTypeHint" Value="Enabled" />
         <Setter Property="Template">
@@ -110,7 +109,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="mah:ItemHelper.ActiveSelectionBackgroundBrush" Value="Transparent" />
         <Setter Property="mah:ItemHelper.ActiveSelectionForegroundBrush" Value="{DynamicResource MahApps.Brushes.AccentBase}" />
@@ -130,7 +128,7 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="ItemContainerStyle" Value="{DynamicResource IconPacksBrowser.Styles.ListBoxItem.Navigation}" />
-        <Setter Property="ItemTemplateSelector" Value="{StaticResource iconPacksBrowser.DataTemplateSelector.Navigation}" />
+        <Setter Property="ItemTemplateSelector" Value="{StaticResource IconPacksBrowser.DataTemplateSelector.Navigation}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBox}">

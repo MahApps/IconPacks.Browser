@@ -1,14 +1,14 @@
-﻿using IconPacks.Browser.Properties;
+﻿using System.Windows;
+using IconPacks.Browser.Properties;
 using IconPacks.Browser.ViewModels;
-using System.Windows;
 
 namespace IconPacks.Browser
 {
-  /// <summary>
-  /// Interaction logic for App.xaml
-  /// </summary>
-  public partial class App : Application
-  {
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
+    {
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);

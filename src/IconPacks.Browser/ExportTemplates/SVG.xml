@@ -28,5 +28,5 @@ Iconpack-License:	@IconPackLicense
                  stroke-width:@StrokeWidth;
                  stroke-linecap:@StrokeLineCap;
                  stroke-linejoin:@StrokeLineJoin;"
-          transform="matrix(@TranformMatrix)" />
+          transform="matrix(@TransformMatrix)" />
 </svg>

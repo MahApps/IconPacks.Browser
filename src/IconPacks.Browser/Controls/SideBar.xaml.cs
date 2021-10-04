@@ -1,8 +1,7 @@
-﻿using IconPacks.Browser.Properties;
-using System;
+﻿using System;
 using System.Windows.Controls;
 using System.Windows.Input;
-using io = System.IO;
+using IconPacks.Browser.Properties;
 
 namespace IconPacks.Browser.Controls
 {
@@ -25,12 +24,9 @@ namespace IconPacks.Browser.Controls
             }
             else if (Keyboard.Modifiers == ModifierKeys.Shift)
             {
-                this.PreviewScrollViewer.ScrollToHorizontalOffset(this.PreviewScrollViewer.HorizontalOffset - e.Delta / 3);
+                this.PreviewScrollViewer.ScrollToHorizontalOffset(this.PreviewScrollViewer.HorizontalOffset - e.Delta / 3d);
                 e.Handled = true;
             }
         }
-
-
-        
     }
 }

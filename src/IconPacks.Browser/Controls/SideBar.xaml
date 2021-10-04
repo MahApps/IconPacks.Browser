@@ -99,10 +99,10 @@
                             <ctrls:CopyToClipboardTextBox TextToCopy="{Binding SelectedIcon.Description}" />
                         </mah:MetroHeader>
                         <mah:MetroHeader Header="Homepage">
-                            <TextBox Style="{DynamicResource IconPacksBrowser.Styles.TextBox.Hyperlink}" Text="{Binding ProjectUrl}" />
+                            <TextBox Style="{DynamicResource IconPacksBrowser.Styles.TextBox.Hyperlink}" Text="{Binding SelectedIcon.MetaData.ProjectUrl, Mode=OneWay}" />
                         </mah:MetroHeader>
                         <mah:MetroHeader Header="License URL">
-                            <TextBox Style="{DynamicResource IconPacksBrowser.Styles.TextBox.Hyperlink}" Text="{Binding LicenseUrl}" />
+                            <TextBox Style="{DynamicResource IconPacksBrowser.Styles.TextBox.Hyperlink}" Text="{Binding SelectedIcon.MetaData.LicenseUrl, Mode=OneWay}" />
                         </mah:MetroHeader>
                     </StackPanel>
                 </Expander>
@@ -217,9 +217,9 @@
                         </Style>
                     </Expander.Resources>
                     <StackPanel>
-                        <Button Command="{Binding SaveAsSvg_Command}" Content="Save as svg" />
-                        <Button Command="{Binding SaveAsWpf_Command}" Content="Save as XAML (WPF)" />
-                        <Button Command="{Binding SaveAsUwp_Command}" Content="Save as XAML (UWP)" />
+                        <Button Command="{Binding SaveAsSvgCommand}" Content="Save as svg" />
+                        <Button Command="{Binding SaveAsWpfCommand}" Content="Save as XAML (WPF)" />
+                        <Button Command="{Binding SaveAsUwpCommand}" Content="Save as XAML (UWP)" />
                         <Button Command="{Binding SaveAsPngCommand}" Content="Save as Png" />
                         <Button Command="{Binding SaveAsJpegCommand}" Content="Save as Jpeg" />
                         <Button Command="{Binding SaveAsBmpCommand}" Content="Save as Bmp" />

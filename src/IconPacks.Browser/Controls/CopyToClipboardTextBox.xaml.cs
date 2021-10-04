@@ -8,11 +8,13 @@ namespace IconPacks.Browser.Controls
     /// </summary>
     public partial class CopyToClipboardTextBox : UserControl
     {
-        public CopyToClipboardTextBox()
-        {
-            InitializeComponent();
-        }
-
+        /// <summary>Identifies the <see cref="TextToCopy"/> dependency property.</summary>
+        public static readonly DependencyProperty TextToCopyProperty
+            = DependencyProperty.Register(
+                nameof(TextToCopy),
+                typeof(string),
+                typeof(CopyToClipboardTextBox),
+                new PropertyMetadata(default(string)));
 
         public string TextToCopy
         {
@@ -20,10 +22,9 @@ namespace IconPacks.Browser.Controls
             set => SetValue(TextToCopyProperty, value);
         }
 
-        // Using a DependencyProperty as the backing store for TextToCopy.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TextToCopyProperty =
-            DependencyProperty.Register("TextToCopy", typeof(string), typeof(CopyToClipboardTextBox), new PropertyMetadata(null));
-
-
+        public CopyToClipboardTextBox()
+        {
+            InitializeComponent();
+        }
     }
 }

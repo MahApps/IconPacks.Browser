@@ -48,7 +48,7 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <GroupBox Header="Design">
+            <GroupBox Header="Design" BorderThickness="0">
                 <StackPanel>
                     <mah:MetroHeader Header="App Color">
                         <mah:ColorPicker mah:TextBoxHelper.ClearTextButton="True"
@@ -83,7 +83,7 @@
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Export">
+            <GroupBox Header="Export" BorderThickness="0">
                 <StackPanel>
                     <mah:MetroHeader Header="Directory for custom export templates">
                         <StackPanel>

@@ -1,7 +1,7 @@
-using MahApps.Metro.Controls;
+using System.Windows.Input;
 using IconPacks.Browser.Properties;
 using IconPacks.Browser.ViewModels;
-using System.Windows.Input;
+using MahApps.Metro.Controls;
 
 namespace IconPacks.Browser
 {
@@ -25,7 +25,7 @@ namespace IconPacks.Browser
             switch (e.PropertyName)
             {
                 case nameof(Settings.Default.IconPreviewSize):
-                    if (Settings.Default.IconPreviewSize < 4) Settings.Default.IconPreviewSize = 4; 
+                    if (Settings.Default.IconPreviewSize < 4) Settings.Default.IconPreviewSize = 4;
                     break;
             }
         }

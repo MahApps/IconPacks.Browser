@@ -1,5 +1,4 @@
-﻿using MahApps.Metro.Controls.Dialogs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -8,7 +7,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using MahApps.Metro.IconPacks;
 
 namespace IconPacks.Browser.ViewModels
@@ -18,6 +17,7 @@ namespace IconPacks.Browser.ViewModels
         private readonly IDialogCoordinator dialogCoordinator;
         private readonly Dispatcher _dispatcher;
         private string _filterText;
+        private IconPackViewModel _selectedIconPack;
         private static MainViewModel _Instance;
 
         public MainViewModel(Dispatcher dispatcher)
@@ -34,9 +34,9 @@ namespace IconPacks.Browser.ViewModels
             this.dialogCoordinator = DialogCoordinator.Instance;
             this._dispatcher = dispatcher;
             this.AppVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
-            
+
             var availableIconPacks = new List<(Type EnumType, Type IconPackType)>(
-                new []
+                new[]
                 {
                     (typeof(PackIconBootstrapIconsKind), typeof(PackIconBootstrapIcons)),
                     (typeof(PackIconBoxIconsKind), typeof(PackIconBoxIcons)),
@@ -71,19 +71,24 @@ namespace IconPacks.Browser.ViewModels
                     (typeof(PackIconZondiconsKind), typeof(PackIconZondicons)),
                 });
 
-
-
-            this.IconPacks = new ObservableCollection<IconPackViewModel>();
+            var coll = new ObservableCollection<IconPackViewModel>();
 
             foreach (var (enumType, iconPackType) in availableIconPacks)
             {
-                IconPacks.Add(new IconPackViewModel(this, enumType, iconPackType, dialogCoordinator));
+                coll.Add(new IconPackViewModel(this, enumType, iconPackType, dialogCoordinator));
             }
 
-            this.AllIconPacksCollection = new List<IconPackViewModel>(1)
+            this.IconPacks = coll;
+
+            this.AllIconPacksCollection = new List<IconPackViewModel>(new[]
             {
-                new IconPackViewModel(this, "All Icons", availableIconPacks.Select(x => x.EnumType).ToArray(), availableIconPacks.Select(x=> x.IconPackType).ToArray(), dialogCoordinator)
-            };
+                new IconPackViewModel(
+                    this,
+                    "All Icons",
+                    availableIconPacks.Select(x => x.EnumType).ToArray(),
+                    availableIconPacks.Select(x => x.IconPackType).ToArray(),
+                    dialogCoordinator)
+            });
 
             this.IconPacksVersion = FileVersionInfo.GetVersionInfo(Assembly.GetAssembly(typeof(PackIconMaterial)).Location).FileVersion;
 
@@ -96,7 +101,7 @@ namespace IconPacks.Browser.ViewModels
             {
                 Process.Start(new ProcessStartInfo
                 {
-                    FileName = link ?? throw new System.ArgumentNullException(nameof(link)),
+                    FileName = link ?? throw new ArgumentNullException(nameof(link)),
                     // UseShellExecute is default to false on .NET Core while true on .NET Framework.
                     // Only this value is set to true, the url link can be opened.
                     UseShellExecute = true,
@@ -104,7 +109,19 @@ namespace IconPacks.Browser.ViewModels
             }
             catch (Exception e)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(MainViewModel._Instance , "Error", e.Message);
+                await DialogCoordinator.Instance.ShowMessageAsync(MainViewModel._Instance, "Error", e.Message);
+            }
+        }
+
+        public IconPackViewModel SelectedIconPack
+        {
+            get => _selectedIconPack;
+            set
+            {
+                if (Set(ref _selectedIconPack, value))
+                {
+                    this.ApplyFilterText(this.FilterText);
+                }
             }
         }
 
@@ -130,14 +147,26 @@ namespace IconPacks.Browser.ViewModels
             {
                 if (Set(ref _filterText, value))
                 {
-                    foreach (var iconPack in this.IconPacks)
-                    {
-                        this._dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => iconPack.FilterText = value));
-                    }
-                    foreach (var iconPack in this.AllIconPacksCollection)
-                    {
-                        this._dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => iconPack.FilterText = value));
-                    }
+                    this.ApplyFilterText(value);
+                }
+            }
+        }
+
+        private void ApplyFilterText(string filterText)
+        {
+            if (this.SelectedIconPack is not null)
+            {
+                this._dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => this.SelectedIconPack.FilterText = filterText));
+                foreach (var iconPack in this.IconPacks.Concat(this.AllIconPacksCollection).Except(new[] { this.SelectedIconPack }))
+                {
+                    this._dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => iconPack.FilterText = filterText));
+                }
+            }
+            else
+            {
+                foreach (var iconPack in this.IconPacks.Concat(this.AllIconPacksCollection))
+                {
+                    this._dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => iconPack.FilterText = filterText));
                 }
             }
         }
@@ -146,10 +175,7 @@ namespace IconPacks.Browser.ViewModels
             new SimpleCommand
             {
                 CanExecuteDelegate = x => (x is string),
-                ExecuteDelegate = x => Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    Clipboard.SetDataObject(x as string);
-                }))
+                ExecuteDelegate = x => Application.Current.Dispatcher.BeginInvoke(new Action(() => { Clipboard.SetDataObject(x as string); }))
             };
 
         public SettingsViewModel Settings { get; }

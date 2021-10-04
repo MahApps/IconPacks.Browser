@@ -1,10 +1,9 @@
-using IconPacks.Browser.Properties;
-using IconPacks.Browser.ViewModels;
 using System;
 using System.Globalization;
 using System.IO;
 using System.Windows.Media;
-using MahApps.Metro.IconPacks;
+using IconPacks.Browser.Properties;
+using IconPacks.Browser.ViewModels;
 
 namespace IconPacks.Browser.Model
 {
@@ -53,7 +52,7 @@ namespace IconPacks.Browser.Model
                 .Replace("@StrokeWidth", parameters.StrokeWidth)
                 .Replace("@StrokeLineCap", parameters.StrokeLineCap)
                 .Replace("@StrokeLineJoin", parameters.StrokeLineJoin)
-                .Replace("@TranformMatrix", parameters.TranformMatrix);
+                .Replace("@TransformMatrix", parameters.TransformMatrix);
         }
 
         internal static string LoadTemplateString(string fileName)
@@ -77,7 +76,7 @@ namespace IconPacks.Browser.Model
         /// <param name="icon"></param>
         internal ExportParameters(IIconViewModel icon)
         {
-            var metaData = Attribute.GetCustomAttribute(icon.IconPackType, typeof(MetaDataAttribute)) as MetaDataAttribute;
+            var metaData = icon.MetaData;
 
             this.IconKind = icon.Name;
             this.IconPackName = icon.IconPackType.Name.Replace("PackIcon", "");
@@ -90,7 +89,7 @@ namespace IconPacks.Browser.Model
             this.StrokeLineCap = PenLineCap.Round.ToString();
             this.StrokeLineJoin = PenLineJoin.Round.ToString();
             this.PathData = null;
-            this.TranformMatrix = Matrix.Identity.ToString(CultureInfo.InvariantCulture);
+            this.TransformMatrix = Matrix.Identity.ToString(CultureInfo.InvariantCulture);
 
             this.IconPackHomepage = metaData?.ProjectUrl;
             this.IconPackLicense = metaData?.LicenseUrl;
@@ -109,6 +108,6 @@ namespace IconPacks.Browser.Model
         internal string StrokeWidth { get; set; }
         internal string StrokeLineCap { get; set; }
         internal string StrokeLineJoin { get; set; }
-        internal string TranformMatrix { get; set; }
+        internal string TransformMatrix { get; set; }
     }
 }

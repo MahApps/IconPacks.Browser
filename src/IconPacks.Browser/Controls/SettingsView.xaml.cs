@@ -1,7 +1,7 @@
-﻿using IconPacks.Browser.ViewModels;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using IconPacks.Browser.ViewModels;
 
 namespace IconPacks.Browser.Controls
 {

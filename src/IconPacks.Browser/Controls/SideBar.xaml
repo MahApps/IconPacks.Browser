@@ -10,7 +10,8 @@
              xmlns:prop="clr-namespace:IconPacks.Browser.Properties"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:vm="clr-namespace:IconPacks.Browser.ViewModels"
-             d:DataContext="{d:DesignInstance Type=vm:IconPackViewModel, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance Type=vm:IconPackViewModel,
+                                              IsDesignTimeCreatable=True}"
              d:DesignHeight="450"
              d:DesignWidth="800"
              mc:Ignorable="d">

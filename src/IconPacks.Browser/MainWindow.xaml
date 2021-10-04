@@ -1,6 +1,7 @@
 ﻿<mah:MetroWindow x:Class="IconPacks.Browser.MainWindow"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:controls="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
                  xmlns:converter="http://metro.mahapps.com/winfx/xaml/shared"
                  xmlns:ctrls="clr-namespace:IconPacks.Browser.Controls"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,7 +9,6 @@
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:viewModels="clr-namespace:IconPacks.Browser.ViewModels"
-                 xmlns:controls="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
                  Title="IconPacks Browser"
                  Width="1200"
                  Height="800"
@@ -40,26 +40,26 @@
 
         <DataTemplate x:Key="IconPacksBrowser.DataTemplates.ListBox.IconViewModel" DataType="{x:Type viewModels:IIconViewModel}">
             <Grid x:Name="Root"
-                              Width="128"
-                              Height="128"
-                              Background="Transparent">
+                  Width="128"
+                  Height="128"
+                  Background="Transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <iconPacks:PackIconControl Grid.Row="0"
-                                                       Width="32"
-                                                       Height="32"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"
-                                                       Kind="{Binding Value, Mode=OneWay, Converter={converter:NullToUnsetValueConverter}}"
-                                                       SnapsToDevicePixels="True" />
+                                           Width="32"
+                                           Height="32"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Kind="{Binding Value, Mode=OneWay, Converter={converter:NullToUnsetValueConverter}}"
+                                           SnapsToDevicePixels="True" />
                 <Grid x:Name="Copy2ClipboardActions"
-                                  Grid.Row="0"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Top"
-                                  Focusable="False"
-                                  Visibility="Collapsed">
+                      Grid.Row="0"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Top"
+                      Focusable="False"
+                      Visibility="Collapsed">
                     <Rectangle RadiusX="11" RadiusY="11">
                         <Rectangle.Fill>
                             <SolidColorBrush Opacity=".2" Color="{DynamicResource MahApps.Colors.ThemeBackground}" />
@@ -67,79 +67,79 @@
                     </Rectangle>
                     <StackPanel Margin="11 0" Orientation="Horizontal">
                         <Button Grid.Column="0"
-                                            Width="22"
-                                            Height="22"
-                                            HorizontalAlignment="Center"
-                                            BorderThickness="0"
-                                            Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
-                                            CommandParameter="{Binding CopyToClipboardText}"
-                                            Focusable="False"
-                                            IsTabStop="False"
-                                            Style="{StaticResource CustomMetroCircleButtonStyle}">
+                                Width="22"
+                                Height="22"
+                                HorizontalAlignment="Center"
+                                BorderThickness="0"
+                                Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
+                                CommandParameter="{Binding CopyToClipboardText}"
+                                Focusable="False"
+                                IsTabStop="False"
+                                Style="{StaticResource CustomMetroCircleButtonStyle}">
                             <Button.ToolTip>
                                 <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as element'}" />
                             </Button.ToolTip>
                             <StackPanel Orientation="Horizontal">
                                 <iconPacks:PackIconMaterial Width="7"
-                                                                        Margin="1 0"
-                                                                        Kind="ChevronLeft" />
+                                                            Margin="1 0"
+                                                            Kind="ChevronLeft" />
                                 <iconPacks:PackIconMaterial Width="7"
-                                                                        Margin="1 0"
-                                                                        Kind="ChevronRight" />
+                                                            Margin="1 0"
+                                                            Kind="ChevronRight" />
                             </StackPanel>
                         </Button>
                         <Button Width="22"
-                                            Height="22"
-                                            BorderThickness="0"
-                                            Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
-                                            CommandParameter="{Binding CopyToClipboardAsContentText}"
-                                            Focusable="False"
-                                            IsTabStop="False"
-                                            Style="{StaticResource CustomMetroCircleButtonStyle}">
+                                Height="22"
+                                BorderThickness="0"
+                                Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
+                                CommandParameter="{Binding CopyToClipboardAsContentText}"
+                                Focusable="False"
+                                IsTabStop="False"
+                                Style="{StaticResource CustomMetroCircleButtonStyle}">
                             <Button.ToolTip>
                                 <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as content'}" />
                             </Button.ToolTip>
                             <iconPacks:PackIconMaterial Width="14"
-                                                                    Height="14"
-                                                                    Kind="CodeBraces" />
+                                                        Height="14"
+                                                        Kind="CodeBraces" />
                         </Button>
                         <Button Width="22"
-                                            Height="22"
-                                            BorderThickness="0"
-                                            Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
-                                            CommandParameter="{Binding CopyToClipboardAsPathIconText}"
-                                            Focusable="False"
-                                            IsTabStop="False"
-                                            Style="{StaticResource CustomMetroCircleButtonStyle}">
+                                Height="22"
+                                BorderThickness="0"
+                                Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
+                                CommandParameter="{Binding CopyToClipboardAsPathIconText}"
+                                Focusable="False"
+                                IsTabStop="False"
+                                Style="{StaticResource CustomMetroCircleButtonStyle}">
                             <Button.ToolTip>
                                 <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as PathIcon element'}" />
                             </Button.ToolTip>
                             <iconPacks:PackIconFontAwesome Width="14"
-                                                                       Height="14"
-                                                                       Kind="DrawPolygonSolid" />
+                                                           Height="14"
+                                                           Kind="DrawPolygonSolid" />
                         </Button>
                         <Button Width="22"
-                                            Height="22"
-                                            BorderThickness="0"
-                                            Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
-                                            CommandParameter="{Binding CopyToClipboardAsGeometryText}"
-                                            Focusable="False"
-                                            IsTabStop="False"
-                                            Style="{StaticResource CustomMetroCircleButtonStyle}">
+                                Height="22"
+                                BorderThickness="0"
+                                Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
+                                CommandParameter="{Binding CopyToClipboardAsGeometryText}"
+                                Focusable="False"
+                                IsTabStop="False"
+                                Style="{StaticResource CustomMetroCircleButtonStyle}">
                             <Button.ToolTip>
                                 <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as Geometry'}" />
                             </Button.ToolTip>
                             <iconPacks:PackIconMaterial Width="14"
-                                                                    Height="14"
-                                                                    Kind="Draw" />
+                                                        Height="14"
+                                                        Kind="Draw" />
                         </Button>
                     </StackPanel>
                 </Grid>
                 <TextBlock Grid.Row="1"
-                                       Margin="2"
-                                       HorizontalAlignment="Center"
-                                       Text="{Binding Name, Mode=OneWay}"
-                                       TextTrimming="CharacterEllipsis" />
+                           Margin="2"
+                           HorizontalAlignment="Center"
+                           Text="{Binding Name, Mode=OneWay}"
+                           TextTrimming="CharacterEllipsis" />
             </Grid>
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
@@ -277,25 +277,25 @@
                 <ListBox Grid.Column="0"
                          Margin="2"
                          FocusVisualStyle="{x:Null}"
-                         ItemsSource="{Binding ElementName=NavigationListBox, Path=SelectedItem.Icons, Mode=OneWay}"
-                         SelectedValue="{Binding ElementName=NavigationListBox, Path=SelectedItem.SelectedIcon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False, NotifyOnValidationError=False}"
                          ItemTemplate="{StaticResource IconPacksBrowser.DataTemplates.ListBox.IconViewModel}"
-                         Style="{DynamicResource MahApps.Styles.ListBox.Virtualized}"
-                         VirtualizingPanel.CacheLengthUnit="Item"
-                         VirtualizingPanel.ScrollUnit="Item"
-                         VirtualizingPanel.VirtualizationMode="Recycling"
+                         ItemsSource="{Binding ElementName=NavigationListBox, Path=SelectedItem.Icons, Mode=OneWay}"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
-                         Validation.ErrorTemplate="{x:Null}">
+                         SelectedValue="{Binding ElementName=NavigationListBox, Path=SelectedItem.SelectedIcon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False, NotifyOnValidationError=False}"
+                         Style="{DynamicResource MahApps.Styles.ListBox.Virtualized}"
+                         Validation.ErrorTemplate="{x:Null}"
+                         VirtualizingPanel.CacheLengthUnit="Item"
+                         VirtualizingPanel.ScrollUnit="Item"
+                         VirtualizingPanel.VirtualizationMode="Recycling">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <controls:VirtualizingWrapPanel Orientation="Vertical"
-                                                            SpacingMode="BetweenItemsOnly"
-                                                            StretchItems="False"
-                                                            ScrollLineDelta="1"
+                            <controls:VirtualizingWrapPanel IsItemsHost="True"
+                                                            ItemSize="128,128"
                                                             MouseWheelDelta="1"
-                                                            IsItemsHost="True"
-                                                            ItemSize="128,128" />
+                                                            Orientation="Vertical"
+                                                            ScrollLineDelta="1"
+                                                            SpacingMode="BetweenItemsOnly"
+                                                            StretchItems="False" />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                 </ListBox>

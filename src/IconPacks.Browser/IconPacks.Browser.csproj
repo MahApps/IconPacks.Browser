@@ -19,20 +19,20 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MahApps.Metro.IconPacks" Version="4.10.0" />
-        <PackageReference Include="MahApps.Metro" Version="2.*" />
-        <PackageReference Include="ControlzEx" Version="4.*" />
-        <PackageReference Include="AsyncAwaitBestPractices" Version="4.*" />
+        <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+        <PackageReference Include="MahApps.Metro" Version="2.4.9" />
+        <PackageReference Include="ControlzEx" Version="4.4.0" />
+        <PackageReference Include="AsyncAwaitBestPractices" Version="4.3.0" />
         <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
-        <PackageReference Include="VirtualizingWrapPanel" Version="1.5.*" />
+        <PackageReference Include="VirtualizingWrapPanel" Version="1.5.4" />
     </ItemGroup>
     <ItemGroup Condition="$(DefineConstants.Contains(NETCOREAPP)) == true">
-        <PackageReference Include="MaterialDesignThemes" Version="4.1.*" />
-        <PackageReference Include="MaterialDesignColors" Version="2.0.*" />
+        <PackageReference Include="MaterialDesignThemes" Version="4.1.0" />
+        <PackageReference Include="MaterialDesignColors" Version="2.0.3" />
     </ItemGroup>
     <ItemGroup Condition="$(DefineConstants.Contains(NETCOREAPP)) == false">
-        <PackageReference Include="MaterialDesignThemes" Version="3.0.*" />
-        <PackageReference Include="MaterialDesignColors" Version="1.2.*" />
+        <PackageReference Include="MaterialDesignThemes" Version="3.0.1" />
+        <PackageReference Include="MaterialDesignColors" Version="1.2.7" />
     </ItemGroup>
 
     <ItemGroup>

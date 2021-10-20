@@ -6,6 +6,22 @@
     "build": {
       "type": "object",
       "properties": {
+        "AzureKeyVaultCertificate": {
+          "type": "string",
+          "default": "Secrets must be entered via 'nuke :secret [profile]'"
+        },
+        "AzureKeyVaultClientId": {
+          "type": "string",
+          "default": "Secrets must be entered via 'nuke :secret [profile]'"
+        },
+        "AzureKeyVaultClientSecret": {
+          "type": "string",
+          "default": "Secrets must be entered via 'nuke :secret [profile]'"
+        },
+        "AzureKeyVaultUrl": {
+          "type": "string",
+          "default": "Secrets must be entered via 'nuke :secret [profile]'"
+        },
         "Configuration": {
           "type": "string",
           "description": "Configuration to build - Default is 'Debug' (local) or 'Release' (server)",
@@ -73,8 +89,10 @@
             "enum": [
               "Clean",
               "Compile",
+              "CompressArtifacts",
               "Publish",
-              "Restore"
+              "Restore",
+              "SignArtifacts"
             ]
           }
         },
@@ -90,8 +108,10 @@
             "enum": [
               "Clean",
               "Compile",
+              "CompressArtifacts",
               "Publish",
-              "Restore"
+              "Restore",
+              "SignArtifacts"
             ]
           }
         },

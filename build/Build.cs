@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI;
@@ -8,9 +9,11 @@ using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
+using Nuke.Common.Tools.AzureSignTool;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
+using Octokit;
 using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.CompressionTasks;
 using static Nuke.Common.IO.FileSystemTasks;
@@ -23,8 +26,15 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     AutoGenerate = true,
     OnPushBranches = new[] { "main", "release/*" },
     OnPullRequestBranches = new[] { "main" },
-    InvokedTargets = new[] { nameof(Compile) }
-    )]
+    InvokedTargets = new[] { nameof(Compile), nameof(Publish), nameof(CompressArtifacts), nameof(SignArtifacts) },
+    ImportSecrets = new[]
+    {
+        nameof(AzureKeyVaultUrl),
+        nameof(AzureKeyVaultClientId),
+        nameof(AzureKeyVaultClientSecret),
+        nameof(AzureKeyVaultCertificate)
+    }
+)]
 [CheckBuildProjectConfigurations]
 [ShutdownDotNetAfterServerBuild]
 class Build : NukeBuild
@@ -34,7 +44,6 @@ class Build : NukeBuild
     ///   - JetBrains Rider            https://nuke.build/rider
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
-
     public static int Main() => Execute<Build>(x => x.Compile);
 
     protected override void OnBuildInitialized()
@@ -44,7 +53,7 @@ class Build : NukeBuild
         ProcessTasks.DefaultLogInvocation = true;
         ProcessTasks.DefaultLogOutput = true;
 
-        if (GitVersion is null && IsLocalBuild == false)
+        if (GitVersion is null)
         {
             throw new Exception("Could not initialize GitVersion.");
         }
@@ -62,8 +71,7 @@ class Build : NukeBuild
         Logger.Info("NuGet           Version: {0}", GitVersion.NuGetVersion);
     }
 
-    [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
-    readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+    [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")] readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
     [Solution(GenerateProjects = true)] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
@@ -83,7 +91,9 @@ class Build : NukeBuild
                 TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(EnsureCleanDirectory);
                 EnsureCleanDirectory(OutputDirectory);
             }
-            catch {}
+            catch
+            {
+            }
         });
 
     Target Restore => _ => _
@@ -110,7 +120,8 @@ class Build : NukeBuild
         });
 
     Target Publish => _ => _
-        .DependsOn(Compile)
+        .OnlyWhenStatic(() => GitRepository.IsOnMainBranch() || GitRepository.IsOnReleaseBranch())
+        .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
         .Executes(() =>
         {
             DotNetPublish(s => s
@@ -142,10 +153,55 @@ class Build : NukeBuild
                 .SetProperty("IncludeNativeLibrariesForSelfExtract", true)
                 .SetProperty("IncludeAllContentForSelfExtract", true)
             );
+        });
 
+    Target CompressArtifacts => _ => _
+        .OnlyWhenStatic(() => GitRepository.IsOnMainBranch() || GitRepository.IsOnReleaseBranch())
+        .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
+        .Executes(() =>
+        {
             Compress(SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "net47", OutputDirectory / "net47" / $"IconPacks.Browser-v{GitVersion.NuGetVersion}.zip");
             Compress(SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "netcoreapp3.1" / "win-x64" / "publish", OutputDirectory / "netcoreapp3.1" / $"IconPacks.Browser-v{GitVersion.NuGetVersion}.zip");
             Compress(SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "net5.0-windows" / "win-x64" / "publish", OutputDirectory / "net5.0-windows" / $"IconPacks.Browser-v{GitVersion.NuGetVersion}.zip");
         });
 
+    Target SignArtifacts => _ => _
+        .OnlyWhenStatic(() => GitRepository.IsOnMainBranch() || GitRepository.IsOnReleaseBranch())
+        .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
+        .Executes(() =>
+        {
+            SignFiles(
+                new[]
+                {
+                    (SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "net47" / "IconPacks.Browser.exe").ToString(),
+                    (SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "netcoreapp3.1" / "win-x64" / "publish").ToString(),
+                    (SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "net5.0-windows" / "win-x64" / "publish").ToString()
+                }
+                , "IconPacks Browser"
+                , GitRepository.HttpsUrl);
+        });
+
+    [Parameter] [Secret] readonly string AzureKeyVaultUrl;
+    [Parameter] [Secret] readonly string AzureKeyVaultClientId;
+    [Parameter] [Secret] readonly string AzureKeyVaultClientSecret;
+    [Parameter] [Secret] readonly string AzureKeyVaultCertificate;
+
+    void SignFiles(IEnumerable<string> files, string description, string descriptionUrl)
+    {
+        var azureSignToolSettings = new CustomAzureSignToolSettings()
+                .SetFiles(files)
+                .SetFileDigest(AzureSignToolDigestAlgorithm.sha256)
+                .SetDescription(description)
+                .SetDescriptionUrl(descriptionUrl)
+                .SetNoPageHashing(true)
+                .SetTimestampRfc3161Url("http://timestamp.digicert.com")
+                .SetTimestampDigest(AzureSignToolDigestAlgorithm.sha256)
+                .SetKeyVaultUrl(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultUrl)))
+                .SetKeyVaultClientId(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultClientId)))
+                .SetKeyVaultClientSecret(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultClientSecret)))
+                .SetKeyVaultCertificateName(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultCertificate)))
+            ;
+
+        AzureSignToolTasks.AzureSignTool(azureSignToolSettings);
+    }
 }

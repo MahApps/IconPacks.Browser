@@ -31,6 +31,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     {
         nameof(AzureKeyVaultUrl),
         nameof(AzureKeyVaultClientId),
+        nameof(AzureKeyVaultTenantId),
         nameof(AzureKeyVaultClientSecret),
         nameof(AzureKeyVaultCertificate)
     }
@@ -186,6 +187,7 @@ class Build : NukeBuild
 
     [Parameter] [Secret] readonly string AzureKeyVaultUrl;
     [Parameter] [Secret] readonly string AzureKeyVaultClientId;
+    [Parameter] [Secret] readonly string AzureKeyVaultTenantId;
     [Parameter] [Secret] readonly string AzureKeyVaultClientSecret;
     [Parameter] [Secret] readonly string AzureKeyVaultCertificate;
 
@@ -201,6 +203,7 @@ class Build : NukeBuild
                 .SetTimestampDigest(AzureSignToolDigestAlgorithm.sha256)
                 .SetKeyVaultUrl(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultUrl)))
                 .SetKeyVaultClientId(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultClientId)))
+                .SetKeyVaultClientId(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultTenantId)))
                 .SetKeyVaultClientSecret(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultClientSecret)))
                 .SetKeyVaultCertificateName(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultCertificate)))
             ;

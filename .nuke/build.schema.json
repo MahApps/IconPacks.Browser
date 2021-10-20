@@ -18,6 +18,10 @@
           "type": "string",
           "default": "Secrets must be entered via 'nuke :secret [profile]'"
         },
+        "AzureKeyVaultTenantId": {
+          "type": "string",
+          "default": "Secrets must be entered via 'nuke :secret [profile]'"
+        },
         "AzureKeyVaultUrl": {
           "type": "string",
           "default": "Secrets must be entered via 'nuke :secret [profile]'"

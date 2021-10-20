@@ -43,5 +43,6 @@ jobs:
         env:
           AzureKeyVaultUrl: ${{ secrets.AZURE_KEY_VAULT_URL }}
           AzureKeyVaultClientId: ${{ secrets.AZURE_KEY_VAULT_CLIENT_ID }}
+          AzureKeyVaultTenantId: ${{ secrets.AZURE_KEY_VAULT_TENANT_ID }}
           AzureKeyVaultClientSecret: ${{ secrets.AZURE_KEY_VAULT_CLIENT_SECRET }}
           AzureKeyVaultCertificate: ${{ secrets.AZURE_KEY_VAULT_CERTIFICATE }}

@@ -174,13 +174,9 @@ class Build : NukeBuild
         .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
         .Executes(() =>
         {
+            var files = SourceDirectory.GlobFiles("**/bin/**/IconPacks.Browser.exe").Select(p => p.ToString());
             SignFiles(
-                new[]
-                {
-                    (SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "net47" / "IconPacks.Browser.exe").ToString(),
-                    (SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "netcoreapp3.1" / "win-x64" / "publish" / "IconPacks.Browser.exe").ToString(),
-                    (SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "net5.0-windows" / "win-x64" / "publish" / "IconPacks.Browser.exe").ToString()
-                }
+                files
                 , "IconPacks Browser"
                 , GitRepository.HttpsUrl);
         });
@@ -203,7 +199,7 @@ class Build : NukeBuild
                 .SetTimestampDigest(AzureSignToolDigestAlgorithm.sha256)
                 .SetKeyVaultUrl(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultUrl)))
                 .SetKeyVaultClientId(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultClientId)))
-                .SetKeyVaultClientId(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultTenantId)))
+                .SetKeyVaultTenantId(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultTenantId)))
                 .SetKeyVaultClientSecret(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultClientSecret)))
                 .SetKeyVaultCertificateName(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultCertificate)))
             ;

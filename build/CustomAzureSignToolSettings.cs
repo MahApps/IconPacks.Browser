@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.AzureSignTool;
 
 // TODO: remove this class on next nuke version
+[PublicAPI]
+[Serializable]
 public class CustomAzureSignToolSettings : AzureSignToolSettings
 {
     /// <summary>
@@ -16,13 +20,14 @@ public class CustomAzureSignToolSettings : AzureSignToolSettings
 
     protected override Arguments ConfigureProcessArguments(Arguments arguments)
     {
-        arguments =
-            base.ConfigureProcessArguments(arguments)
-                .Add("{value}", Files);
+        arguments = arguments
+            .Add("sign")
+            .Add("{value}", Files);
         return base.ConfigureProcessArguments(arguments);
     }
 }
 
+[PublicAPI]
 public static class CustomAzureSignToolSettingsExtensions
 {
     /// <summary>

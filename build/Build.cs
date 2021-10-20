@@ -26,7 +26,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     AutoGenerate = true,
     OnPushBranches = new[] { "main", "release/*" },
     OnPullRequestBranches = new[] { "main" },
-    InvokedTargets = new[] { nameof(Compile), nameof(Publish), nameof(CompressArtifacts), nameof(SignArtifacts) },
+    InvokedTargets = new[] { nameof(Compile), nameof(SignArtifacts) },
     ImportSecrets = new[]
     {
         nameof(AzureKeyVaultUrl),
@@ -89,7 +89,7 @@ class Build : NukeBuild
             {
                 SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(EnsureCleanDirectory);
                 TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(EnsureCleanDirectory);
-                EnsureCleanDirectory(OutputDirectory);
+                OutputDirectory.GlobDirectories("*.*").ForEach(EnsureCleanDirectory);
             }
             catch
             {
@@ -120,6 +120,7 @@ class Build : NukeBuild
         });
 
     Target Publish => _ => _
+        .DependsOn(Compile)
         .OnlyWhenStatic(() => GitRepository.IsOnMainBranch() || GitRepository.IsOnReleaseBranch())
         .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
         .Executes(() =>
@@ -156,6 +157,7 @@ class Build : NukeBuild
         });
 
     Target CompressArtifacts => _ => _
+        .DependsOn(Publish)
         .OnlyWhenStatic(() => GitRepository.IsOnMainBranch() || GitRepository.IsOnReleaseBranch())
         .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
         .Executes(() =>
@@ -166,6 +168,7 @@ class Build : NukeBuild
         });
 
     Target SignArtifacts => _ => _
+        .DependsOn(Publish)
         .OnlyWhenStatic(() => GitRepository.IsOnMainBranch() || GitRepository.IsOnReleaseBranch())
         .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
         .Executes(() =>
@@ -174,8 +177,8 @@ class Build : NukeBuild
                 new[]
                 {
                     (SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "net47" / "IconPacks.Browser.exe").ToString(),
-                    (SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "netcoreapp3.1" / "win-x64" / "publish").ToString(),
-                    (SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "net5.0-windows" / "win-x64" / "publish").ToString()
+                    (SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "netcoreapp3.1" / "win-x64" / "publish" / "IconPacks.Browser.exe").ToString(),
+                    (SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "net5.0-windows" / "win-x64" / "publish" / "IconPacks.Browser.exe").ToString()
                 }
                 , "IconPacks Browser"
                 , GitRepository.HttpsUrl);
@@ -193,7 +196,7 @@ class Build : NukeBuild
                 .SetFileDigest(AzureSignToolDigestAlgorithm.sha256)
                 .SetDescription(description)
                 .SetDescriptionUrl(descriptionUrl)
-                .SetNoPageHashing(true)
+                .ToggleNoPageHashing()
                 .SetTimestampRfc3161Url("http://timestamp.digicert.com")
                 .SetTimestampDigest(AzureSignToolDigestAlgorithm.sha256)
                 .SetKeyVaultUrl(EnvironmentInfo.GetParameter<string>(nameof(AzureKeyVaultUrl)))

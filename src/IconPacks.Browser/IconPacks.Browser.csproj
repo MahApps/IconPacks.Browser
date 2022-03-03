@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net47;netcoreapp3.1;net5.0-windows</TargetFrameworks>
+        <TargetFrameworks>net47;net5.0-windows</TargetFrameworks>
         <OutputType>WinExe</OutputType>
         <UseWPF>true</UseWPF>
         <AssemblyName>IconPacks.Browser</AssemblyName>
@@ -22,13 +22,14 @@
         <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
         <PackageReference Include="MahApps.Metro" Version="2.4.9" />
         <PackageReference Include="ControlzEx" Version="4.4.0" />
-        <PackageReference Include="AsyncAwaitBestPractices" Version="4.3.0" />
+        <PackageReference Include="AsyncAwaitBestPractices" Version="6.0.4" />
         <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
-        <PackageReference Include="VirtualizingWrapPanel" Version="1.5.4" />
+        <PackageReference Include="VirtualizingWrapPanel" Version="1.5.7" />
+        <PackageReference Update="WpfAnalyzers" Version="4.0.2" />
     </ItemGroup>
     <ItemGroup Condition="$(DefineConstants.Contains(NETCOREAPP)) == true">
-        <PackageReference Include="MaterialDesignThemes" Version="4.1.0" />
-        <PackageReference Include="MaterialDesignColors" Version="2.0.3" />
+        <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
+        <PackageReference Include="MaterialDesignColors" Version="2.0.4" />
     </ItemGroup>
     <ItemGroup Condition="$(DefineConstants.Contains(NETCOREAPP)) == false">
         <PackageReference Include="MaterialDesignThemes" Version="3.0.1" />

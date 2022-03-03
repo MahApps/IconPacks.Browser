@@ -14,6 +14,7 @@ using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
 using Octokit;
+using Serilog;
 using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.CompressionTasks;
 using static Nuke.Common.IO.FileSystemTasks;
@@ -61,15 +62,15 @@ class Build : NukeBuild
 
         Logger.Block("Info");
 
-        Logger.Info("IsLocalBuild           : {0}", IsLocalBuild.ToString());
-        Logger.Info("Branch                 : {0}", GitRepository.Branch);
-        Logger.Info("Configuration          : {0}", Configuration);
+        Log.Information("IsLocalBuild           : {IsLocalBuild}", IsLocalBuild.ToString());
+        Log.Information("Branch                 : {Branch}", GitRepository.Branch);
+        Log.Information("Configuration          : {Configuration}", Configuration.ToString());
 
-        Logger.Info("Informational   Version: {0}", GitVersion.InformationalVersion);
-        Logger.Info("SemVer          Version: {0}", GitVersion.SemVer);
-        Logger.Info("AssemblySemVer  Version: {0}", GitVersion.AssemblySemVer);
-        Logger.Info("MajorMinorPatch Version: {0}", GitVersion.MajorMinorPatch);
-        Logger.Info("NuGet           Version: {0}", GitVersion.NuGetVersion);
+        Log.Information("Informational   Version: {InformationalVersion}", GitVersion.InformationalVersion);
+        Log.Information("SemVer          Version: {SemVer}", GitVersion.SemVer);
+        Log.Information("AssemblySemVer  Version: {AssemblySemVer}", GitVersion.AssemblySemVer);
+        Log.Information("MajorMinorPatch Version: {MajorMinorPatch}", GitVersion.MajorMinorPatch);
+        Log.Information("NuGet           Version: {NuGetVersion}", GitVersion.NuGetVersion);
     }
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")] readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -94,6 +95,7 @@ class Build : NukeBuild
             }
             catch
             {
+                Log.Warning("Can not clean folders");
             }
         });
 
@@ -133,20 +135,6 @@ class Build : NukeBuild
                 .SetAssemblyVersion(GitVersion.AssemblySemVer)
                 .SetFileVersion(GitVersion.AssemblySemFileVer)
                 .SetInformationalVersion(GitVersion.InformationalVersion)
-                .SetFramework("netcoreapp3.1")
-                .SetRuntime("win-x64")
-                .SetPublishTrimmed(false)
-                .SetSelfContained(true)
-                .SetPublishSingleFile(true)
-            );
-
-            DotNetPublish(s => s
-                .SetProject(Solution)
-                .SetConfiguration(Configuration)
-                .SetVersion(GitRepository.IsOnReleaseBranch() ? GitVersion.MajorMinorPatch : GitVersion.NuGetVersion)
-                .SetAssemblyVersion(GitVersion.AssemblySemVer)
-                .SetFileVersion(GitVersion.AssemblySemFileVer)
-                .SetInformationalVersion(GitVersion.InformationalVersion)
                 .SetFramework("net5.0-windows")
                 .SetRuntime("win-x64")
                 .SetPublishTrimmed(false)
@@ -164,7 +152,6 @@ class Build : NukeBuild
         .Executes(() =>
         {
             Compress(SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "net47", OutputDirectory / "net47" / $"IconPacks.Browser-v{GitVersion.NuGetVersion}.zip");
-            Compress(SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "netcoreapp3.1" / "win-x64" / "publish", OutputDirectory / "netcoreapp3.1" / $"IconPacks.Browser-v{GitVersion.NuGetVersion}.zip");
             Compress(SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "net5.0-windows" / "win-x64" / "publish", OutputDirectory / "net5.0-windows" / $"IconPacks.Browser-v{GitVersion.NuGetVersion}.zip");
         });
 
@@ -189,7 +176,7 @@ class Build : NukeBuild
 
     void SignFiles(IEnumerable<string> files, string description, string descriptionUrl)
     {
-        var azureSignToolSettings = new CustomAzureSignToolSettings()
+        var azureSignToolSettings = new AzureSignToolSettings()
                 .SetFiles(files)
                 .SetFileDigest(AzureSignToolDigestAlgorithm.sha256)
                 .SetDescription(description)

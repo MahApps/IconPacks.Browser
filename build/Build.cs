@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI;
@@ -11,25 +12,32 @@ using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.AzureSignTool;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.GitHub;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
 using Octokit;
 using Serilog;
-using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.CompressionTasks;
 using static Nuke.Common.IO.FileSystemTasks;
-using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 [GitHubActions(
     "ci",
     GitHubActionsImage.WindowsLatest,
     AutoGenerate = true,
-    OnPushBranches = new[] { "main", "release/*" },
-    OnPullRequestBranches = new[] { "main" },
-    InvokedTargets = new[] { nameof(Compile), nameof(SignArtifacts) },
+    OnPushBranches = new[] { "main", "develop" },
+    OnPullRequestBranches = new[] { "main", "develop" },
+    InvokedTargets = new[] { nameof(Compile) }
+)]
+[GitHubActions(
+    "ci-deploy",
+    GitHubActionsImage.WindowsLatest,
+    AutoGenerate = true,
+    OnPushTags = new[] { "main", "release/*" },
+    InvokedTargets = new[] { nameof(Compile), nameof(SignArtifacts), nameof(CreateRelease) },
     ImportSecrets = new[]
     {
+        nameof(GithubToken),
         nameof(AzureKeyVaultUrl),
         nameof(AzureKeyVaultClientId),
         nameof(AzureKeyVaultTenantId),
@@ -77,7 +85,7 @@ class Build : NukeBuild
 
     [Solution(GenerateProjects = true)] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
-    [GitVersion(Framework = "netcoreapp3.1")] readonly GitVersion GitVersion;
+    [GitVersion(Framework = "net5.0")] readonly GitVersion GitVersion;
 
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath TestsDirectory => RootDirectory / "tests";
@@ -151,8 +159,8 @@ class Build : NukeBuild
         .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
         .Executes(() =>
         {
-            Compress(SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "net47", OutputDirectory / "net47" / $"IconPacks.Browser-v{GitVersion.NuGetVersion}.zip");
-            Compress(SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "net5.0-windows" / "win-x64" / "publish", OutputDirectory / "net5.0-windows" / $"IconPacks.Browser-v{GitVersion.NuGetVersion}.zip");
+            Compress(SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "net47", OutputDirectory / $"IconPacks.Browser-net47-v{GitVersion.NuGetVersion}.zip");
+            Compress(SourceDirectory / "IconPacks.Browser" / "bin" / Configuration / "net5.0-windows" / "win-x64" / "publish", OutputDirectory / $"IconPacks.Browser-net50-v{GitVersion.NuGetVersion}.zip");
         });
 
     Target SignArtifacts => _ => _
@@ -168,6 +176,54 @@ class Build : NukeBuild
                 , GitRepository.HttpsUrl);
         });
 
+    Target CreateRelease => _ => _
+        .OnlyWhenStatic(() => GitRepository.IsOnMainBranch() || GitRepository.IsOnReleaseBranch())
+        .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
+        .Requires(() => GithubToken)
+        .Executes(() =>
+        {
+            GitHubTasks.GitHubClient = new GitHubClient(new ProductHeaderValue(nameof(NukeBuild)))
+            {
+                Credentials = new Credentials(GithubToken)
+            };
+
+            var newRelease = new NewRelease(GitVersion.MajorMinorPatch)
+            {
+                TargetCommitish = GitVersion.Sha,
+                Draft = true,
+                Name = $"Release version {GitVersion.AssemblySemFileVer}",
+                Prerelease = false
+            };
+
+            var createdRelease = GitHubTasks.GitHubClient.Repository.Release.Create(GitRepository.GetGitHubOwner(), GitRepository.GetGitHubName(), newRelease).Result;
+
+            var files = SourceDirectory.GlobFiles(OutputDirectory / "*.*");
+            files.ForEach(p => UploadReleaseAssetToGithub(GitHubTasks.GitHubClient, createdRelease, p));
+        });
+
+    private void UploadReleaseAssetToGithub(IGitHubClient client, Release release, AbsolutePath asset)
+    {
+        if (!asset.FileExists())
+        {
+            return;
+        }
+
+        Log.Information("Started Uploading {FileName} to the release", asset.Name);
+
+        using var archiveContents = File.OpenRead(asset);
+        var assetUpload = new ReleaseAssetUpload()
+        {
+            FileName = asset.Name,
+            ContentType = "application/zip",
+            RawData = archiveContents
+        };
+
+        var _ = client.Repository.Release.UploadAsset(release, assetUpload).Result;
+
+        Log.Information("Done Uploading {FileName} to the release", asset.Name);
+    }
+
+    [Parameter("GitHub Api key")] [Secret] string GithubToken = null;
     [Parameter] [Secret] readonly string AzureKeyVaultUrl;
     [Parameter] [Secret] readonly string AzureKeyVaultClientId;
     [Parameter] [Secret] readonly string AzureKeyVaultTenantId;

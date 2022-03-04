@@ -9,22 +9,18 @@
 #
 #     - To trigger manual generation invoke:
 #
-#         nuke --generate-configuration GitHubActions_ci --host GitHubActions
+#         nuke --generate-configuration GitHubActions_ci-deploy --host GitHubActions
 #
 # </auto-generated>
 # ------------------------------------------------------------------------------
 
-name: ci
+name: ci-deploy
 
 on:
   push:
-    branches:
+    tags:
       - main
-      - develop
-  pull_request:
-    branches:
-      - main
-      - develop
+      - 'release/*'
 
 jobs:
   windows-latest:
@@ -39,5 +35,12 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
-      - name: Run './build.cmd Compile'
-        run: ./build.cmd Compile
+      - name: Run './build.cmd Compile SignArtifacts CreateRelease'
+        run: ./build.cmd Compile SignArtifacts CreateRelease
+        env:
+          GithubToken: ${{ secrets.GITHUB_TOKEN }}
+          AzureKeyVaultUrl: ${{ secrets.AZURE_KEY_VAULT_URL }}
+          AzureKeyVaultClientId: ${{ secrets.AZURE_KEY_VAULT_CLIENT_ID }}
+          AzureKeyVaultTenantId: ${{ secrets.AZURE_KEY_VAULT_TENANT_ID }}
+          AzureKeyVaultClientSecret: ${{ secrets.AZURE_KEY_VAULT_CLIENT_SECRET }}
+          AzureKeyVaultCertificate: ${{ secrets.AZURE_KEY_VAULT_CERTIFICATE }}

@@ -132,7 +132,6 @@ class Build : NukeBuild
 
     Target Publish => _ => _
         .DependsOn(Compile)
-        .OnlyWhenStatic(() => GitRepository.IsOnMainBranch() || GitRepository.IsOnReleaseBranch())
         .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
         .Executes(() =>
         {
@@ -155,7 +154,6 @@ class Build : NukeBuild
 
     Target CompressArtifacts => _ => _
         .DependsOn(Publish)
-        .OnlyWhenStatic(() => GitRepository.IsOnMainBranch() || GitRepository.IsOnReleaseBranch())
         .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
         .Executes(() =>
         {
@@ -165,7 +163,6 @@ class Build : NukeBuild
 
     Target SignArtifacts => _ => _
         .DependsOn(Publish)
-        .OnlyWhenStatic(() => GitRepository.IsOnMainBranch() || GitRepository.IsOnReleaseBranch())
         .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
         .Executes(() =>
         {
@@ -177,7 +174,6 @@ class Build : NukeBuild
         });
 
     Target CreateRelease => _ => _
-        .OnlyWhenStatic(() => GitRepository.IsOnMainBranch() || GitRepository.IsOnReleaseBranch())
         .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
         .Requires(() => GithubToken)
         .Executes(() =>

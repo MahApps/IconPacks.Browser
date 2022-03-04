@@ -153,6 +153,7 @@ class Build : NukeBuild
         });
 
     Target CompressArtifacts => _ => _
+        .DependsOn(Compile)
         .DependsOn(Publish)
         .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
         .Executes(() =>
@@ -167,14 +168,12 @@ class Build : NukeBuild
         .Executes(() =>
         {
             var files = SourceDirectory.GlobFiles("**/bin/**/IconPacks.Browser.exe").Select(p => p.ToString());
-            SignFiles(
-                files
-                , "IconPacks Browser"
-                , GitRepository.HttpsUrl);
+            SignFiles(files, "IconPacks Browser", GitRepository.HttpsUrl);
         });
 
     Target CreateRelease => _ => _
         .DependsOn(SignArtifacts)
+        .DependsOn(CompressArtifacts)
         .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
         .Requires(() => GithubToken)
         .Executes(() =>
@@ -197,8 +196,10 @@ class Build : NukeBuild
             var files = OutputDirectory.GlobFiles("*.zip");
             if (files.IsEmpty())
             {
-                Log.Warning("No files found in {OutputFolder} doesn't exist", OutputDirectory.Name);
+                Log.Warning("No files found in {OutputFolder}", OutputDirectory.Name);
             }
+
+            SignFiles(files.Select(p => p.ToString()), "IconPacks Browser", GitRepository.HttpsUrl);
 
             files.ForEach(p => UploadReleaseAssetToGithub(GitHubTasks.GitHubClient, createdRelease, p));
         });

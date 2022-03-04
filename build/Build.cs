@@ -199,8 +199,6 @@ class Build : NukeBuild
                 Log.Warning("No files found in {OutputFolder}", OutputDirectory.Name);
             }
 
-            SignFiles(files.Select(p => p.ToString()), "IconPacks Browser", GitRepository.HttpsUrl);
-
             files.ForEach(p => UploadReleaseAssetToGithub(GitHubTasks.GitHubClient, createdRelease, p));
         });
 

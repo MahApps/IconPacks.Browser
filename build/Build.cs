@@ -194,7 +194,12 @@ class Build : NukeBuild
 
             var createdRelease = GitHubTasks.GitHubClient.Repository.Release.Create(GitRepository.GetGitHubOwner(), GitRepository.GetGitHubName(), newRelease).Result;
 
-            var files = OutputDirectory.GlobFiles("**/*.zip");
+            var files = OutputDirectory.GlobFiles("*.zip");
+            if (files.IsEmpty())
+            {
+                Log.Warning("No files found in {OutputFolder} doesn't exist", OutputDirectory.Name);
+            }
+
             files.ForEach(p => UploadReleaseAssetToGithub(GitHubTasks.GitHubClient, createdRelease, p));
         });
 
@@ -202,6 +207,7 @@ class Build : NukeBuild
     {
         if (!asset.FileExists())
         {
+            Log.Error("File {File} doesn't exist", asset.Name);
             return;
         }
 

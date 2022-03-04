@@ -33,7 +33,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     "ci-deploy",
     GitHubActionsImage.WindowsLatest,
     AutoGenerate = true,
-    OnPushTags = new[] { "main", "release/*" },
+    OnPushTags = new[] { "*" },
     InvokedTargets = new[] { nameof(Compile), nameof(SignArtifacts), nameof(CreateRelease) },
     ImportSecrets = new[]
     {

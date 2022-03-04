@@ -19,8 +19,7 @@ name: ci-deploy
 on:
   push:
     tags:
-      - main
-      - 'release/*'
+      - '*'
 
 jobs:
   windows-latest:

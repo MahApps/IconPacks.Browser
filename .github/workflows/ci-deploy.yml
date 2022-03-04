@@ -34,8 +34,8 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
-      - name: Run './build.cmd Compile SignArtifacts CreateRelease'
-        run: ./build.cmd Compile SignArtifacts CreateRelease
+      - name: Run './build.cmd Compile CreateRelease'
+        run: ./build.cmd Compile CreateRelease
         env:
           GithubToken: ${{ secrets.GITHUB_TOKEN }}
           AzureKeyVaultUrl: ${{ secrets.AZURE_KEY_VAULT_URL }}

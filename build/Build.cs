@@ -34,7 +34,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     GitHubActionsImage.WindowsLatest,
     AutoGenerate = true,
     OnPushTags = new[] { "*" },
-    InvokedTargets = new[] { nameof(Compile), nameof(SignArtifacts), nameof(CreateRelease) },
+    InvokedTargets = new[] { nameof(Compile), nameof(CreateRelease) },
     ImportSecrets = new[]
     {
         nameof(GithubToken),
@@ -174,6 +174,7 @@ class Build : NukeBuild
         });
 
     Target CreateRelease => _ => _
+        .DependsOn(SignArtifacts)
         .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
         .Requires(() => GithubToken)
         .Executes(() =>
@@ -187,13 +188,13 @@ class Build : NukeBuild
             {
                 TargetCommitish = GitVersion.Sha,
                 Draft = true,
-                Name = $"Release version {GitVersion.AssemblySemFileVer}",
+                Name = $"{GitRepository.GetGitHubName()} v{GitVersion.FullSemVer}",
                 Prerelease = false
             };
 
             var createdRelease = GitHubTasks.GitHubClient.Repository.Release.Create(GitRepository.GetGitHubOwner(), GitRepository.GetGitHubName(), newRelease).Result;
 
-            var files = SourceDirectory.GlobFiles(OutputDirectory / "*.*");
+            var files = OutputDirectory.GlobFiles("**/*.zip");
             files.ForEach(p => UploadReleaseAssetToGithub(GitHubTasks.GitHubClient, createdRelease, p));
         });
 

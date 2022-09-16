@@ -31,7 +31,7 @@
         <PackageReference Include="VirtualizingWrapPanel" Version="1.5.7" />
     </ItemGroup>
     <ItemGroup Condition="$(DefineConstants.Contains(NETCOREAPP)) == true">
-        <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
+        <PackageReference Include="MaterialDesignThemes" Version="4.6.0" />
         <PackageReference Include="MaterialDesignColors" Version="2.0.7" />
     </ItemGroup>
     <ItemGroup Condition="$(DefineConstants.Contains(NETCOREAPP)) == false">

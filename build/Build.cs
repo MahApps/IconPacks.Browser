@@ -25,6 +25,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     "ci",
     GitHubActionsImage.WindowsLatest,
     AutoGenerate = true,
+    FetchDepth = 0,
     OnPushBranches = new[] { "main", "develop" },
     OnPullRequestBranches = new[] { "main", "develop" },
     InvokedTargets = new[] { nameof(Compile) }
@@ -33,6 +34,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     "ci-deploy",
     GitHubActionsImage.WindowsLatest,
     AutoGenerate = true,
+    FetchDepth = 0,
     OnPushTags = new[] { "*" },
     InvokedTargets = new[] { nameof(Compile), nameof(CreateRelease) },
     ImportSecrets = new[]
@@ -45,7 +47,6 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
         nameof(AzureKeyVaultCertificate)
     }
 )]
-[CheckBuildProjectConfigurations]
 [ShutdownDotNetAfterServerBuild]
 class Build : NukeBuild
 {
@@ -83,9 +84,9 @@ class Build : NukeBuild
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")] readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
-    [Solution(GenerateProjects = true)] readonly Solution Solution;
+    [Solution(GenerateProjects = true, SuppressBuildProjectCheck = false)] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
-    [GitVersion(Framework = "netcoreapp3.1", NoFetch = true)] readonly GitVersion GitVersion;
+    [GitVersion(Framework = "net5.0", NoFetch = true)] readonly GitVersion GitVersion;
 
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath TestsDirectory => RootDirectory / "tests";
@@ -144,9 +145,9 @@ class Build : NukeBuild
                 .SetInformationalVersion(GitVersion.InformationalVersion)
                 .SetFramework("net5.0-windows")
                 .SetRuntime("win-x64")
-                .SetPublishTrimmed(false)
-                .SetSelfContained(true)
-                .SetPublishSingleFile(true)
+                .DisablePublishTrimmed()
+                .EnableSelfContained()
+                .EnablePublishSingleFile()
                 .SetProperty("IncludeNativeLibrariesForSelfExtract", true)
                 .SetProperty("IncludeAllContentForSelfExtract", true)
             );

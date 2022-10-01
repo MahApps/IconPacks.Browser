@@ -32,11 +32,11 @@
     </ItemGroup>
     <ItemGroup Condition="$(DefineConstants.Contains(NETCOREAPP)) == true">
         <PackageReference Include="MaterialDesignThemes" Version="4.6.0" />
-        <PackageReference Include="MaterialDesignColors" Version="2.0.7" />
+        <PackageReference Include="MaterialDesignColors" Version="2.0.9" />
     </ItemGroup>
     <ItemGroup Condition="$(DefineConstants.Contains(NETCOREAPP)) == false">
         <PackageReference Include="MaterialDesignThemes" Version="3.0.1" />
-        <PackageReference Include="MaterialDesignColors" Version="1.2.7" />
+        <PackageReference Include="MaterialDesignColors" Version="2.0.9" />
     </ItemGroup>
 
     <ItemGroup>

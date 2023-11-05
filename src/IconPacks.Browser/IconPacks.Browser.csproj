@@ -26,7 +26,7 @@
         </PackageReference>
         <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
         <PackageReference Include="MahApps.Metro" Version="2.4.9" />
-        <PackageReference Include="AsyncAwaitBestPractices" Version="6.0.5" />
+        <PackageReference Include="AsyncAwaitBestPractices" Version="6.0.6" />
         <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
         <PackageReference Include="VirtualizingWrapPanel" Version="1.5.7" />
     </ItemGroup>

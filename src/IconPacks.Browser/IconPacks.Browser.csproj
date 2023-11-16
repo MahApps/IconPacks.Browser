@@ -41,6 +41,9 @@
 
     <ItemGroup>
         <_SettingsFiles Remove="Properties\Settings.settings" />
+        <None Update="ExportTemplates\Clipboard.WPF.Geometry.xml">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Update="ExportTemplates\Clipboard.Content.xml">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>

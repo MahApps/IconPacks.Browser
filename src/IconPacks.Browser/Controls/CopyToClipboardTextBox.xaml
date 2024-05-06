@@ -27,7 +27,7 @@
                 Width="22"
                 Command="{x:Static vm:MainViewModel.CopyTextToClipboardCommand}"
                 CommandParameter="{Binding ElementName=ucCopyToClipboardTextBox, Path=TextToCopy}"
-                Content="{iconPacks:Octicons Kind=Clippy}"
+                Content="{iconPacks:Octicons Kind=Copy}"
                 ToolTip="Copy">
             <Button.Style>
                 <Style BasedOn="{StaticResource MahApps.Styles.Button.Chromeless}" TargetType="{x:Type Button}">

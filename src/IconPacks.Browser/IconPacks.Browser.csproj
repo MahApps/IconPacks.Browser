@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net47;net5.0-windows</TargetFrameworks>
+        <TargetFrameworks>net47;net6.0-windows</TargetFrameworks>
         <OutputType>WinExe</OutputType>
         <UseWPF>true</UseWPF>
         <AssemblyName>IconPacks.Browser</AssemblyName>
@@ -19,20 +19,20 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
+        <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
         <PackageReference Include="WpfAnalyzers" Version="4.1.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
-        <PackageReference Include="MahApps.Metro" Version="2.4.9" />
-        <PackageReference Include="AsyncAwaitBestPractices" Version="6.0.5" />
-        <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
-        <PackageReference Include="VirtualizingWrapPanel" Version="1.5.7" />
+        <PackageReference Include="MahApps.Metro.IconPacks" Version="5.0.0-*" />
+        <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+        <PackageReference Include="AsyncAwaitBestPractices" Version="6.0.6" />
+        <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
+        <PackageReference Include="VirtualizingWrapPanel" Version="1.5.8" />
     </ItemGroup>
     <ItemGroup Condition="$(DefineConstants.Contains(NETCOREAPP)) == true">
-        <PackageReference Include="MaterialDesignThemes" Version="4.6.0" />
-        <PackageReference Include="MaterialDesignColors" Version="2.0.7" />
+        <PackageReference Include="MaterialDesignThemes" Version="4.6.1" />
+        <PackageReference Include="MaterialDesignColors" Version="2.0.9" />
     </ItemGroup>
     <ItemGroup Condition="$(DefineConstants.Contains(NETCOREAPP)) == false">
         <PackageReference Include="MaterialDesignThemes" Version="3.0.1" />

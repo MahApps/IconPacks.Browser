@@ -62,6 +62,7 @@ namespace IconPacks.Browser.ViewModels
                     (typeof(PackIconMicronsKind), typeof(PackIconMicrons)),
                     (typeof(PackIconModernKind), typeof(PackIconModern)),
                     (typeof(PackIconOcticonsKind), typeof(PackIconOcticons)),
+                    (typeof(PackIconPhosphorIconsKind), typeof(PackIconPhosphorIcons)),
                     (typeof(PackIconPicolIconsKind), typeof(PackIconPicolIcons)),
                     (typeof(PackIconPixelartIconsKind), typeof(PackIconPixelartIcons)),
                     (typeof(PackIconRadixIconsKind), typeof(PackIconRadixIcons)),

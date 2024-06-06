@@ -21,7 +21,7 @@ using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using MahApps.Metro.IconPacks;
 using Microsoft.Win32;
-using io = System.IO;
+using IO = System.IO;
 
 namespace IconPacks.Browser.ViewModels
 {
@@ -253,7 +253,7 @@ namespace IconPacks.Browser.ViewModels
 
                     var svgFileContent = ExportHelper.FillTemplate(svgFileTemplate, parameters);
 
-                    using io.StreamWriter file = new io.StreamWriter(fileSaveDialog.FileName);
+                    using IO.StreamWriter file = new IO.StreamWriter(fileSaveDialog.FileName);
                     await file.WriteAsync(svgFileContent);
                 }
             }
@@ -317,7 +317,7 @@ namespace IconPacks.Browser.ViewModels
 
                     var wpfFileContent = ExportHelper.FillTemplate(wpfFileTemplate, parameters);
 
-                    using io.StreamWriter file = new io.StreamWriter(fileSaveDialog.FileName);
+                    using IO.StreamWriter file = new IO.StreamWriter(fileSaveDialog.FileName);
                     await file.WriteAsync(wpfFileContent);
                 }
             }
@@ -380,7 +380,7 @@ namespace IconPacks.Browser.ViewModels
 
                     var wpfFileContent = ExportHelper.FillTemplate(wpfFileTemplate, parameters);
 
-                    using io.StreamWriter file = new io.StreamWriter(fileSaveDialog.FileName);
+                    using IO.StreamWriter file = new IO.StreamWriter(fileSaveDialog.FileName);
                     await file.WriteAsync(wpfFileContent);
                 }
             }
@@ -450,7 +450,7 @@ namespace IconPacks.Browser.ViewModels
 
                     encoder.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
 
-                    using var fileStream = new io.FileStream(fileSaveDialog.FileName, io.FileMode.Create);
+                    using var fileStream = new IO.FileStream(fileSaveDialog.FileName, IO.FileMode.Create);
                     encoder.Save(fileStream);
                 }
             }

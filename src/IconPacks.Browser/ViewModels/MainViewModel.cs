@@ -176,12 +176,45 @@ namespace IconPacks.Browser.ViewModels
             }
         }
 
+        private static void DoCopyTextToClipboard(string text)
+        {
+            Application.Current.Dispatcher.BeginInvoke(new Action(() => { Clipboard.SetDataObject(text); }));
+        }
+
         public static ICommand CopyTextToClipboardCommand { get; } =
             new SimpleCommand
             {
                 CanExecuteDelegate = x => (x is string),
-                ExecuteDelegate = x => Application.Current.Dispatcher.BeginInvoke(new Action(() => { Clipboard.SetDataObject(x as string); }))
+                ExecuteDelegate = x => DoCopyTextToClipboard((string)x)
             };
+
+        public static ICommand CopyToClipboardTextCommand { get; } =
+            new SimpleCommand
+            {
+                CanExecuteDelegate = x => (x is IIconViewModel),
+                ExecuteDelegate = x => DoCopyTextToClipboard(((IIconViewModel)x).CopyToClipboardText)
+            };
+
+        public static ICommand CopyToClipboardAsContentTextCommand { get; } =
+            new SimpleCommand
+            {
+                CanExecuteDelegate = x => (x is IIconViewModel),
+                ExecuteDelegate = x => DoCopyTextToClipboard(((IIconViewModel)x).CopyToClipboardAsContentText)
+            };
+
+        public static ICommand CopyToClipboardAsPathIconTextCommand { get; } =
+            new SimpleCommand
+            {
+                CanExecuteDelegate = x => (x is IIconViewModel),
+                ExecuteDelegate = x => DoCopyTextToClipboard(((IIconViewModel)x).CopyToClipboardAsPathIconText)
+            };
+
+        public static ICommand CopyToClipboardAsGeometryTextCommand { get; } =
+            new SimpleCommand
+            {
+                CanExecuteDelegate = x => (x is IIconViewModel),
+                ExecuteDelegate = x => DoCopyTextToClipboard(((IIconViewModel)x).CopyToClipboardAsGeometryText)
+            };  
 
         public SettingsViewModel Settings { get; }
     }

@@ -11,30 +11,42 @@ namespace IconPacks.Browser.Model
     {
         // SVG-File
         private static string _SvgFileTemplate;
+
         internal static string SvgFileTemplate => _SvgFileTemplate ??= LoadTemplateString("SVG.xml");
 
         // XAML-File (WPF)
         private static string _WpfFileTemplate;
+
         internal static string WpfFileTemplate => _WpfFileTemplate ??= LoadTemplateString("WPF.xml");
 
         // XAML-File (WPF)
         private static string _UwpFileTemplate;
+
         internal static string UwpFileTemplate => _UwpFileTemplate ??= LoadTemplateString("WPF.xml");
 
         // Clipboard - WPF
         private static string _ClipboardWpf;
+
         internal static string ClipboardWpf => _ClipboardWpf ??= File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExportTemplates", "Clipboard.WPF.xml"));
+
+        // Clipboard - WPF
+        private static string _ClipboardWpfGeometry;
+
+        internal static string ClipboardWpfGeometry => _ClipboardWpfGeometry ??= File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExportTemplates", "Clipboard.WPF.Geometry.xml"));
 
         // Clipboard - UWP
         private static string _ClipboardUwp;
+
         internal static string ClipboardUwp => _ClipboardUwp ??= File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExportTemplates", "Clipboard.UWP.xml"));
 
         // Clipboard - Content
         private static string _ClipboardContent;
+
         internal static string ClipboardContent => _ClipboardContent ??= File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExportTemplates", "Clipboard.Content.xml"));
 
         // Clipboard - PathData
         private static string _ClipboardData;
+
         internal static string ClipboardData => _ClipboardData ??= File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExportTemplates", "Clipboard.PathData.xml"));
 
         internal static string FillTemplate(string template, ExportParameters parameters)
@@ -45,7 +57,7 @@ namespace IconPacks.Browser.Model
                 .Replace("@IconPackLicense", parameters.IconPackLicense)
                 .Replace("@PageWidth", parameters.PageWidth)
                 .Replace("@PageHeight", parameters.PageHeight)
-                .Replace("@PathData", parameters.PathData)
+                .CheckedReplace("@PathData", () => parameters.PathData) // avoid allocation of Lazy<string>
                 .Replace("@FillColor", parameters.FillColor)
                 .Replace("@Background", parameters.Background)
                 .Replace("@StrokeColor", parameters.StrokeColor)
@@ -71,7 +83,7 @@ namespace IconPacks.Browser.Model
     internal struct ExportParameters
     {
         /// <summary>
-        /// Provides a default set of Export parameters. You should edit this to your needs. 
+        /// Provides a default set of Export parameters. You should edit this to your needs.
         /// </summary>
         /// <param name="icon"></param>
         internal ExportParameters(IIconViewModel icon)
@@ -93,6 +105,8 @@ namespace IconPacks.Browser.Model
 
             this.IconPackHomepage = metaData?.ProjectUrl;
             this.IconPackLicense = metaData?.LicenseUrl;
+
+            this.PathData = (icon as IconViewModel)?.GetPackIconControlBase().Data;
         }
 
         internal string IconKind { get; set; }
@@ -109,5 +123,18 @@ namespace IconPacks.Browser.Model
         internal string StrokeLineCap { get; set; }
         internal string StrokeLineJoin { get; set; }
         internal string TransformMatrix { get; set; }
+    }
+
+    internal static class ExportHelperExtensions
+    {
+        internal static string CheckedReplace(this string input, string oldValue, Func<string> newValue)
+        {
+            if (input.Contains(oldValue))
+            {
+                return input.Replace(oldValue, newValue());
+            }
+
+            return input;
+        }
     }
 }

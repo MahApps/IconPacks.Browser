@@ -473,6 +473,7 @@ namespace IconPacks.Browser.ViewModels
         object Value { get; set; }
         MetaDataAttribute MetaData { get; set; }
         string CopyToClipboardText { get; }
+        string CopyToClipboardWpfGeometry { get; }
         string CopyToClipboardAsContentText { get; }
         string CopyToClipboardAsPathIconText { get; }
         string CopyToClipboardAsGeometryText { get; }
@@ -491,12 +492,13 @@ namespace IconPacks.Browser.ViewModels
         }
 
         public string CopyToClipboardText => ExportHelper.FillTemplate(ExportHelper.ClipboardWpf, new ExportParameters(this)); // $"<iconPacks:{IconPackType.Name} Kind=\"{Name}\" />";
+        public string CopyToClipboardWpfGeometry => ExportHelper.FillTemplate(ExportHelper.ClipboardWpfGeometry, new ExportParameters(this)); // $"<iconPacks:{IconPackType.Name} Kind=\"{Name}\" />";
 
         public string CopyToClipboardAsContentText => ExportHelper.FillTemplate(ExportHelper.ClipboardContent, new ExportParameters(this)); // $"{{iconPacks:{IconPackType.Name.Replace("PackIcon", "")} Kind={Name}}}";
 
         public string CopyToClipboardAsPathIconText => ExportHelper.FillTemplate(ExportHelper.ClipboardUwp, new ExportParameters(this)); // $"<iconPacks:{IconPackType.Name.Replace("PackIcon", "PathIcon")} Kind=\"{Name}\" />";
 
-        public string CopyToClipboardAsGeometryText => ExportHelper.FillTemplate(ExportHelper.ClipboardData, new ExportParameters(this) { PathData = GetPackIconControlBase().Data }); // GetPackIconControlBase().Data;
+        public string CopyToClipboardAsGeometryText => ExportHelper.FillTemplate(ExportHelper.ClipboardData, new ExportParameters(this)); // GetPackIconControlBase().Data;
 
         public string Name { get; set; }
 
@@ -515,6 +517,7 @@ namespace IconPacks.Browser.ViewModels
         internal PackIconControlBase GetPackIconControlBase()
         {
             if (Activator.CreateInstance(IconPackType) is not PackIconControlBase iconPack) return null;
+
             var kindProperty = IconPackType.GetProperty("Kind");
             if (kindProperty == null) return null;
             kindProperty.SetValue(iconPack, Value);

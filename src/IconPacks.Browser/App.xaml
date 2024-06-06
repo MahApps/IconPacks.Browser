@@ -21,12 +21,12 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!--  Brushes  -->
-            <SolidColorBrush x:Key="IconPackBrowser.Brushes.PanelBackground" Opacity="0.15" Color="#808080" />
+            <SolidColorBrush x:Key="IconPackBrowser.Brushes.PanelBackground" Color="#808080" Opacity="0.15" />
 
             <!--  Styles  -->
             <Style x:Key="UnderlinedTextBlockStyle"
-                   BasedOn="{StaticResource {x:Type TextBlock}}"
-                   TargetType="{x:Type TextBlock}">
+                   TargetType="{x:Type TextBlock}"
+                   BasedOn="{StaticResource {x:Type TextBlock}}">
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="TextDecorations" Value="Underline" />
@@ -34,15 +34,15 @@
                 </Style.Triggers>
             </Style>
 
-            <Style BasedOn="{StaticResource MahApps.Styles.ListBoxItem}" TargetType="{x:Type ListBoxItem}">
+            <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource MahApps.Styles.ListBoxItem}">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 <Setter Property="Padding" Value="0" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
             </Style>
 
             <Style x:Key="CustomMetroCircleButtonStyle"
-                   BasedOn="{StaticResource MahApps.Styles.Button.Circle}"
-                   TargetType="{x:Type Button}">
+                   TargetType="{x:Type Button}"
+                   BasedOn="{StaticResource MahApps.Styles.Button.Circle}">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray3}" />
                 <Setter Property="BorderThickness" Value="2" />
@@ -57,8 +57,8 @@
                                 <Ellipse Fill="{TemplateBinding Background}" StrokeThickness="0" />
                                 <Ellipse x:Name="ellipsebg"
                                          Fill="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                         Opacity="0"
-                                         StrokeThickness="0" />
+                                         StrokeThickness="0"
+                                         Opacity="0" />
                                 <Ellipse x:Name="ellipse"
                                          Stroke="{TemplateBinding BorderBrush}"
                                          StrokeThickness="{Binding RelativeSource={x:Static RelativeSource.TemplatedParent}, Path=BorderThickness.Left}" />
@@ -92,21 +92,21 @@
                 <Setter Property="VerticalContentAlignment" Value="Center" />
             </Style>
 
-            <Style BasedOn="{StaticResource MahApps.Styles.Expander}" TargetType="Expander">
+            <Style TargetType="Expander" BasedOn="{StaticResource MahApps.Styles.Expander}">
                 <Setter Property="IsExpanded" Value="True" />
             </Style>
 
-            <Style BasedOn="{StaticResource MahApps.Styles.MetroHeader}" TargetType="mah:MetroHeader">
+            <Style TargetType="mah:MetroHeader" BasedOn="{StaticResource MahApps.Styles.MetroHeader}">
                 <Setter Property="Padding" Value="2 0 2 4" />
-                <Setter Property="mah:HeaderedControlHelper.HeaderMargin" Value="2 2 2 4" />
                 <Setter Property="mah:HeaderedControlHelper.HeaderFontSize" Value="{DynamicResource MahApps.Font.Size.Content}" />
+                <Setter Property="mah:HeaderedControlHelper.HeaderMargin" Value="2 2 2 4" />
             </Style>
 
-            <Style BasedOn="{StaticResource MahApps.Styles.ColorPicker}" TargetType="mah:ColorPicker">
+            <Style TargetType="mah:ColorPicker" BasedOn="{StaticResource MahApps.Styles.ColorPicker}">
                 <Setter Property="BorderThickness" Value="0" />
             </Style>
 
-            <Style BasedOn="{StaticResource MahApps.Styles.ComboBox}" TargetType="ComboBox">
+            <Style TargetType="ComboBox" BasedOn="{StaticResource MahApps.Styles.ComboBox}">
                 <Setter Property="BorderThickness" Value="0" />
             </Style>
 

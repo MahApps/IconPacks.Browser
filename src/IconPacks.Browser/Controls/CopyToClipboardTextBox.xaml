@@ -16,9 +16,9 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <TextBox MaxHeight="60"
+                 FontFamily="{Binding ElementName=ucCopyToClipboardTextBox, Path=FontFamily}"
                  mah:TextBoxHelper.SelectAllOnFocus="True"
                  BorderThickness="0"
-                 FontFamily="{Binding ElementName=ucCopyToClipboardTextBox, Path=FontFamily}"
                  IsReadOnly="True"
                  Text="{Binding ElementName=ucCopyToClipboardTextBox, Path=TextToCopy, Mode=OneWay}"
                  TextWrapping="Wrap"
@@ -30,7 +30,7 @@
                 Content="{iconPacks:Octicons Kind=Copy}"
                 ToolTip="Copy">
             <Button.Style>
-                <Style BasedOn="{StaticResource MahApps.Styles.Button.Chromeless}" TargetType="{x:Type Button}">
+                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MahApps.Styles.Button.Chromeless}">
                     <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.ThemeBackground}" />
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">

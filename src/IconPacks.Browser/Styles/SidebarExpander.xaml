@@ -25,8 +25,8 @@
     </Style>
 
     <Style x:Key="IconPackBrowser.Styles.ToggleButton.ExpanderHeader"
-           BasedOn="{StaticResource MahApps.Styles.ToggleButton.ExpanderHeader.Base}"
-           TargetType="{x:Type ToggleButton}">
+           TargetType="{x:Type ToggleButton}"
+           BasedOn="{StaticResource MahApps.Styles.ToggleButton.ExpanderHeader.Base}">
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
@@ -51,7 +51,7 @@
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
     </Style>
 
-    <Style BasedOn="{StaticResource MahApps.Styles.Expander}" TargetType="{x:Type ctrls:SidebarExpander}">
+    <Style TargetType="{x:Type ctrls:SidebarExpander}" BasedOn="{StaticResource MahApps.Styles.Expander}">
         <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Gray8}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="MaxWidth" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Panel}, Path=ActualWidth, Converter={converters:MathSubtractConverter}, ConverterParameter=150}" />
@@ -73,9 +73,9 @@
                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                     UseLayoutRounding="True">
                                 <ToggleButton x:Name="ToggleSite"
+                                              Style="{StaticResource IconPackBrowser.Styles.ToggleButton.ExpanderHeader}"
                                               Foreground="{TemplateBinding Foreground}"
                                               IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsExpanded, Mode=TwoWay}"
-                                              Style="{StaticResource IconPackBrowser.Styles.ToggleButton.ExpanderHeader}"
                                               UseLayoutRounding="False">
                                     <Grid>
                                         <StackPanel Margin="4"
@@ -88,14 +88,14 @@
                                                                        Foreground="{DynamicResource MahApps.Brushes.Gray1}"
                                                                        Kind="Left" />
                                             <ContentControl HorizontalAlignment="Center"
+                                                            FontFamily="{TemplateBinding mah:HeaderedControlHelper.HeaderFontFamily}"
+                                                            FontSize="{TemplateBinding mah:HeaderedControlHelper.HeaderFontSize}"
+                                                            FontWeight="{TemplateBinding mah:HeaderedControlHelper.HeaderFontWeight}"
+                                                            FontStretch="{TemplateBinding mah:HeaderedControlHelper.HeaderFontStretch}"
                                                             Content="{TemplateBinding Header}"
                                                             ContentStringFormat="{TemplateBinding HeaderStringFormat}"
                                                             ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                                            ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
-                                                            FontFamily="{TemplateBinding mah:HeaderedControlHelper.HeaderFontFamily}"
-                                                            FontSize="{TemplateBinding mah:HeaderedControlHelper.HeaderFontSize}"
-                                                            FontStretch="{TemplateBinding mah:HeaderedControlHelper.HeaderFontStretch}"
-                                                            FontWeight="{TemplateBinding mah:HeaderedControlHelper.HeaderFontWeight}" />
+                                                            ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" />
                                             <iconPacks:PackIconMicrons x:Name="Arrow2"
                                                                        Margin="0 16 0 0"
                                                                        HorizontalAlignment="Center"

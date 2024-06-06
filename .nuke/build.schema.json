@@ -103,7 +103,8 @@
               "CreateRelease",
               "Publish",
               "Restore",
-              "SignArtifacts"
+              "SignArtifacts",
+              "XamlStyler"
             ]
           }
         },
@@ -123,7 +124,8 @@
               "CreateRelease",
               "Publish",
               "Restore",
-              "SignArtifacts"
+              "SignArtifacts",
+              "XamlStyler"
             ]
           }
         },

@@ -1,1 +1,0 @@
-xstyler.exe -r -d ..\src\IconPacks.Browser\ -c .\Options\XAMLStyler.json

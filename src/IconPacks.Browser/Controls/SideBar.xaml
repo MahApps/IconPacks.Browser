@@ -24,10 +24,10 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <GroupBox Grid.Row="0"
+            <GroupBox Header="Preview"
+                      Grid.Row="0"
                       Padding="0"
-                      DataContext="{Binding SelectedIcon}"
-                      Header="Preview">
+                      DataContext="{Binding SelectedIcon}">
                 <GroupBox.Background>
                     <DrawingBrush TileMode="Tile"
                                   Viewport="0,0,20,20"
@@ -52,11 +52,11 @@
                     </DrawingBrush>
                 </GroupBox.Background>
                 <ScrollViewer x:Name="PreviewScrollViewer"
+                              Style="{StaticResource MahApps.Styles.ScrollViewer}"
                               Padding="2"
                               mah:ScrollViewerHelper.BubbleUpScrollEventToParentScrollviewer="True"
                               HorizontalScrollBarVisibility="Auto"
                               PreviewMouseWheel="IconPreview_PreviewMouseWheel"
-                              Style="{StaticResource MahApps.Styles.ScrollViewer}"
                               VerticalScrollBarVisibility="Auto">
                     <ScrollViewer.Background>
                         <SolidColorBrush Color="{Binding Source={x:Static prop:Settings.Default}, Path=IconBackground}" />
@@ -81,10 +81,9 @@
 
             <StackPanel Grid.Row="2">
 
-                <Expander Margin="0 2 0 0" Header="Icon Information">
+                <Expander Header="Icon Information" Margin="0 2 0 0">
                     <StackPanel>
-                        <mah:MetroHeader DataContext="{Binding SelectedIcon}"
-                                         Header="IconPackName and IconKind">
+                        <mah:MetroHeader Header="IconPackName and IconKind" DataContext="{Binding SelectedIcon}">
                             <ctrls:CopyToClipboardTextBox>
                                 <ctrls:CopyToClipboardTextBox.TextToCopy>
                                     <MultiBinding StringFormat="{}{0}.{1}">
@@ -106,8 +105,7 @@
                     </StackPanel>
                 </Expander>
 
-                <Expander Margin="0 5 0 0"
-                          Header="Preview options">
+                <Expander Header="Preview options" Margin="0 5 0 0">
                     <StackPanel>
                         <mah:MetroHeader Header="Iconsize ">
                             <ComboBox x:Name="ComboBoxIconPreviewSize"
@@ -134,9 +132,9 @@
                     </StackPanel>
                 </Expander>
 
-                <Expander Margin="0 5 0 0"
+                <Expander Header="Copy to clipboard"
+                          Margin="0 5 0 0"
                           DataContext="{Binding SelectedIcon}"
-                          Header="Copy to clipboard"
                           IsExpanded="True">
                     <StackPanel>
                         <!--  WPF Control  -->
@@ -147,7 +145,10 @@
                                                                      Height="12"
                                                                      VerticalAlignment="Center"
                                                                      Kind="BracketsAngle" />
-                                    <Label VerticalAlignment="Center" Margin ="4 0" Padding="0" Content="Copy as WPF-Control" />
+                                    <Label Margin="4 0"
+                                           Padding="0"
+                                           VerticalAlignment="Center"
+                                           Content="Copy as WPF-Control" />
                                 </StackPanel>
                             </mah:MetroHeader.Header>
                             <ctrls:CopyToClipboardTextBox FontFamily="Consolas" TextToCopy="{Binding CopyToClipboardText}" />
@@ -160,7 +161,10 @@
                                                                      Height="12"
                                                                      VerticalAlignment="Center"
                                                                      Kind="Polygon" />
-                                    <Label VerticalAlignment="Center" Margin ="4 0" Padding="0" Content="Copy as WPF-PathGeometry" />
+                                    <Label Margin="4 0"
+                                           Padding="0"
+                                           VerticalAlignment="Center"
+                                           Content="Copy as WPF-PathGeometry" />
                                 </StackPanel>
                             </mah:MetroHeader.Header>
                             <ctrls:CopyToClipboardTextBox FontFamily="Consolas" TextToCopy="{Binding CopyToClipboardWpfGeometry}" />
@@ -174,7 +178,10 @@
                                                                      Height="12"
                                                                      VerticalAlignment="Center"
                                                                      Kind="BracketsCurly" />
-                                    <Label VerticalAlignment="Center" Margin ="4 0" Padding="0" Content="Copy as content extension" />
+                                    <Label Margin="4 0"
+                                           Padding="0"
+                                           VerticalAlignment="Center"
+                                           Content="Copy as content extension" />
                                 </StackPanel>
                             </mah:MetroHeader.Header>
                             <ctrls:CopyToClipboardTextBox FontFamily="Consolas" TextToCopy="{Binding CopyToClipboardAsContentText}" />
@@ -188,7 +195,10 @@
                                                                      Height="12"
                                                                      VerticalAlignment="Center"
                                                                      Kind="BracketsAngle" />
-                                    <Label VerticalAlignment="Center" Margin ="4 0" Padding="0" Content="Copy as UWP-Control" />
+                                    <Label Margin="4 0"
+                                           Padding="0"
+                                           VerticalAlignment="Center"
+                                           Content="Copy as UWP-Control" />
                                 </StackPanel>
                             </mah:MetroHeader.Header>
                             <ctrls:CopyToClipboardTextBox FontFamily="Consolas" TextToCopy="{Binding CopyToClipboardAsPathIconText}" />
@@ -201,7 +211,10 @@
                                                                      Height="12"
                                                                      VerticalAlignment="Center"
                                                                      Kind="Polygon" />
-                                    <Label VerticalAlignment="Center" Margin ="4 0" Padding="0" Content="Copy path data" />
+                                    <Label Margin="4 0"
+                                           Padding="0"
+                                           VerticalAlignment="Center"
+                                           Content="Copy path data" />
                                 </StackPanel>
                             </mah:MetroHeader.Header>
                             <ctrls:CopyToClipboardTextBox FontFamily="Consolas" TextToCopy="{Binding CopyToClipboardAsGeometryText}" />
@@ -209,12 +222,12 @@
                     </StackPanel>
                 </Expander>
 
-                <Expander Margin="0 5 0 0"
+                <Expander Header="Export"
+                          Margin="0 5 0 0"
                           Padding="4 0 4 4"
-                          Header="Export"
                           IsExpanded="True">
                     <Expander.Resources>
-                        <Style BasedOn="{StaticResource MahApps.Styles.Button.Flat}" TargetType="Button">
+                        <Style TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button.Flat}">
                             <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.ThemeBackground}" />
                             <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
                             <Setter Property="Margin" Value="0 4 0 0" />

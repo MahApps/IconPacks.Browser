@@ -23,35 +23,35 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <RepeatButton x:Name="SmallDecrease"
+                              Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarSmall}"
                               Grid.Column="0"
                               Command="ScrollBar.LineLeftCommand"
                               Content="M54,14.9765625L54,74.9765625 24,44.9765625 54,14.9765625z"
-                              Opacity="0"
-                              Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarSmall}"
-                              Visibility="Visible" />
+                              Visibility="Visible"
+                              Opacity="0" />
                 <Track x:Name="PART_Track"
                        Grid.Column="1"
                        IsDirectionReversed="False">
                     <Track.DecreaseRepeatButton>
                         <RepeatButton x:Name="LargeDecrease"
-                                      Command="ScrollBar.PageLeftCommand"
-                                      Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarLarge}" />
+                                      Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarLarge}"
+                                      Command="ScrollBar.PageLeftCommand" />
                     </Track.DecreaseRepeatButton>
                     <Track.Thumb>
-                        <mah:MetroThumb Margin="0 1 0 1" Style="{DynamicResource MahApps.Styles.Thumb.ScrollBar}" />
+                        <mah:MetroThumb Style="{DynamicResource MahApps.Styles.Thumb.ScrollBar}" Margin="0 1 0 1" />
                     </Track.Thumb>
                     <Track.IncreaseRepeatButton>
                         <RepeatButton x:Name="LargeIncrease"
-                                      Command="ScrollBar.PageRightCommand"
-                                      Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarLarge}" />
+                                      Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarLarge}"
+                                      Command="ScrollBar.PageRightCommand" />
                     </Track.IncreaseRepeatButton>
                 </Track>
                 <RepeatButton x:Name="SmallIncrease"
+                              Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarSmall}"
                               Grid.Column="2"
                               Command="ScrollBar.LineRightCommand"
                               Content="M192,79.875L352,239.875 192,399.875 192,79.875z"
-                              Opacity="0"
-                              Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarSmall}" />
+                              Opacity="0" />
             </Grid>
         </Grid>
         <ControlTemplate.Triggers>
@@ -122,12 +122,12 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <RepeatButton x:Name="SmallDecrease"
+                              Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarSmall}"
                               Grid.Row="0"
                               Command="ScrollBar.LineUpCommand"
                               Content="M240.125,160L400.125,320 80.125,320 240.125,160z"
-                              Opacity="0"
-                              Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarSmall}"
-                              Visibility="Visible" />
+                              Visibility="Visible"
+                              Opacity="0" />
                 <Track x:Name="PART_Track"
                        Grid.Row="1"
                        IsDirectionReversed="True">
@@ -136,25 +136,25 @@
                     </Track.Resources>
                     <Track.DecreaseRepeatButton>
                         <RepeatButton x:Name="VerticalLargeDecrease"
-                                      Command="ScrollBar.PageUpCommand"
-                                      Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarLarge}" />
+                                      Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarLarge}"
+                                      Command="ScrollBar.PageUpCommand" />
                     </Track.DecreaseRepeatButton>
                     <Track.Thumb>
-                        <mah:MetroThumb Margin="1 0 1 0" Style="{DynamicResource MahApps.Styles.Thumb.ScrollBar}" />
+                        <mah:MetroThumb Style="{DynamicResource MahApps.Styles.Thumb.ScrollBar}" Margin="1 0 1 0" />
                     </Track.Thumb>
                     <Track.IncreaseRepeatButton>
                         <RepeatButton x:Name="VerticalLargeIncrease"
-                                      Command="ScrollBar.PageDownCommand"
-                                      Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarLarge}" />
+                                      Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarLarge}"
+                                      Command="ScrollBar.PageDownCommand" />
                     </Track.IncreaseRepeatButton>
                 </Track>
                 <RepeatButton x:Name="SmallIncrease"
+                              Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarSmall}"
                               Grid.Row="2"
                               Command="ScrollBar.LineDownCommand"
                               Content="M80.125,192L400.125,192 240.125,352 80.125,192z"
-                              Opacity="0"
-                              Style="{DynamicResource MahApps.Styles.RepeatButton.ScrollBarSmall}"
-                              Visibility="Visible" />
+                              Visibility="Visible"
+                              Opacity="0" />
             </Grid>
         </Grid>
         <ControlTemplate.Triggers>
@@ -233,8 +233,8 @@
     </Style>
 
     <Style x:Key="IconPacksBrowser.Styles.ScrollViewer.Win10"
-           BasedOn="{StaticResource MahApps.Styles.ScrollViewer}"
-           TargetType="{x:Type ScrollViewer}">
+           TargetType="{x:Type ScrollViewer}"
+           BasedOn="{StaticResource MahApps.Styles.ScrollViewer}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
@@ -257,6 +257,7 @@
                                                 Content="{TemplateBinding Content}"
                                                 ContentTemplate="{TemplateBinding ContentTemplate}" />
                         <ScrollBar x:Name="PART_VerticalScrollBar"
+                                   Style="{DynamicResource IconPacksBrowser.Styles.ScrollBar.Win10}"
                                    Grid.Row="0"
                                    Grid.Column="1"
                                    Width="{DynamicResource IconPacksBrowser.Sizes.ScrollBar.Width}"
@@ -265,11 +266,11 @@
                                    Cursor="Arrow"
                                    Maximum="{TemplateBinding ScrollableHeight}"
                                    Minimum="0"
-                                   Style="{DynamicResource IconPacksBrowser.Styles.ScrollBar.Win10}"
                                    ViewportSize="{TemplateBinding ViewportHeight}"
                                    Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
                                    Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
                         <ScrollBar x:Name="PART_HorizontalScrollBar"
+                                   Style="{DynamicResource IconPacksBrowser.Styles.ScrollBar.Win10}"
                                    Grid.Row="1"
                                    Grid.Column="0"
                                    Height="{DynamicResource IconPacksBrowser.Sizes.ScrollBar.Height}"
@@ -279,7 +280,6 @@
                                    Maximum="{TemplateBinding ScrollableWidth}"
                                    Minimum="0"
                                    Orientation="Horizontal"
-                                   Style="{DynamicResource IconPacksBrowser.Styles.ScrollBar.Win10}"
                                    ViewportSize="{TemplateBinding ViewportWidth}"
                                    Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
                                    Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
@@ -299,8 +299,8 @@
     </Style>
 
     <Style x:Key="IconPacksBrowser.Styles.ScrollViewer.Win10.Navigation"
-           BasedOn="{StaticResource IconPacksBrowser.Styles.ScrollViewer.Win10}"
-           TargetType="{x:Type ScrollViewer}">
+           TargetType="{x:Type ScrollViewer}"
+           BasedOn="{StaticResource IconPacksBrowser.Styles.ScrollViewer.Win10}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
@@ -324,6 +324,7 @@
                                                 Content="{TemplateBinding Content}"
                                                 ContentTemplate="{TemplateBinding ContentTemplate}" />
                         <ScrollBar x:Name="PART_VerticalScrollBar"
+                                   Style="{DynamicResource IconPacksBrowser.Styles.ScrollBar.Win10}"
                                    Grid.Row="0"
                                    Grid.Column="1"
                                    Width="{DynamicResource IconPacksBrowser.Sizes.ScrollBar.Width}"
@@ -332,11 +333,11 @@
                                    Cursor="Arrow"
                                    Maximum="{TemplateBinding ScrollableHeight}"
                                    Minimum="0"
-                                   Style="{DynamicResource IconPacksBrowser.Styles.ScrollBar.Win10}"
                                    ViewportSize="{TemplateBinding ViewportHeight}"
                                    Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
                                    Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
                         <ScrollBar x:Name="PART_HorizontalScrollBar"
+                                   Style="{DynamicResource IconPacksBrowser.Styles.ScrollBar.Win10}"
                                    Grid.Row="1"
                                    Grid.Column="0"
                                    Height="{DynamicResource IconPacksBrowser.Sizes.ScrollBar.Height}"
@@ -346,7 +347,6 @@
                                    Maximum="{TemplateBinding ScrollableWidth}"
                                    Minimum="0"
                                    Orientation="Horizontal"
-                                   Style="{DynamicResource IconPacksBrowser.Styles.ScrollBar.Win10}"
                                    ViewportSize="{TemplateBinding ViewportWidth}"
                                    Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
                                    Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
@@ -365,5 +365,5 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource IconPacksBrowser.Styles.ScrollViewer.Win10}" TargetType="{x:Type ScrollViewer}" />
+    <Style TargetType="{x:Type ScrollViewer}" BasedOn="{StaticResource IconPacksBrowser.Styles.ScrollViewer.Win10}" />
 </ResourceDictionary>

@@ -28,8 +28,8 @@
 
     <mah:MetroWindow.Resources>
         <Style x:Key="LinkButtonStyle"
-               BasedOn="{StaticResource MahApps.Styles.Button.WindowCommands}"
-               TargetType="{x:Type Button}">
+               TargetType="{x:Type Button}"
+               BasedOn="{StaticResource MahApps.Styles.Button.WindowCommands}">
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Opacity" Value="1" />
             <Setter Property="Padding" Value="0" />
@@ -62,11 +62,12 @@
                       Visibility="Collapsed">
                     <Rectangle RadiusX="11" RadiusY="11">
                         <Rectangle.Fill>
-                            <SolidColorBrush Opacity=".2" Color="{DynamicResource MahApps.Colors.ThemeBackground}" />
+                            <SolidColorBrush Color="{DynamicResource MahApps.Colors.ThemeBackground}" Opacity=".2" />
                         </Rectangle.Fill>
                     </Rectangle>
                     <StackPanel Margin="11 0" Orientation="Horizontal">
-                        <Button Grid.Column="0"
+                        <Button Style="{StaticResource CustomMetroCircleButtonStyle}"
+                                Grid.Column="0"
                                 Width="22"
                                 Height="22"
                                 HorizontalAlignment="Center"
@@ -74,8 +75,7 @@
                                 Command="{x:Static viewModels:MainViewModel.CopyToClipboardTextCommand}"
                                 CommandParameter="{Binding}"
                                 Focusable="False"
-                                IsTabStop="False"
-                                Style="{StaticResource CustomMetroCircleButtonStyle}">
+                                IsTabStop="False">
                             <Button.ToolTip>
                                 <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as element'}" />
                             </Button.ToolTip>
@@ -88,14 +88,14 @@
                                                             Kind="ChevronRight" />
                             </StackPanel>
                         </Button>
-                        <Button Width="22"
+                        <Button Style="{StaticResource CustomMetroCircleButtonStyle}"
+                                Width="22"
                                 Height="22"
                                 BorderThickness="0"
                                 Command="{x:Static viewModels:MainViewModel.CopyToClipboardAsContentTextCommand}"
                                 CommandParameter="{Binding}"
                                 Focusable="False"
-                                IsTabStop="False"
-                                Style="{StaticResource CustomMetroCircleButtonStyle}">
+                                IsTabStop="False">
                             <Button.ToolTip>
                                 <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as content'}" />
                             </Button.ToolTip>
@@ -103,14 +103,14 @@
                                                         Height="14"
                                                         Kind="CodeBraces" />
                         </Button>
-                        <Button Width="22"
+                        <Button Style="{StaticResource CustomMetroCircleButtonStyle}"
+                                Width="22"
                                 Height="22"
                                 BorderThickness="0"
                                 Command="{x:Static viewModels:MainViewModel.CopyToClipboardAsPathIconTextCommand}"
                                 CommandParameter="{Binding}"
                                 Focusable="False"
-                                IsTabStop="False"
-                                Style="{StaticResource CustomMetroCircleButtonStyle}">
+                                IsTabStop="False">
                             <Button.ToolTip>
                                 <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as PathIcon element'}" />
                             </Button.ToolTip>
@@ -118,14 +118,14 @@
                                                            Height="14"
                                                            Kind="DrawPolygonSolid" />
                         </Button>
-                        <Button Width="22"
+                        <Button Style="{StaticResource CustomMetroCircleButtonStyle}"
+                                Width="22"
                                 Height="22"
                                 BorderThickness="0"
                                 Command="{x:Static viewModels:MainViewModel.CopyToClipboardAsGeometryTextCommand}"
                                 CommandParameter="{Binding}"
                                 Focusable="False"
-                                IsTabStop="False"
-                                Style="{StaticResource CustomMetroCircleButtonStyle}">
+                                IsTabStop="False">
                             <Button.ToolTip>
                                 <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as Geometry'}" />
                             </Button.ToolTip>
@@ -152,11 +152,11 @@
 
     <mah:MetroWindow.Flyouts>
         <mah:FlyoutsControl>
-            <mah:Flyout MinWidth="350"
+            <mah:Flyout Header="Settings"
+                        MinWidth="350"
                         Background="#FF323232"
                         CloseButtonVisibility="Visible"
                         DataContext="{Binding Settings}"
-                        Header="Settings"
                         IsModal="True"
                         IsOpen="{Binding ElementName=ToggleButtonOpenSettings, Path=IsChecked, Mode=TwoWay}"
                         Position="Right">
@@ -197,7 +197,9 @@
             <ToggleButton x:Name="ToggleButtonOpenSettings" Content="{iconPacks:Modern Kind=Settings}" />
             <Button Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
                     CommandParameter="https://github.com/MahApps/MahApps.Metro.IconPacks"
-                    Content="{iconPacks:Modern SocialGithubOctocat, Width=22, Height=22}"
+                    Content="{iconPacks:Modern SocialGithubOctocat,
+                                               Width=22,
+                                               Height=22}"
                     ToolTip="IconPacks.Browser on GitHub" />
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
@@ -216,18 +218,18 @@
                 DockPanel.Dock="Top">
             <DockPanel LastChildFill="True">
                 <TextBox x:Name="FilterTextBox"
+                         Style="{DynamicResource IconPacksBrowser.Styles.TextBox.Search}"
                          MinWidth="400"
                          Margin="5"
-                         mah:TextBoxHelper.Watermark="Filter by... (Ctrl + F)"
                          Background="{DynamicResource MahApps.Brushes.Gray9}"
+                         mah:TextBoxHelper.Watermark="Filter by... (Ctrl + F)"
                          BorderThickness="0"
                          DockPanel.Dock="Right"
-                         Style="{DynamicResource IconPacksBrowser.Styles.TextBox.Search}"
                          Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=300}">
                     <TextBox.ToolTip>
                         <StackPanel>
-                            <TextBlock FontWeight="Bold"
-                                       Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                            <TextBlock Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                                       FontWeight="Bold"
                                        Text="Advanced filtering:" />
                             <TextBlock>
                                 <Run Text="Use these chars to match all substrings: &#x09;" /> <Run FontFamily="Courier New" Text="'&amp;' '+' ',' ';'" />
@@ -241,10 +243,10 @@
 
                 <mah:TransitioningContentControl Margin="10 0"
                                                  VerticalAlignment="Center"
-                                                 Content="{Binding ElementName=NavigationListBox, Path=SelectedItem.Caption}"
+                                                 Foreground="{DynamicResource MahApps.Brushes.Highlight}"
                                                  FontSize="30"
                                                  FontWeight="DemiBold"
-                                                 Foreground="{DynamicResource MahApps.Brushes.Highlight}"
+                                                 Content="{Binding ElementName=NavigationListBox, Path=SelectedItem.Caption}"
                                                  RestartTransitionOnContentChange="True" />
             </DockPanel>
         </Border>
@@ -256,9 +258,9 @@
                        PaneBackground="{DynamicResource IconPackBrowser.Brushes.PanelBackground}">
             <mah:SplitView.Pane>
                 <ListBox Name="NavigationListBox"
+                         Style="{DynamicResource IconPacksBrowser.Styles.ListBox.Navigation}"
                          SelectedIndex="0"
-                         SelectedItem="{Binding SelectedIconPack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{DynamicResource IconPacksBrowser.Styles.ListBox.Navigation}">
+                         SelectedItem="{Binding SelectedIconPack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <ListBox.ItemsSource>
                         <CompositeCollection>
                             <CollectionContainer Collection="{Binding Source={StaticResource IconPacksBrowser.Collections.All}}" />
@@ -275,7 +277,8 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <ListBox Grid.Column="0"
+                <ListBox Style="{DynamicResource MahApps.Styles.ListBox.Virtualized}"
+                         Grid.Column="0"
                          Margin="2"
                          FocusVisualStyle="{x:Null}"
                          ItemTemplate="{StaticResource IconPacksBrowser.DataTemplates.ListBox.IconViewModel}"
@@ -283,7 +286,6 @@
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          SelectedValue="{Binding ElementName=NavigationListBox, Path=SelectedItem.SelectedIcon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False, NotifyOnValidationError=False}"
-                         Style="{DynamicResource MahApps.Styles.ListBox.Virtualized}"
                          Validation.ErrorTemplate="{x:Null}"
                          VirtualizingPanel.CacheLengthUnit="Item"
                          VirtualizingPanel.ScrollUnit="Item"
@@ -302,8 +304,8 @@
                 </ListBox>
 
                 <ctrls:SidebarExpander Grid.Column="1"
-                                       mah:HeaderedControlHelper.HeaderBackground="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                                        Background="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
+                                       mah:HeaderedControlHelper.HeaderBackground="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                                        BorderBrush="{DynamicResource MahApps.Brushes.Gray10}"
                                        BorderThickness="0"
                                        DataContext="{Binding ElementName=NavigationListBox, Path=SelectedItem}"
@@ -351,11 +353,11 @@
             <StatusBarItem Content="{Binding ElementName=NavigationListBox, Path=SelectedItem, Mode=OneWay}">
                 <StatusBarItem.ContentTemplate>
                     <DataTemplate DataType="{x:Type viewModels:IconPackViewModel}">
-                        <Button Margin="0 0 4 0"
+                        <Button Style="{StaticResource LinkButtonStyle}"
+                                Margin="0 0 4 0"
                                 VerticalAlignment="Center"
                                 Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
-                                CommandParameter="{Binding SelectedIcon.MetaData.ProjectUrl, Mode=OneWay}"
-                                Style="{StaticResource LinkButtonStyle}">
+                                CommandParameter="{Binding SelectedIcon.MetaData.ProjectUrl, Mode=OneWay}">
                             <Button.ContentTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -364,8 +366,8 @@
                                                                     Margin="0 0 4 0"
                                                                     VerticalAlignment="Center"
                                                                     Kind="LinkExternal" />
-                                        <TextBlock VerticalAlignment="Center"
-                                                   Style="{StaticResource UnderlinedTextBlockStyle}"
+                                        <TextBlock Style="{StaticResource UnderlinedTextBlockStyle}"
+                                                   VerticalAlignment="Center"
                                                    Text="Project site" />
                                     </StackPanel>
                                 </DataTemplate>
@@ -383,11 +385,11 @@
             <StatusBarItem Content="{Binding ElementName=NavigationListBox, Path=SelectedItem, Mode=OneWay}">
                 <StatusBarItem.ContentTemplate>
                     <DataTemplate DataType="{x:Type viewModels:IconPackViewModel}">
-                        <Button Margin="0 0 4 0"
+                        <Button Style="{StaticResource LinkButtonStyle}"
+                                Margin="0 0 4 0"
                                 VerticalAlignment="Center"
                                 Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
-                                CommandParameter="{Binding SelectedIcon.MetaData.LicenseUrl, Mode=OneWay}"
-                                Style="{StaticResource LinkButtonStyle}">
+                                CommandParameter="{Binding SelectedIcon.MetaData.LicenseUrl, Mode=OneWay}">
                             <Button.ContentTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -396,8 +398,8 @@
                                                                     Margin="0 0 4 0"
                                                                     VerticalAlignment="Center"
                                                                     Kind="Law" />
-                                        <TextBlock VerticalAlignment="Center"
-                                                   Style="{StaticResource UnderlinedTextBlockStyle}"
+                                        <TextBlock Style="{StaticResource UnderlinedTextBlockStyle}"
+                                                   VerticalAlignment="Center"
                                                    Text="License" />
                                     </StackPanel>
                                 </DataTemplate>

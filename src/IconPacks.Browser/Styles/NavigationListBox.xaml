@@ -20,8 +20,8 @@
     </model:NavigationItemTemplateSelector>
 
     <Style x:Key="IconPacksBrowser.Styles.ListBoxItem.Navigation"
-           BasedOn="{StaticResource MahApps.Styles.ListBoxItem}"
-           TargetType="{x:Type ListBoxItem}">
+           TargetType="{x:Type ListBoxItem}"
+           BasedOn="{StaticResource MahApps.Styles.ListBoxItem}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontSize" Value="16" />
@@ -123,8 +123,8 @@
     </Style>
 
     <Style x:Key="IconPacksBrowser.Styles.ListBox.Navigation"
-           BasedOn="{StaticResource MahApps.Styles.ListBox.HamburgerMenu}"
-           TargetType="{x:Type ListBox}">
+           TargetType="{x:Type ListBox}"
+           BasedOn="{StaticResource MahApps.Styles.ListBox.HamburgerMenu}">
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="ItemContainerStyle" Value="{DynamicResource IconPacksBrowser.Styles.ListBoxItem.Navigation}" />
@@ -137,13 +137,13 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-                        <ScrollViewer Padding="{TemplateBinding Padding}"
+                        <ScrollViewer Style="{DynamicResource IconPacksBrowser.Styles.ScrollViewer.Win10.Navigation}"
+                                      Padding="{TemplateBinding Padding}"
                                       mah:ScrollViewerHelper.VerticalScrollBarOnLeftSide="{TemplateBinding mah:ScrollViewerHelper.VerticalScrollBarOnLeftSide}"
                                       CanContentScroll="{TemplateBinding ScrollViewer.CanContentScroll}"
                                       Focusable="False"
                                       HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
                                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                      Style="{DynamicResource IconPacksBrowser.Styles.ScrollViewer.Win10.Navigation}"
                                       VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </ScrollViewer>

@@ -76,15 +76,11 @@ class Build : NukeBuild
         Log.Information("NuGet           Version: {NuGetVersion}", GitVersion.NuGetVersion);
     }
 
-    [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
-    readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+    [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")] readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
-    [Solution(GenerateProjects = true, SuppressBuildProjectCheck = false)]
-    readonly Solution Solution;
-    [GitRepository]
-    readonly GitRepository GitRepository;
-    [GitVersion(Framework = "net6.0", NoFetch = true)]
-    readonly GitVersion GitVersion;
+    [Solution(GenerateProjects = true, SuppressBuildProjectCheck = false)] readonly Solution Solution;
+    [GitRepository] readonly GitRepository GitRepository;
+    [GitVersion(Framework = "net6.0", NoFetch = true)] readonly GitVersion GitVersion;
 
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath OutputDirectory => RootDirectory / "artifacts";
@@ -105,15 +101,24 @@ class Build : NukeBuild
         });
 
     Target Restore => _ => _
+        .DependsOn(Clean)
         .Executes(() =>
         {
+            DotNetToolRestore();
+
             DotNetRestore(s => s
                 .SetProjectFile(Solution));
         });
 
-    Target Compile => _ => _
+    Target XamlStyler => _ => _
         .DependsOn(Restore)
-        .DependsOn(Clean)
+        .Executes(() =>
+        {
+            DotNet($"xstyler --recursive --directory \"{SourceDirectory}\" --config \"{RootDirectory / "Settings.XAMLStyler"}\"");
+        });
+
+    Target Compile => _ => _
+        .DependsOn(XamlStyler)
         .Executes(() =>
         {
             DotNetBuild(s => s
@@ -223,12 +228,12 @@ class Build : NukeBuild
         Log.Information("Done Uploading {FileName} to the release", asset.Name);
     }
 
-    [Parameter("GitHub Api key")][Secret] string GithubToken = null;
-    [Parameter][Secret] readonly string AzureKeyVaultUrl;
-    [Parameter][Secret] readonly string AzureKeyVaultClientId;
-    [Parameter][Secret] readonly string AzureKeyVaultTenantId;
-    [Parameter][Secret] readonly string AzureKeyVaultClientSecret;
-    [Parameter][Secret] readonly string AzureKeyVaultCertificate;
+    [Parameter("GitHub Api key")] [Secret] string GithubToken = null;
+    [Parameter] [Secret] readonly string AzureKeyVaultUrl;
+    [Parameter] [Secret] readonly string AzureKeyVaultClientId;
+    [Parameter] [Secret] readonly string AzureKeyVaultTenantId;
+    [Parameter] [Secret] readonly string AzureKeyVaultClientSecret;
+    [Parameter] [Secret] readonly string AzureKeyVaultCertificate;
 
     void SignFiles(IEnumerable<string> files, string description, string descriptionUrl)
     {

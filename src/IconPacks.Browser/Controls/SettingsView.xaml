@@ -60,7 +60,7 @@
                                          SelectedColorTemplate="{StaticResource IconPacksBroser.Templates.ColorPicker.Accent}"
                                          StandardColorPaletteItemsSource="{x:Static vm:SettingsViewModel.AccentColors}">
                             <mah:ColorPicker.StandardColorPaletteStyle>
-                                <Style BasedOn="{StaticResource MahApps.Styles.ColorPalette.ColorPickerDropDown}" TargetType="{x:Type mah:ColorPalette}">
+                                <Style TargetType="{x:Type mah:ColorPalette}" BasedOn="{StaticResource MahApps.Styles.ColorPalette.ColorPickerDropDown}">
                                     <Setter Property="ItemContainerStyle" Value="{DynamicResource MahApps.Styles.ListBoxItem}" />
                                     <Setter Property="ItemTemplate" Value="{DynamicResource IconPacksBroser.Templates.ColorPicker.Accent}" />
                                     <Setter Property="ItemsPanel">
@@ -87,21 +87,21 @@
                 <StackPanel>
                     <mah:MetroHeader Header="Directory for custom export templates">
                         <StackPanel>
-                            <TextBox mah:TextBoxHelper.Watermark="Build-In Templates"
-                                     Style="{StaticResource IconPacksBrowser.Styles.TextBox.Hyperlink}"
+                            <TextBox Style="{StaticResource IconPacksBrowser.Styles.TextBox.Hyperlink}"
+                                     mah:TextBoxHelper.Watermark="Build-In Templates"
                                      Text="{Binding Source={x:Static prop:Settings.Default}, Path=ExportTemplatesDir}" />
-                            <Button Margin="0 5 0 0"
+                            <Button Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
+                                    Margin="0 5 0 0"
                                     Command="{Binding SelectTemplateFolderCommand}"
-                                    Content="Select a custom template folder"
-                                    Style="{DynamicResource MahApps.Styles.Button.Chromeless}" />
-                            <Button Margin="0 5 0 0"
+                                    Content="Select a custom template folder" />
+                            <Button Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
+                                    Margin="0 5 0 0"
                                     Command="{Binding ClearTemplatesDirCommand}"
-                                    Content="Reset template folder to default"
-                                    Style="{DynamicResource MahApps.Styles.Button.Chromeless}" />
-                            <Button Margin="0 5 0 0"
+                                    Content="Reset template folder to default" />
+                            <Button Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
+                                    Margin="0 5 0 0"
                                     Command="{Binding CopyOriginalTemplatesCommand}"
-                                    Content="Copy original templates to custom folder"
-                                    Style="{DynamicResource MahApps.Styles.Button.Chromeless}" />
+                                    Content="Copy original templates to custom folder" />
                         </StackPanel>
                     </mah:MetroHeader>
                 </StackPanel>

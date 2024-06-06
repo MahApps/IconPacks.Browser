@@ -12,8 +12,8 @@
 
     <!--  TextBox Style  -->
     <Style x:Key="IconPacksBrowser.Styles.TextBox.Search"
-           BasedOn="{StaticResource MahApps.Styles.TextBox}"
-           TargetType="{x:Type TextBox}">
+           TargetType="{x:Type TextBox}"
+           BasedOn="{StaticResource MahApps.Styles.TextBox}">
         <Setter Property="MinHeight" Value="26" />
         <Setter Property="Opacity" Value="0.6" />
         <Setter Property="Padding" Value="4" />
@@ -75,6 +75,7 @@
                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
 
                             <TextBlock x:Name="PART_Message"
+                                       Style="{DynamicResource MahApps.Styles.TextBlock.Watermark}"
                                        Grid.Row="1"
                                        Grid.Column="1"
                                        Margin="4 0"
@@ -82,7 +83,6 @@
                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                        Foreground="{TemplateBinding Foreground}"
-                                       Style="{DynamicResource MahApps.Styles.TextBlock.Watermark}"
                                        Text="{TemplateBinding mah:TextBoxHelper.Watermark}"
                                        TextAlignment="{TemplateBinding mah:TextBoxHelper.WatermarkAlignment}"
                                        TextTrimming="{TemplateBinding mah:TextBoxHelper.WatermarkTrimming}"
@@ -90,10 +90,10 @@
                                        Visibility="Collapsed" />
 
                             <ContentControl x:Name="PART_FloatingMessageContainer"
+                                            Style="{DynamicResource MahApps.Styles.ContentControl.FloatingMessageContainer}"
                                             Grid.Row="0"
                                             Grid.Column="1"
-                                            Margin="4 0"
-                                            Style="{DynamicResource MahApps.Styles.ContentControl.FloatingMessageContainer}">
+                                            Margin="4 0">
                                 <ContentControl.Height>
                                     <MultiBinding Converter="{converters:MathMultiplyConverter}">
                                         <Binding ElementName="PART_FloatingMessage"
@@ -105,10 +105,10 @@
                                     </MultiBinding>
                                 </ContentControl.Height>
                                 <TextBlock x:Name="PART_FloatingMessage"
+                                           Style="{DynamicResource MahApps.Styles.TextBlock.AutoCollapsing}"
                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                            Foreground="{TemplateBinding Foreground}"
-                                           Style="{DynamicResource MahApps.Styles.TextBlock.AutoCollapsing}"
                                            Text="{TemplateBinding mah:TextBoxHelper.Watermark}"
                                            TextAlignment="{TemplateBinding mah:TextBoxHelper.WatermarkAlignment}"
                                            TextTrimming="{TemplateBinding mah:TextBoxHelper.WatermarkTrimming}">
@@ -130,6 +130,7 @@
                             </ContentControl>
 
                             <Button x:Name="PART_ClearText"
+                                    Style="{DynamicResource IconPacksBrowser.Styles.Buttons.SearchTextBox.Clear}"
                                     Grid.Row="0"
                                     Grid.RowSpan="2"
                                     Grid.Column="2"
@@ -137,16 +138,15 @@
                                     Height="20"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    FontFamily="{TemplateBinding mah:TextBoxHelper.ButtonFontFamily}"
+                                    FontSize="{TemplateBinding mah:TextBoxHelper.ButtonFontSize}"
                                     mah:ControlsHelper.CornerRadius="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ActualHeight, Converter={converters:SizeToCornerRadiusConverter}}"
                                     mah:TextBoxHelper.IsClearTextButtonBehaviorEnabled="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(mah:TextBoxHelper.ClearTextButton), Mode=OneWay}"
                                     Content="{TemplateBinding mah:TextBoxHelper.ButtonContent}"
                                     ContentTemplate="{TemplateBinding mah:TextBoxHelper.ButtonContentTemplate}"
                                     Focusable="False"
-                                    FontFamily="{TemplateBinding mah:TextBoxHelper.ButtonFontFamily}"
-                                    FontSize="{TemplateBinding mah:TextBoxHelper.ButtonFontSize}"
-                                    Foreground="{TemplateBinding Foreground}"
                                     IsTabStop="False"
-                                    Style="{DynamicResource IconPacksBrowser.Styles.Buttons.SearchTextBox.Clear}"
                                     Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(mah:TextBoxHelper.ClearTextButton), Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         </Grid>
 
@@ -156,9 +156,9 @@
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="{TemplateBinding mah:ControlsHelper.CornerRadius}"
                                 IsHitTestVisible="False"
-                                Opacity="0"
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(mah:ControlsHelper.DisabledVisualElementVisibility), Mode=OneWay}" />
+                                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(mah:ControlsHelper.DisabledVisualElementVisibility), Mode=OneWay}"
+                                Opacity="0" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(mah:TextBoxHelper.ButtonsAlignment)}" Value="Left">
@@ -289,8 +289,8 @@
     </Style>
 
     <Style x:Key="IconPacksBrowser.Styles.Buttons.SearchTextBox.Clear"
-           BasedOn="{StaticResource MahApps.Styles.Button.Chromeless}"
-           TargetType="{x:Type Button}">
+           TargetType="{x:Type Button}"
+           BasedOn="{StaticResource MahApps.Styles.Button.Chromeless}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -299,8 +299,8 @@
                                           Margin="{TemplateBinding Padding}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Opacity="0.75"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          Opacity="0.75" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">

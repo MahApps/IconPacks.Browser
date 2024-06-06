@@ -97,8 +97,9 @@
             </Style>
 
             <Style BasedOn="{StaticResource MahApps.Styles.MetroHeader}" TargetType="mah:MetroHeader">
-                <Setter Property="Padding" Value="2 0 2 5" />
-                <Setter Property="mah:HeaderedControlHelper.HeaderFontSize" Value="{DynamicResource MahApps.Sizes.Font.Content}" />
+                <Setter Property="Padding" Value="2 0 2 4" />
+                <Setter Property="mah:HeaderedControlHelper.HeaderMargin" Value="2 2 2 4" />
+                <Setter Property="mah:HeaderedControlHelper.HeaderFontSize" Value="{DynamicResource MahApps.Font.Size.Content}" />
             </Style>
 
             <Style BasedOn="{StaticResource MahApps.Styles.ColorPicker}" TargetType="mah:ColorPicker">

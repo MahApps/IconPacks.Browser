@@ -473,6 +473,7 @@ namespace IconPacks.Browser.ViewModels
         object Value { get; set; }
         MetaDataAttribute MetaData { get; set; }
         string CopyToClipboardText { get; }
+        string CopyToClipboardWpfGeometry { get; }
         string CopyToClipboardAsContentText { get; }
         string CopyToClipboardAsPathIconText { get; }
         string CopyToClipboardAsGeometryText { get; }

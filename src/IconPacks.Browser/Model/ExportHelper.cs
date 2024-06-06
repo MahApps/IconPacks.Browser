@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Windows.Media;
-
 using IconPacks.Browser.Properties;
 using IconPacks.Browser.ViewModels;
 
@@ -29,7 +28,7 @@ namespace IconPacks.Browser.Model
         private static string _ClipboardWpf;
 
         internal static string ClipboardWpf => _ClipboardWpf ??= File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExportTemplates", "Clipboard.WPF.xml"));
-        
+
         // Clipboard - WPF
         private static string _ClipboardWpfGeometry;
 
@@ -107,12 +106,8 @@ namespace IconPacks.Browser.Model
             this.IconPackHomepage = metaData?.ProjectUrl;
             this.IconPackLicense = metaData?.LicenseUrl;
 
-            //this.PathData = (icon as IconViewModel)?.GetPackIconControlBase().Data;
-            _pathDataLazy = new Lazy<string>(() => (icon as IconViewModel)?.GetPackIconControlBase().Data);
+            this.PathData = (icon as IconViewModel)?.GetPackIconControlBase().Data;
         }
-
-        private Lazy<string> _pathDataLazy;
-        private string _pathData;
 
         internal string IconKind { get; set; }
         internal string IconPackName { get; set; }
@@ -120,13 +115,7 @@ namespace IconPacks.Browser.Model
         internal string IconPackLicense { get; set; }
         internal string PageWidth { get; set; }
         internal string PageHeight { get; set; }
-
-        internal string PathData
-        {
-            get => _pathData ?? _pathDataLazy.Value;
-            set => _pathData = value;
-        }
-
+        internal string PathData { get; set; }
         internal string FillColor { get; set; }
         internal string Background { get; set; }
         internal string StrokeColor { get; set; }

@@ -19,7 +19,7 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="150" MinHeight="50" />
+                <RowDefinition Height="250" MinHeight="50" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -81,10 +81,9 @@
 
             <StackPanel Grid.Row="2">
 
-                <Expander Margin="0 2 0 0" Header="Icon Information" IsExpanded="False">
+                <Expander Margin="0 2 0 0" Header="Icon Information">
                     <StackPanel>
-                        <mah:MetroHeader Padding="2 0"
-                                         DataContext="{Binding SelectedIcon}"
+                        <mah:MetroHeader DataContext="{Binding SelectedIcon}"
                                          Header="IconPackName and IconKind">
                             <ctrls:CopyToClipboardTextBox>
                                 <ctrls:CopyToClipboardTextBox.TextToCopy>
@@ -108,8 +107,7 @@
                 </Expander>
 
                 <Expander Margin="0 5 0 0"
-                          Header="Preview options"
-                          IsExpanded="False">
+                          Header="Preview options">
                     <StackPanel>
                         <mah:MetroHeader Header="Iconsize ">
                             <ComboBox x:Name="ComboBoxIconPreviewSize"
@@ -145,13 +143,11 @@
                         <mah:MetroHeader>
                             <mah:MetroHeader.Header>
                                 <StackPanel Orientation="Horizontal">
-                                    <StackPanel Orientation="Horizontal">
-                                        <iconPacks:PackIconEvaIcons Width="20"
-                                                                    Height="10"
-                                                                    VerticalAlignment="Center"
-                                                                    Kind="Code" />
-                                        <TextBlock VerticalAlignment="Center" Text="Copy icon as WPF-Control" />
-                                    </StackPanel>
+                                    <iconPacks:PackIconPhosphorIcons Width="12"
+                                                                     Height="12"
+                                                                     VerticalAlignment="Center"
+                                                                     Kind="BracketsAngle" />
+                                    <Label VerticalAlignment="Center" Margin ="4 0" Padding="0" Content="Copy as WPF-Control" />
                                 </StackPanel>
                             </mah:MetroHeader.Header>
                             <ctrls:CopyToClipboardTextBox FontFamily="Consolas" TextToCopy="{Binding CopyToClipboardText}" />
@@ -160,13 +156,11 @@
                         <mah:MetroHeader>
                             <mah:MetroHeader.Header>
                                 <StackPanel Orientation="Horizontal">
-                                    <StackPanel Orientation="Horizontal">
-                                        <iconPacks:PackIconEvaIcons Width="20"
-                                                                    Height="10"
-                                                                    VerticalAlignment="Center"
-                                                                    Kind="Code" />
-                                        <TextBlock VerticalAlignment="Center" Text="Copy icon as WPF-PathGeometry" />
-                                    </StackPanel>
+                                    <iconPacks:PackIconPhosphorIcons Width="12"
+                                                                     Height="12"
+                                                                     VerticalAlignment="Center"
+                                                                     Kind="Polygon" />
+                                    <Label VerticalAlignment="Center" Margin ="4 0" Padding="0" Content="Copy as WPF-PathGeometry" />
                                 </StackPanel>
                             </mah:MetroHeader.Header>
                             <ctrls:CopyToClipboardTextBox FontFamily="Consolas" TextToCopy="{Binding CopyToClipboardWpfGeometry}" />
@@ -176,28 +170,25 @@
                         <mah:MetroHeader>
                             <mah:MetroHeader.Header>
                                 <StackPanel Orientation="Horizontal">
-                                    <StackPanel Orientation="Horizontal">
-                                        <iconPacks:PackIconMaterial Width="20"
-                                                                    Height="10"
-                                                                    VerticalAlignment="Center"
-                                                                    Kind="CodeBraces" />
-                                        <TextBlock VerticalAlignment="Center" Text="Copy icon as content" />
-                                    </StackPanel>
+                                    <iconPacks:PackIconPhosphorIcons Width="12"
+                                                                     Height="12"
+                                                                     VerticalAlignment="Center"
+                                                                     Kind="BracketsCurly" />
+                                    <Label VerticalAlignment="Center" Margin ="4 0" Padding="0" Content="Copy as content extension" />
                                 </StackPanel>
                             </mah:MetroHeader.Header>
                             <ctrls:CopyToClipboardTextBox FontFamily="Consolas" TextToCopy="{Binding CopyToClipboardAsContentText}" />
                         </mah:MetroHeader>
+
                         <!--  Copy as UWP Control  -->
                         <mah:MetroHeader>
                             <mah:MetroHeader.Header>
                                 <StackPanel Orientation="Horizontal">
-                                    <StackPanel Orientation="Horizontal">
-                                        <iconPacks:PackIconFontAwesome Width="20"
-                                                                       Height="10"
-                                                                       VerticalAlignment="Center"
-                                                                       Kind="DrawPolygonSolid" />
-                                        <TextBlock VerticalAlignment="Center" Text="Copy icon as UWP-Control" />
-                                    </StackPanel>
+                                    <iconPacks:PackIconPhosphorIcons Width="12"
+                                                                     Height="12"
+                                                                     VerticalAlignment="Center"
+                                                                     Kind="BracketsAngle" />
+                                    <Label VerticalAlignment="Center" Margin ="4 0" Padding="0" Content="Copy as UWP-Control" />
                                 </StackPanel>
                             </mah:MetroHeader.Header>
                             <ctrls:CopyToClipboardTextBox FontFamily="Consolas" TextToCopy="{Binding CopyToClipboardAsPathIconText}" />
@@ -206,13 +197,11 @@
                         <mah:MetroHeader>
                             <mah:MetroHeader.Header>
                                 <StackPanel Orientation="Horizontal">
-                                    <StackPanel Orientation="Horizontal">
-                                        <iconPacks:PackIconMaterial Width="20"
-                                                                    Height="10"
-                                                                    VerticalAlignment="Center"
-                                                                    Kind="Draw" />
-                                        <TextBlock VerticalAlignment="Center" Text="Copy path data" />
-                                    </StackPanel>
+                                    <iconPacks:PackIconPhosphorIcons Width="12"
+                                                                     Height="12"
+                                                                     VerticalAlignment="Center"
+                                                                     Kind="Polygon" />
+                                    <Label VerticalAlignment="Center" Margin ="4 0" Padding="0" Content="Copy path data" />
                                 </StackPanel>
                             </mah:MetroHeader.Header>
                             <ctrls:CopyToClipboardTextBox FontFamily="Consolas" TextToCopy="{Binding CopyToClipboardAsGeometryText}" />

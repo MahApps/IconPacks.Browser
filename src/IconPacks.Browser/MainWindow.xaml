@@ -71,8 +71,8 @@
                                 Height="22"
                                 HorizontalAlignment="Center"
                                 BorderThickness="0"
-                                Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
-                                CommandParameter="{Binding CopyToClipboardText}"
+                                Command="{x:Static viewModels:MainViewModel.CopyToClipboardTextCommand}"
+                                CommandParameter="{Binding}"
                                 Focusable="False"
                                 IsTabStop="False"
                                 Style="{StaticResource CustomMetroCircleButtonStyle}">
@@ -91,8 +91,8 @@
                         <Button Width="22"
                                 Height="22"
                                 BorderThickness="0"
-                                Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
-                                CommandParameter="{Binding CopyToClipboardAsContentText}"
+                                Command="{x:Static viewModels:MainViewModel.CopyToClipboardAsContentTextCommand}"
+                                CommandParameter="{Binding}"
                                 Focusable="False"
                                 IsTabStop="False"
                                 Style="{StaticResource CustomMetroCircleButtonStyle}">
@@ -106,8 +106,8 @@
                         <Button Width="22"
                                 Height="22"
                                 BorderThickness="0"
-                                Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
-                                CommandParameter="{Binding CopyToClipboardAsPathIconText}"
+                                Command="{x:Static viewModels:MainViewModel.CopyToClipboardAsPathIconTextCommand}"
+                                CommandParameter="{Binding}"
                                 Focusable="False"
                                 IsTabStop="False"
                                 Style="{StaticResource CustomMetroCircleButtonStyle}">
@@ -121,8 +121,8 @@
                         <Button Width="22"
                                 Height="22"
                                 BorderThickness="0"
-                                Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
-                                CommandParameter="{Binding CopyToClipboardAsGeometryText}"
+                                Command="{x:Static viewModels:MainViewModel.CopyToClipboardAsGeometryTextCommand}"
+                                CommandParameter="{Binding}"
                                 Focusable="False"
                                 IsTabStop="False"
                                 Style="{StaticResource CustomMetroCircleButtonStyle}">

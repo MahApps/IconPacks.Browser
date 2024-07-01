@@ -466,6 +466,7 @@ namespace IconPacks.Browser.ViewModels
     public interface IIconViewModel
     {
         string Name { get; set; }
+        string FullName { get; }
         string IconPackName { get; }
         string Description { get; set; }
         Type IconPackType { get; set; }
@@ -484,6 +485,7 @@ namespace IconPacks.Browser.ViewModels
         public IconViewModel(Type enumType, Type packType, Enum k, MetaDataAttribute metaData)
         {
             Name = k.ToString();
+            FullName = enumType.FullName + "." + k.ToString();
             Description = GetDescription(k);
             IconPackType = packType;
             IconType = enumType;
@@ -501,6 +503,7 @@ namespace IconPacks.Browser.ViewModels
         public string CopyToClipboardAsGeometryText => ExportHelper.FillTemplate(ExportHelper.ClipboardData, new ExportParameters(this)); // GetPackIconControlBase().Data;
 
         public string Name { get; set; }
+        public string FullName { get; }
 
         public string IconPackName => IconPackType.Name.Replace("PackIcon", "");
 

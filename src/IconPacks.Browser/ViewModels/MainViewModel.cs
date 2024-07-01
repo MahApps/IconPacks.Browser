@@ -5,10 +5,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls.Primitives;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using MahApps.Metro.Controls.Dialogs;
 using MahApps.Metro.IconPacks;
+using IconPacks.Browser.Model;
+using ControlzEx.Theming;
 
 namespace IconPacks.Browser.ViewModels
 {
@@ -98,6 +102,8 @@ namespace IconPacks.Browser.ViewModels
             this.IconPacksVersion = FileVersionInfo.GetVersionInfo(Assembly.GetAssembly(typeof(PackIconMaterial)).Location).FileVersion;
 
             this.Settings = new SettingsViewModel(this.dialogCoordinator);
+
+            ThemeManager.Current.ThemeChanged += this.ThemeResourcesViewModel.ThemeManager_ThemeChanged;
         }
 
         private static async void OpenUrlLink(string link)
@@ -214,8 +220,13 @@ namespace IconPacks.Browser.ViewModels
             {
                 CanExecuteDelegate = x => (x is IIconViewModel),
                 ExecuteDelegate = x => DoCopyTextToClipboard(((IIconViewModel)x).CopyToClipboardAsGeometryText)
-            };  
+            };
 
         public SettingsViewModel Settings { get; }
+
+
+        public ThemeResourcesViewModel ThemeResourcesViewModel { get; } = new ThemeResourcesViewModel();
+
+     
     }
 }

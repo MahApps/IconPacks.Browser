@@ -1,35 +1,37 @@
-﻿<mah:MetroWindow x:Class="IconPacks.Browser.MainWindow"
-                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                 xmlns:controls="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
-                 xmlns:converter="http://metro.mahapps.com/winfx/xaml/shared"
-                 xmlns:ctrls="clr-namespace:IconPacks.Browser.Controls"
-                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                 xmlns:viewModels="clr-namespace:IconPacks.Browser.ViewModels"
-                 Title="IconPacks Browser"
-                 Width="1200"
-                 Height="800"
-                 MinWidth="600"
-                 MinHeight="400"
-                 d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
-                 d:DesignHeight="400"
-                 d:DesignWidth="600"
-                 mah:DialogParticipation.Register="{Binding}"
-                 BorderBrush="{DynamicResource MahApps.Brushes.Accent}"
-                 BorderThickness="1"
-                 ResizeMode="CanResizeWithGrip"
-                 TitleCharacterCasing="Normal"
-                 WindowStartupLocation="CenterScreen"
-                 WindowTransitionsEnabled="False"
-                 mc:Ignorable="d">
+﻿<mah:MetroWindow
+    x:Class="IconPacks.Browser.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
+    xmlns:converter="http://metro.mahapps.com/winfx/xaml/shared"
+    xmlns:ctrls="clr-namespace:IconPacks.Browser.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:IconPacks.Browser.ViewModels"
+    Title="IconPacks Browser"
+    Width="1200"
+    Height="800"
+    MinWidth="600"
+    MinHeight="400"
+    d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
+    d:DesignHeight="400"
+    d:DesignWidth="600"
+    mah:DialogParticipation.Register="{Binding}"
+    BorderBrush="{DynamicResource MahApps.Brushes.Accent}"
+    BorderThickness="1"
+    ResizeMode="CanResizeWithGrip"
+    TitleCharacterCasing="Normal"
+    WindowStartupLocation="CenterScreen"
+    WindowTransitionsEnabled="False"
+    mc:Ignorable="d">
 
     <mah:MetroWindow.Resources>
-        <Style x:Key="LinkButtonStyle"
-               TargetType="{x:Type Button}"
-               BasedOn="{StaticResource MahApps.Styles.Button.WindowCommands}">
+        <Style
+            x:Key="LinkButtonStyle"
+            BasedOn="{StaticResource MahApps.Styles.Button.WindowCommands}"
+            TargetType="{x:Type Button}">
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Opacity" Value="1" />
             <Setter Property="Padding" Value="0" />
@@ -39,107 +41,137 @@
         <CollectionViewSource x:Key="IconPacksBrowser.Collections.All" Source="{Binding AllIconPacksCollection}" />
 
         <DataTemplate x:Key="IconPacksBrowser.DataTemplates.ListBox.IconViewModel" DataType="{x:Type viewModels:IIconViewModel}">
-            <Grid x:Name="Root"
-                  Width="128"
-                  Height="128"
-                  Background="Transparent">
+            <Grid
+                x:Name="Root"
+                Width="128"
+                Height="128"
+                Background="Transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <iconPacks:PackIconControl Grid.Row="0"
-                                           Width="32"
-                                           Height="32"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           Kind="{Binding Value, Mode=OneWay, Converter={converter:NullToUnsetValueConverter}}"
-                                           SnapsToDevicePixels="True" />
-                <Grid x:Name="Copy2ClipboardActions"
-                      Grid.Row="0"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Top"
-                      Focusable="False"
-                      Visibility="Collapsed">
+                <iconPacks:PackIconControl
+                    Grid.Row="0"
+                    Width="32"
+                    Height="32"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Kind="{Binding Value, Mode=OneWay, Converter={converter:NullToUnsetValueConverter}}"
+                    SnapsToDevicePixels="True" />
+                <Grid
+                    x:Name="Copy2ClipboardActions"
+                    Grid.Row="0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Focusable="False"
+                    Visibility="Collapsed">
                     <Rectangle RadiusX="11" RadiusY="11">
                         <Rectangle.Fill>
-                            <SolidColorBrush Color="{DynamicResource MahApps.Colors.ThemeBackground}" Opacity=".2" />
+                            <SolidColorBrush Opacity=".2" Color="{DynamicResource MahApps.Colors.ThemeBackground}" />
                         </Rectangle.Fill>
                     </Rectangle>
-                    <StackPanel Margin="11 0" Orientation="Horizontal">
-                        <Button Style="{StaticResource CustomMetroCircleButtonStyle}"
-                                Grid.Column="0"
-                                Width="22"
-                                Height="22"
-                                HorizontalAlignment="Center"
-                                BorderThickness="0"
-                                Command="{x:Static viewModels:MainViewModel.CopyToClipboardTextCommand}"
-                                CommandParameter="{Binding}"
-                                Focusable="False"
-                                IsTabStop="False">
+                    <StackPanel Margin="11,0" Orientation="Horizontal">
+                        <Button
+                            Width="22"
+                            Height="22"
+                            BorderThickness="0"
+                            Command="{x:Static viewModels:MainViewModel.CopyTextToClipboardCommand}"
+                            CommandParameter="{Binding FullName}"
+                            Focusable="False"
+                            IsTabStop="False"
+                            Style="{StaticResource CustomMetroCircleButtonStyle}">
+                            <Button.ToolTip>
+                                <TextBlock Text="{Binding FullName, StringFormat='{}Copy resource name &quot;{0}&quot; to clipboard'}" />
+                            </Button.ToolTip>
+                            <iconPacks:PackIconMaterial
+                                Width="14"
+                                Height="14"
+                                Kind="AlphaNCircleOutline" />
+                        </Button>
+                        <Button
+                            Grid.Column="0"
+                            Width="22"
+                            Height="22"
+                            HorizontalAlignment="Center"
+                            BorderThickness="0"
+                            Command="{x:Static viewModels:MainViewModel.CopyToClipboardTextCommand}"
+                            CommandParameter="{Binding}"
+                            Focusable="False"
+                            IsTabStop="False"
+                            Style="{StaticResource CustomMetroCircleButtonStyle}">
                             <Button.ToolTip>
                                 <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as element'}" />
                             </Button.ToolTip>
                             <StackPanel Orientation="Horizontal">
-                                <iconPacks:PackIconMaterial Width="7"
-                                                            Margin="1 0"
-                                                            Kind="ChevronLeft" />
-                                <iconPacks:PackIconMaterial Width="7"
-                                                            Margin="1 0"
-                                                            Kind="ChevronRight" />
+                                <iconPacks:PackIconMaterial
+                                    Width="7"
+                                    Margin="1,0"
+                                    Kind="ChevronLeft" />
+                                <iconPacks:PackIconMaterial
+                                    Width="7"
+                                    Margin="1,0"
+                                    Kind="ChevronRight" />
                             </StackPanel>
                         </Button>
-                        <Button Style="{StaticResource CustomMetroCircleButtonStyle}"
-                                Width="22"
-                                Height="22"
-                                BorderThickness="0"
-                                Command="{x:Static viewModels:MainViewModel.CopyToClipboardAsContentTextCommand}"
-                                CommandParameter="{Binding}"
-                                Focusable="False"
-                                IsTabStop="False">
+                        <Button
+                            Width="22"
+                            Height="22"
+                            BorderThickness="0"
+                            Command="{x:Static viewModels:MainViewModel.CopyToClipboardAsContentTextCommand}"
+                            CommandParameter="{Binding}"
+                            Focusable="False"
+                            IsTabStop="False"
+                            Style="{StaticResource CustomMetroCircleButtonStyle}">
                             <Button.ToolTip>
                                 <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as content'}" />
                             </Button.ToolTip>
-                            <iconPacks:PackIconMaterial Width="14"
-                                                        Height="14"
-                                                        Kind="CodeBraces" />
+                            <iconPacks:PackIconMaterial
+                                Width="14"
+                                Height="14"
+                                Kind="CodeBraces" />
                         </Button>
-                        <Button Style="{StaticResource CustomMetroCircleButtonStyle}"
-                                Width="22"
-                                Height="22"
-                                BorderThickness="0"
-                                Command="{x:Static viewModels:MainViewModel.CopyToClipboardAsPathIconTextCommand}"
-                                CommandParameter="{Binding}"
-                                Focusable="False"
-                                IsTabStop="False">
+                        <Button
+                            Width="22"
+                            Height="22"
+                            BorderThickness="0"
+                            Command="{x:Static viewModels:MainViewModel.CopyToClipboardAsPathIconTextCommand}"
+                            CommandParameter="{Binding}"
+                            Focusable="False"
+                            IsTabStop="False"
+                            Style="{StaticResource CustomMetroCircleButtonStyle}">
                             <Button.ToolTip>
                                 <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as PathIcon element'}" />
                             </Button.ToolTip>
-                            <iconPacks:PackIconFontAwesome Width="14"
-                                                           Height="14"
-                                                           Kind="DrawPolygonSolid" />
+                            <iconPacks:PackIconFontAwesome
+                                Width="14"
+                                Height="14"
+                                Kind="DrawPolygonSolid" />
                         </Button>
-                        <Button Style="{StaticResource CustomMetroCircleButtonStyle}"
-                                Width="22"
-                                Height="22"
-                                BorderThickness="0"
-                                Command="{x:Static viewModels:MainViewModel.CopyToClipboardAsGeometryTextCommand}"
-                                CommandParameter="{Binding}"
-                                Focusable="False"
-                                IsTabStop="False">
+                        <Button
+                            Width="22"
+                            Height="22"
+                            BorderThickness="0"
+                            Command="{x:Static viewModels:MainViewModel.CopyToClipboardAsGeometryTextCommand}"
+                            CommandParameter="{Binding}"
+                            Focusable="False"
+                            IsTabStop="False"
+                            Style="{StaticResource CustomMetroCircleButtonStyle}">
                             <Button.ToolTip>
                                 <TextBlock Text="{Binding Value, StringFormat='{}Copy {0} to clipboard as Geometry'}" />
                             </Button.ToolTip>
-                            <iconPacks:PackIconMaterial Width="14"
-                                                        Height="14"
-                                                        Kind="Draw" />
+                            <iconPacks:PackIconMaterial
+                                Width="14"
+                                Height="14"
+                                Kind="Draw" />
                         </Button>
                     </StackPanel>
                 </Grid>
-                <TextBlock Grid.Row="1"
-                           Margin="2"
-                           HorizontalAlignment="Center"
-                           Text="{Binding Name, Mode=OneWay}"
-                           TextTrimming="CharacterEllipsis" />
+                <TextBlock
+                    Grid.Row="1"
+                    Margin="2"
+                    HorizontalAlignment="Center"
+                    Text="{Binding Name, Mode=OneWay}"
+                    TextTrimming="CharacterEllipsis" />
             </Grid>
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
@@ -152,14 +184,15 @@
 
     <mah:MetroWindow.Flyouts>
         <mah:FlyoutsControl>
-            <mah:Flyout Header="Settings"
-                        MinWidth="350"
-                        Background="#FF323232"
-                        CloseButtonVisibility="Visible"
-                        DataContext="{Binding Settings}"
-                        IsModal="True"
-                        IsOpen="{Binding ElementName=ToggleButtonOpenSettings, Path=IsChecked, Mode=TwoWay}"
-                        Position="Right">
+            <mah:Flyout
+                MinWidth="350"
+                Background="#FF323232"
+                CloseButtonVisibility="Visible"
+                DataContext="{Binding Settings}"
+                Header="Settings"
+                IsModal="True"
+                IsOpen="{Binding ElementName=ToggleButtonOpenSettings, Path=IsChecked, Mode=TwoWay}"
+                Position="Right">
                 <ctrls:SettingsView />
             </mah:Flyout>
         </mah:FlyoutsControl>
@@ -170,9 +203,10 @@
     </mah:MetroWindow.CommandBindings>
 
     <mah:MetroWindow.InputBindings>
-        <KeyBinding Key="F"
-                    Command="{x:Static ApplicationCommands.Find}"
-                    Modifiers="Ctrl" />
+        <KeyBinding
+            Key="F"
+            Command="{x:Static ApplicationCommands.Find}"
+            Modifiers="Ctrl" />
     </mah:MetroWindow.InputBindings>
 
     <mah:MetroWindow.IconTemplate>
@@ -195,223 +229,480 @@
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
             <ToggleButton x:Name="ToggleButtonOpenSettings" Content="{iconPacks:Modern Kind=Settings}" />
-            <Button Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
-                    CommandParameter="https://github.com/MahApps/MahApps.Metro.IconPacks"
-                    Content="{iconPacks:Modern SocialGithubOctocat,
-                                               Width=22,
-                                               Height=22}"
-                    ToolTip="IconPacks.Browser on GitHub" />
+            <Button
+                Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
+                CommandParameter="https://github.com/MahApps/MahApps.Metro.IconPacks"
+                Content="{iconPacks:Modern SocialGithubOctocat,
+                                           Width=22,
+                                           Height=22}"
+                ToolTip="IconPacks.Browser on GitHub" />
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
-
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Border Grid.Row="0"
-                Height="48"
-                Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                BorderBrush="{DynamicResource MahApps.Brushes.Accent}"
-                BorderThickness="0 0 0 3"
-                DockPanel.Dock="Top">
-            <DockPanel LastChildFill="True">
-                <TextBox x:Name="FilterTextBox"
-                         Style="{DynamicResource IconPacksBrowser.Styles.TextBox.Search}"
-                         MinWidth="400"
-                         Margin="5"
-                         Background="{DynamicResource MahApps.Brushes.Gray9}"
-                         mah:TextBoxHelper.Watermark="Filter by... (Ctrl + F)"
-                         BorderThickness="0"
-                         DockPanel.Dock="Right"
-                         Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=300}">
-                    <TextBox.ToolTip>
-                        <StackPanel>
-                            <TextBlock Foreground="{DynamicResource MahApps.Brushes.Accent}"
-                                       FontWeight="Bold"
-                                       Text="Advanced filtering:" />
-                            <TextBlock>
-                                <Run Text="Use these chars to match all substrings: &#x09;" /> <Run FontFamily="Courier New" Text="'&amp;' '+' ',' ';'" />
-                            </TextBlock>
-                            <TextBlock>
-                                <Run Text="Use this chars to match any substring: &#x09;" /> <Run FontFamily="Courier New" Text="'|'" />
-                            </TextBlock>
-                        </StackPanel>
-                    </TextBox.ToolTip>
-                </TextBox>
-
-                <mah:TransitioningContentControl Margin="10 0"
-                                                 VerticalAlignment="Center"
-                                                 Foreground="{DynamicResource MahApps.Brushes.Highlight}"
-                                                 FontSize="30"
-                                                 FontWeight="DemiBold"
-                                                 Content="{Binding ElementName=NavigationListBox, Path=SelectedItem.Caption}"
-                                                 RestartTransitionOnContentChange="True" />
-            </DockPanel>
-        </Border>
-        <mah:SplitView Grid.Row="1"
-                       CanResizeOpenPane="True"
-                       DisplayMode="Inline"
-                       IsPaneOpen="True"
-                       OpenPaneLength="205"
-                       PaneBackground="{DynamicResource IconPackBrowser.Brushes.PanelBackground}">
-            <mah:SplitView.Pane>
-                <ListBox Name="NavigationListBox"
-                         Style="{DynamicResource IconPacksBrowser.Styles.ListBox.Navigation}"
-                         SelectedIndex="0"
-                         SelectedItem="{Binding SelectedIconPack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <ListBox.ItemsSource>
-                        <CompositeCollection>
-                            <CollectionContainer Collection="{Binding Source={StaticResource IconPacksBrowser.Collections.All}}" />
-                            <Separator />
-                            <CollectionContainer Collection="{Binding Source={StaticResource IconPacksBrowser.Collections.IconPacks}}" />
-                        </CompositeCollection>
-                    </ListBox.ItemsSource>
-                </ListBox>
-            </mah:SplitView.Pane>
-
+    <mah:MetroAnimatedSingleRowTabControl x:Name="MainTabControl">
+        <TabItem Width="100" Header="Icons">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Border
+                    Grid.Row="0"
+                    Height="48"
+                    Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                    BorderBrush="{DynamicResource MahApps.Brushes.Accent}"
+                    BorderThickness="0,0,0,3"
+                    DockPanel.Dock="Top">
+                    <DockPanel LastChildFill="True">
+                        <TextBox
+                            x:Name="FilterTextBox"
+                            MinWidth="400"
+                            Margin="5"
+                            mah:TextBoxHelper.Watermark="Filter by... (Ctrl + F)"
+                            Background="{DynamicResource MahApps.Brushes.Gray9}"
+                            BorderThickness="0"
+                            DockPanel.Dock="Right"
+                            Style="{DynamicResource IconPacksBrowser.Styles.TextBox.Search}"
+                            Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=300}">
+                            <TextBox.ToolTip>
+                                <StackPanel>
+                                    <TextBlock
+                                        FontWeight="Bold"
+                                        Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                                        Text="Advanced filtering:" />
+                                    <TextBlock>
+                                        <Run Text="Use these chars to match all substrings: &#x09;" /> <Run FontFamily="Courier New" Text="'&amp;' '+' ',' ';'" />
+                                    </TextBlock>
+                                    <TextBlock>
+                                        <Run Text="Use this chars to match any substring: &#x09;" /> <Run FontFamily="Courier New" Text="'|'" />
+                                    </TextBlock>
+                                </StackPanel>
+                            </TextBox.ToolTip>
+                        </TextBox>
 
-                <ListBox Style="{DynamicResource MahApps.Styles.ListBox.Virtualized}"
-                         Grid.Column="0"
-                         Margin="2"
-                         FocusVisualStyle="{x:Null}"
-                         ItemTemplate="{StaticResource IconPacksBrowser.DataTemplates.ListBox.IconViewModel}"
-                         ItemsSource="{Binding ElementName=NavigationListBox, Path=SelectedItem.Icons, Mode=OneWay}"
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                         ScrollViewer.VerticalScrollBarVisibility="Auto"
-                         SelectedValue="{Binding ElementName=NavigationListBox, Path=SelectedItem.SelectedIcon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False, NotifyOnValidationError=False}"
-                         Validation.ErrorTemplate="{x:Null}"
-                         VirtualizingPanel.CacheLengthUnit="Item"
-                         VirtualizingPanel.ScrollUnit="Item"
-                         VirtualizingPanel.VirtualizationMode="Recycling">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <controls:VirtualizingWrapPanel IsItemsHost="True"
-                                                            ItemSize="128,128"
-                                                            MouseWheelDelta="1"
-                                                            Orientation="Vertical"
-                                                            ScrollLineDelta="1"
-                                                            SpacingMode="BetweenItemsOnly"
-                                                            StretchItems="False" />
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                </ListBox>
+                        <mah:TransitioningContentControl
+                            Margin="10,0"
+                            VerticalAlignment="Center"
+                            Content="{Binding ElementName=NavigationListBox, Path=SelectedItem.Caption}"
+                            FontSize="30"
+                            FontWeight="DemiBold"
+                            Foreground="{DynamicResource MahApps.Brushes.Highlight}"
+                            RestartTransitionOnContentChange="True" />
+                    </DockPanel>
+                </Border>
+                <mah:SplitView
+                    Grid.Row="1"
+                    CanResizeOpenPane="True"
+                    DisplayMode="Inline"
+                    IsPaneOpen="True"
+                    OpenPaneLength="205"
+                    PaneBackground="{DynamicResource IconPackBrowser.Brushes.PanelBackground}">
+                    <mah:SplitView.Pane>
+                        <ListBox
+                            Name="NavigationListBox"
+                            SelectedIndex="0"
+                            SelectedItem="{Binding SelectedIconPack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{DynamicResource IconPacksBrowser.Styles.ListBox.Navigation}">
+                            <ListBox.ItemsSource>
+                                <CompositeCollection>
+                                    <CollectionContainer Collection="{Binding Source={StaticResource IconPacksBrowser.Collections.All}}" />
+                                    <Separator />
+                                    <CollectionContainer Collection="{Binding Source={StaticResource IconPacksBrowser.Collections.IconPacks}}" />
+                                </CompositeCollection>
+                            </ListBox.ItemsSource>
+                        </ListBox>
+                    </mah:SplitView.Pane>
 
-                <ctrls:SidebarExpander Grid.Column="1"
-                                       Background="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
-                                       mah:HeaderedControlHelper.HeaderBackground="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
-                                       BorderBrush="{DynamicResource MahApps.Brushes.Gray10}"
-                                       BorderThickness="0"
-                                       DataContext="{Binding ElementName=NavigationListBox, Path=SelectedItem}"
-                                       ExpandDirection="Right"
-                                       IsExpanded="True">
-                    <ctrls:SidebarExpander.Header>
-                        <TextBlock FontWeight="Bold"
-                                   Text="P R E V I E W    A N D    E X P O R T"
-                                   TextAlignment="Center"
-                                   TextOptions.TextFormattingMode="Display">
-                            <TextBlock.LayoutTransform>
-                                <RotateTransform Angle="270" />
-                            </TextBlock.LayoutTransform>
-                        </TextBlock>
-                    </ctrls:SidebarExpander.Header>
-                    <ctrls:SideBar />
-                </ctrls:SidebarExpander>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ListBox
+                            Grid.Column="0"
+                            Margin="2"
+                            FocusVisualStyle="{x:Null}"
+                            ItemTemplate="{StaticResource IconPacksBrowser.DataTemplates.ListBox.IconViewModel}"
+                            ItemsSource="{Binding ElementName=NavigationListBox, Path=SelectedItem.Icons, Mode=OneWay}"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            SelectedValue="{Binding ElementName=NavigationListBox, Path=SelectedItem.SelectedIcon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False, NotifyOnValidationError=False}"
+                            Style="{DynamicResource MahApps.Styles.ListBox.Virtualized}"
+                            Validation.ErrorTemplate="{x:Null}"
+                            VirtualizingPanel.CacheLengthUnit="Item"
+                            VirtualizingPanel.ScrollUnit="Item"
+                            VirtualizingPanel.VirtualizationMode="Recycling">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <controls:VirtualizingWrapPanel
+                                        IsItemsHost="True"
+                                        ItemSize="128,128"
+                                        MouseWheelDelta="1"
+                                        Orientation="Vertical"
+                                        ScrollLineDelta="1"
+                                        SpacingMode="BetweenItemsOnly"
+                                        StretchItems="False" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                        </ListBox>
+
+                        <ctrls:SidebarExpander
+                            Grid.Column="1"
+                            mah:HeaderedControlHelper.HeaderBackground="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
+                            Background="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
+                            BorderBrush="{DynamicResource MahApps.Brushes.Gray10}"
+                            BorderThickness="0"
+                            DataContext="{Binding ElementName=NavigationListBox, Path=SelectedItem}"
+                            ExpandDirection="Right"
+                            IsExpanded="True">
+                            <ctrls:SidebarExpander.Header>
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Text="P R E V I E W    A N D    E X P O R T"
+                                    TextAlignment="Center"
+                                    TextOptions.TextFormattingMode="Display">
+                                    <TextBlock.LayoutTransform>
+                                        <RotateTransform Angle="270" />
+                                    </TextBlock.LayoutTransform>
+                                </TextBlock>
+                            </ctrls:SidebarExpander.Header>
+                            <ctrls:SideBar />
+                        </ctrls:SidebarExpander>
+                    </Grid>
+                </mah:SplitView>
+
+                <StatusBar Grid.Row="2" Height="24">
+                    <!-- <StatusBarItem Content="{Binding AppVersion, Mode=OneWay}" ContentStringFormat="{}Browser v{0}" /> -->
+                    <!-- <Separator Style="{DynamicResource MahApps.Styles.Separator.StatusBar}" /> -->
+                    <StatusBarItem Content="{Binding IconPacksVersion, Mode=OneWay}" ContentStringFormat="{}IconPacks v{0}" />
+
+                    <Separator Style="{DynamicResource MahApps.Styles.Separator.StatusBar}" />
+
+                    <StatusBarItem Content="{Binding ElementName=NavigationListBox, Path=SelectedItem, Mode=OneWay}">
+                        <StatusBarItem.ContentTemplate>
+                            <DataTemplate DataType="{x:Type viewModels:IconPackViewModel}">
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} with {1} icons">
+                                            <Binding Mode="OneWay" Path="Caption" />
+                                            <Binding Mode="OneWay" Path="IconCount" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </StatusBarItem.ContentTemplate>
+                    </StatusBarItem>
+
+                    <Separator Style="{DynamicResource MahApps.Styles.Separator.StatusBar}" />
+
+                    <StatusBarItem Content="{Binding ElementName=NavigationListBox, Path=SelectedItem, Mode=OneWay}">
+                        <StatusBarItem.ContentTemplate>
+                            <DataTemplate DataType="{x:Type viewModels:IconPackViewModel}">
+                                <Button
+                                    Margin="0,0,4,0"
+                                    VerticalAlignment="Center"
+                                    Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
+                                    CommandParameter="{Binding SelectedIcon.MetaData.ProjectUrl, Mode=OneWay}"
+                                    Style="{StaticResource LinkButtonStyle}">
+                                    <Button.ContentTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <iconPacks:PackIconOcticons
+                                                    Width="14"
+                                                    Height="14"
+                                                    Margin="0,0,4,0"
+                                                    VerticalAlignment="Center"
+                                                    Kind="LinkExternal" />
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    Style="{StaticResource UnderlinedTextBlockStyle}"
+                                                    Text="Project site" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Button.ContentTemplate>
+                                    <Button.ToolTip>
+                                        <TextBlock Text="{Binding SelectedIcon.MetaData.ProjectUrl, Mode=OneWay, StringFormat='{}Visit: {0}'}" />
+                                    </Button.ToolTip>
+                                </Button>
+                            </DataTemplate>
+                        </StatusBarItem.ContentTemplate>
+                    </StatusBarItem>
+
+                    <Separator Style="{DynamicResource MahApps.Styles.Separator.StatusBar}" />
+
+                    <StatusBarItem Content="{Binding ElementName=NavigationListBox, Path=SelectedItem, Mode=OneWay}">
+                        <StatusBarItem.ContentTemplate>
+                            <DataTemplate DataType="{x:Type viewModels:IconPackViewModel}">
+                                <Button
+                                    Margin="0,0,4,0"
+                                    VerticalAlignment="Center"
+                                    Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
+                                    CommandParameter="{Binding SelectedIcon.MetaData.LicenseUrl, Mode=OneWay}"
+                                    Style="{StaticResource LinkButtonStyle}">
+                                    <Button.ContentTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <iconPacks:PackIconOcticons
+                                                    Width="14"
+                                                    Height="14"
+                                                    Margin="0,0,4,0"
+                                                    VerticalAlignment="Center"
+                                                    Kind="Law" />
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    Style="{StaticResource UnderlinedTextBlockStyle}"
+                                                    Text="License" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Button.ContentTemplate>
+                                    <Button.ToolTip>
+                                        <TextBlock Text="{Binding SelectedIcon.MetaData.LicenseUrl, Mode=OneWay, StringFormat='{}License: {0}'}" />
+                                    </Button.ToolTip>
+                                </Button>
+                            </DataTemplate>
+                        </StatusBarItem.ContentTemplate>
+                    </StatusBarItem>
+                </StatusBar>
             </Grid>
-        </mah:SplitView>
-
-        <StatusBar Grid.Row="2" Height="24">
-            <!-- <StatusBarItem Content="{Binding AppVersion, Mode=OneWay}" ContentStringFormat="{}Browser v{0}" /> -->
-            <!-- <Separator Style="{DynamicResource MahApps.Styles.Separator.StatusBar}" /> -->
-            <StatusBarItem Content="{Binding IconPacksVersion, Mode=OneWay}" ContentStringFormat="{}IconPacks v{0}" />
-
-            <Separator Style="{DynamicResource MahApps.Styles.Separator.StatusBar}" />
-
-            <StatusBarItem Content="{Binding ElementName=NavigationListBox, Path=SelectedItem, Mode=OneWay}">
-                <StatusBarItem.ContentTemplate>
-                    <DataTemplate DataType="{x:Type viewModels:IconPackViewModel}">
-                        <TextBlock>
-                            <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0} with {1} icons">
-                                    <Binding Mode="OneWay" Path="Caption" />
-                                    <Binding Mode="OneWay" Path="IconCount" />
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                    </DataTemplate>
-                </StatusBarItem.ContentTemplate>
-            </StatusBarItem>
-
-            <Separator Style="{DynamicResource MahApps.Styles.Separator.StatusBar}" />
-
-            <StatusBarItem Content="{Binding ElementName=NavigationListBox, Path=SelectedItem, Mode=OneWay}">
-                <StatusBarItem.ContentTemplate>
-                    <DataTemplate DataType="{x:Type viewModels:IconPackViewModel}">
-                        <Button Style="{StaticResource LinkButtonStyle}"
-                                Margin="0 0 4 0"
-                                VerticalAlignment="Center"
-                                Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
-                                CommandParameter="{Binding SelectedIcon.MetaData.ProjectUrl, Mode=OneWay}">
-                            <Button.ContentTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <iconPacks:PackIconOcticons Width="14"
-                                                                    Height="14"
-                                                                    Margin="0 0 4 0"
-                                                                    VerticalAlignment="Center"
-                                                                    Kind="LinkExternal" />
-                                        <TextBlock Style="{StaticResource UnderlinedTextBlockStyle}"
-                                                   VerticalAlignment="Center"
-                                                   Text="Project site" />
-                                    </StackPanel>
+        </TabItem>
+        <TabItem Header="Colors">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Border
+                    Grid.Row="0"
+                    Height="48"
+                    Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                    BorderBrush="{DynamicResource MahApps.Brushes.Accent}"
+                    BorderThickness="0,0,0,3"
+                    DockPanel.Dock="Top">
+                    <DockPanel LastChildFill="True">
+                        <TextBox
+                            x:Name="FilterTextBoxColors"
+                            MinWidth="400"
+                            Margin="5"
+                            mah:TextBoxHelper.Watermark="Filter by... (Ctrl + F)"
+                            Background="{DynamicResource MahApps.Brushes.Gray9}"
+                            BorderThickness="0"
+                            DockPanel.Dock="Right"
+                            Style="{DynamicResource IconPacksBrowser.Styles.TextBox.Search}"
+                            Text="{Binding ThemeResourcesViewModel.FilterTextColors, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=300}">
+                            <TextBox.ToolTip>
+                                <StackPanel>
+                                    <TextBlock
+                                        FontWeight="Bold"
+                                        Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                                        Text="Advanced filtering:" />
+                                    <TextBlock>
+                                        <Run Text="Use these chars to match all substrings: &#x09;" /> <Run FontFamily="Courier New" Text="'&amp;' '+' ',' ';'" /></TextBlock>
+                                    <TextBlock>
+                                        <Run Text="Use this chars to match any substring: &#x09;" /> <Run FontFamily="Courier New" Text="'|'" /></TextBlock>
+                                </StackPanel>
+                            </TextBox.ToolTip>
+                        </TextBox>
+                        <Slider
+                            MinWidth="100"
+                            AutoToolTipPlacement="TopLeft"
+                            AutoToolTipPrecision="0"
+                            DockPanel.Dock="Right"
+                            Maximum="255"
+                            Minimum="0"
+                            Value="{Binding ThemeResourcesViewModel.FilterAlphaValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=300}" />
+                        <TextBlock
+                            Margin="10,0,10,0"
+                            VerticalAlignment="Center"
+                            DockPanel.Dock="Right"
+                            Text="{Binding Path=ThemeResourcesViewModel.FilterAlphaValue, Mode=OneWay, StringFormat='{}Alpha min value 0x{0:x}'}" />
+                        <mah:TransitioningContentControl
+                            Margin="10,0"
+                            VerticalAlignment="Center"
+                            Content="{Binding ThemeResourcesViewModel.Header}"
+                            FontSize="30"
+                            FontWeight="DemiBold"
+                            Foreground="{DynamicResource MahApps.Brushes.Highlight}"
+                            RestartTransitionOnContentChange="True" />
+                    </DockPanel>
+                </Border>
+                <DataGrid
+                    x:Name="ColorGrid"
+                    Grid.Row="1"
+                    AutoGenerateColumns="False"
+                    HeadersVisibility="Column"
+                    ItemsSource="{Binding ThemeResourcesViewModel.ThemeResources}"
+                    SelectionMode="Single"
+                    SelectionUnit="FullRow">
+                    <DataGrid.CellStyle>
+                        <Style BasedOn="{StaticResource {x:Type DataGridCell}}" TargetType="{x:Type DataGridCell}">
+                            <EventSetter Event="MouseDoubleClick" Handler="DataGridCell_MouseDoubleClick" />
+                        </Style>
+                    </DataGrid.CellStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            x:Name="ColorKey"
+                            Width="400"
+                            Binding="{Binding Key}"
+                            Header="Key"
+                            IsReadOnly="True" />
+                        <DataGridTemplateColumn
+                            Width="100"
+                            Header="Value Light"
+                            IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate DataType="local:ThemeResource">
+                                    <Ellipse
+                                        x:Name="BrushResource"
+                                        Width="30"
+                                        Height="30"
+                                        Fill="{Binding ValueLight}"
+                                        Stroke="{DynamicResource MahApps.Brushes.Gray2}" />
                                 </DataTemplate>
-                            </Button.ContentTemplate>
-                            <Button.ToolTip>
-                                <TextBlock Text="{Binding SelectedIcon.MetaData.ProjectUrl, Mode=OneWay, StringFormat='{}Visit: {0}'}" />
-                            </Button.ToolTip>
-                        </Button>
-                    </DataTemplate>
-                </StatusBarItem.ContentTemplate>
-            </StatusBarItem>
-
-            <Separator Style="{DynamicResource MahApps.Styles.Separator.StatusBar}" />
-
-            <StatusBarItem Content="{Binding ElementName=NavigationListBox, Path=SelectedItem, Mode=OneWay}">
-                <StatusBarItem.ContentTemplate>
-                    <DataTemplate DataType="{x:Type viewModels:IconPackViewModel}">
-                        <Button Style="{StaticResource LinkButtonStyle}"
-                                Margin="0 0 4 0"
-                                VerticalAlignment="Center"
-                                Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
-                                CommandParameter="{Binding SelectedIcon.MetaData.LicenseUrl, Mode=OneWay}">
-                            <Button.ContentTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <iconPacks:PackIconOcticons Width="14"
-                                                                    Height="14"
-                                                                    Margin="0 0 4 0"
-                                                                    VerticalAlignment="Center"
-                                                                    Kind="Law" />
-                                        <TextBlock Style="{StaticResource UnderlinedTextBlockStyle}"
-                                                   VerticalAlignment="Center"
-                                                   Text="License" />
-                                    </StackPanel>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn
+                            Width="200"
+                            Binding="{Binding StringValueLight}"
+                            Header="Key Light"
+                            IsReadOnly="True" />
+                        <DataGridTemplateColumn
+                            Width="100"
+                            Header="Value Dark"
+                            IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate DataType="local:ThemeResource">
+                                    <Ellipse
+                                        x:Name="BrushResource"
+                                        Width="30"
+                                        Height="30"
+                                        Fill="{Binding ValueDark}"
+                                        Stroke="{DynamicResource MahApps.Brushes.Gray2}" />
                                 </DataTemplate>
-                            </Button.ContentTemplate>
-                            <Button.ToolTip>
-                                <TextBlock Text="{Binding SelectedIcon.MetaData.LicenseUrl, Mode=OneWay, StringFormat='{}License: {0}'}" />
-                            </Button.ToolTip>
-                        </Button>
-                    </DataTemplate>
-                </StatusBarItem.ContentTemplate>
-            </StatusBarItem>
-        </StatusBar>
-    </Grid>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn
+                            Width="200"
+                            Binding="{Binding StringValueDark}"
+                            Header="Key Dark"
+                            IsReadOnly="True" />
+                    </DataGrid.Columns>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsHidden}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource MahApps.Brushes.DataGrid.Selection.BorderBrush.MouseOver}" />
+                                    <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.DataGrid.Selection.Text.MouseOver}" />
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource MahApps.Brushes.DataGrid.Selection.Background}" />
+                                    <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.DataGrid.Selection.Text.MouseOver}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+                </DataGrid>
+                <StatusBar Grid.Row="2" Height="24">
+                    <!-- <StatusBarItem Content="{Binding AppVersion, Mode=OneWay}" ContentStringFormat="{}Browser v{0}" /> -->
+                    <!-- <Separator Style="{DynamicResource MahApps.Styles.Separator.StatusBar}" /> -->
+                    <StatusBarItem Content="{Binding IconPacksVersion, Mode=OneWay}" ContentStringFormat="{}IconPacks v{0}" />
+                    <Separator Style="{DynamicResource MahApps.Styles.Separator.StatusBar}" />
+                    <StatusBarItem Content="{Binding Path=ThemeResourcesViewModel, Mode=OneWay}">
+                        <StatusBarItem.ContentTemplate>
+                            <DataTemplate DataType="{x:Type viewModels:ThemeResourcesViewModel}">
+                                <TextBlock Text="{Binding StatusColorFilter}" />
+                            </DataTemplate>
+                        </StatusBarItem.ContentTemplate>
+                    </StatusBarItem>
+                    <Separator Style="{DynamicResource MahApps.Styles.Separator.StatusBar}" />
+                    <StatusBarItem Content="{Binding ElementName=NavigationListBox, Path=SelectedItem, Mode=OneWay}">
+                        <StatusBarItem.ContentTemplate>
+                            <DataTemplate DataType="{x:Type viewModels:IconPackViewModel}">
+                                <Button
+                                    Margin="0,0,4,0"
+                                    VerticalAlignment="Center"
+                                    Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
+                                    CommandParameter="{Binding SelectedIcon.MetaData.ProjectUrl, Mode=OneWay}"
+                                    Style="{StaticResource LinkButtonStyle}">
+                                    <Button.ContentTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <iconPacks:PackIconOcticons
+                                                    Width="14"
+                                                    Height="14"
+                                                    Margin="0,0,4,0"
+                                                    VerticalAlignment="Center"
+                                                    Kind="LinkExternal" />
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    Style="{StaticResource UnderlinedTextBlockStyle}"
+                                                    Text="Project site" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Button.ContentTemplate>
+                                    <Button.ToolTip>
+                                        <TextBlock Text="{Binding SelectedIcon.MetaData.ProjectUrl, Mode=OneWay, StringFormat='{}Visit: {0}'}" />
+                                    </Button.ToolTip>
+                                </Button>
+                            </DataTemplate>
+                        </StatusBarItem.ContentTemplate>
+                    </StatusBarItem>
+                    <Separator Style="{DynamicResource MahApps.Styles.Separator.StatusBar}" />
+                    <StatusBarItem Content="{Binding ElementName=NavigationListBox, Path=SelectedItem, Mode=OneWay}">
+                        <StatusBarItem.ContentTemplate>
+                            <DataTemplate DataType="{x:Type viewModels:IconPackViewModel}">
+                                <Button
+                                    Margin="0,0,4,0"
+                                    VerticalAlignment="Center"
+                                    Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
+                                    CommandParameter="{Binding SelectedIcon.MetaData.LicenseUrl, Mode=OneWay}"
+                                    Style="{StaticResource LinkButtonStyle}">
+                                    <Button.ContentTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <iconPacks:PackIconOcticons
+                                                    Width="14"
+                                                    Height="14"
+                                                    Margin="0,0,4,0"
+                                                    VerticalAlignment="Center"
+                                                    Kind="Law" />
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    Style="{StaticResource UnderlinedTextBlockStyle}"
+                                                    Text="License" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Button.ContentTemplate>
+                                    <Button.ToolTip>
+                                        <TextBlock Text="{Binding SelectedIcon.MetaData.LicenseUrl, Mode=OneWay, StringFormat='{}License: {0}'}" />
+                                    </Button.ToolTip>
+                                </Button>
+                            </DataTemplate>
+                        </StatusBarItem.ContentTemplate>
+                    </StatusBarItem>
+                </StatusBar>
+                <Popup
+                    Name="pop1"
+                    IsOpen="{Binding ThemeResourcesViewModel.PopupIsOpen}"
+                    Placement="Mouse">
+                    <Border
+                        Background="LemonChiffon"
+                        BorderBrush="Black"
+                        BorderThickness="2">
+                        <TextBlock
+                            Name="tb1"
+                            Margin="5"
+                            Foreground="Black"
+                            Text="{Binding ThemeResourcesViewModel.PopupText}" />
+                    </Border>
+                </Popup>
+            </Grid>
+        </TabItem>
+    </mah:MetroAnimatedSingleRowTabControl>
+
 
 </mah:MetroWindow>

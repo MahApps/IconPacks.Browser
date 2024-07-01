@@ -1,3 +1,5 @@
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using IconPacks.Browser.Properties;
 using IconPacks.Browser.ViewModels;
@@ -34,6 +36,23 @@ namespace IconPacks.Browser
         {
             FilterTextBox.Focus();
             Keyboard.Focus(FilterTextBox);
+        }
+
+        /// <summary>
+        /// Forward Cell click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridCell_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is DataGridCell c && c.TryFindParent<Window>()!=null)
+            {
+                var frm = c.TryFindParent<Window>();
+                if (frm.DataContext !=null && frm.DataContext is MainViewModel mvm)
+                {
+                    mvm.ThemeResourcesViewModel.DataGridCell_MouseDoubleClick(sender,e);
+                }
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using AsyncAwaitBestPractices;
+using IconPacks.Browser.IcoExport;
 using IconPacks.Browser.Model;
 using IconPacks.Browser.Properties;
 using JetBrains.Annotations;
@@ -22,6 +24,7 @@ using MahApps.Metro.Controls.Dialogs;
 using MahApps.Metro.IconPacks;
 using Microsoft.Win32;
 using IO = System.IO;
+
 
 namespace IconPacks.Browser.ViewModels
 {
@@ -47,6 +50,7 @@ namespace IconPacks.Browser.ViewModels
             SaveAsPngCommand = new SimpleCommand((_) => SaveAsBitmapExecute(new PngBitmapEncoder()), (_) => SelectedIcon is not null);
             SaveAsJpegCommand = new SimpleCommand((_) => SaveAsBitmapExecute(new JpegBitmapEncoder()), (_) => SelectedIcon is not null);
             SaveAsBmpCommand = new SimpleCommand((_) => SaveAsBitmapExecute(new BmpBitmapEncoder()), (_) => SelectedIcon is not null);
+            SaveAsIcoCommand = new SimpleCommand((_) => SaveAsIconExecute(), (_) => SelectedIcon is not null);
         }
 
         public IconPackViewModel(MainViewModel mainViewModel, Type enumType, Type packType, IDialogCoordinator dialogCoordinator)
@@ -68,6 +72,11 @@ namespace IconPacks.Browser.ViewModels
             this.Caption = caption;
 
             this.LoadAllEnumsAsync(enumTypes, packTypes).SafeFireAndForget();
+        }
+
+        //For Design Mode
+        public IconPackViewModel()
+        {
         }
 
         private async Task LoadEnumsAsync(Type enumType, Type packType)
@@ -215,7 +224,7 @@ namespace IconPacks.Browser.ViewModels
                     iconControl.EndInit();
                     iconControl.ApplyTemplate();
 
-                    var iconPath = iconControl.FindChild<Path>();
+                    var iconPath = iconControl.FindChild<System.Windows.Shapes.Path>();
 
                     var bBox = iconPath.Data.Bounds;
 
@@ -293,7 +302,7 @@ namespace IconPacks.Browser.ViewModels
                     iconControl.EndInit();
                     iconControl.ApplyTemplate();
 
-                    var iconPath = iconControl.FindChild<Path>();
+                    var iconPath = iconControl.FindChild<System.Windows.Shapes.Path>();
 
                     var bBox = iconPath.Data.Bounds;
 
@@ -357,7 +366,7 @@ namespace IconPacks.Browser.ViewModels
                     iconControl.EndInit();
                     iconControl.ApplyTemplate();
 
-                    var iconPath = iconControl.FindChild<Path>();
+                    var iconPath = iconControl.FindChild<System.Windows.Shapes.Path>();
 
                     var bBox = iconPath.Data.Bounds;
 
@@ -397,6 +406,59 @@ namespace IconPacks.Browser.ViewModels
         public ICommand SaveAsJpegCommand { get; }
 
         public ICommand SaveAsBmpCommand { get; }
+        public ICommand SaveAsIcoCommand { get; }
+
+        private async void SaveAsIconExecute()
+        {
+            var progress = await dialogCoordinator.ShowProgressAsync(MainViewModel, "Export", "Saving selected icon as .ico file");
+            progress.SetIndeterminate();
+
+            try
+            {
+                if (SelectedIcon is IconViewModel icon)
+                {
+                    
+
+                    var IcoOptionsView = new ExportIconView();
+                    var IcoOptionViewModel = new ExportIconViewModel() { Frm = IcoOptionsView, Icon = icon };
+                    IcoOptionsView.DataContext = IcoOptionViewModel;
+                    if (IcoOptionsView.ShowDialog() == true && IcoOptionViewModel.IconBitmaps.Count != 0)
+                    {
+
+                        var fileSaveDialog = new SaveFileDialog()
+                        {
+                            AddExtension = true,
+                            FileName = $"{SelectedIcon.IconPackName}-{SelectedIcon.Name}",
+                            Filter = "Ico-File (*.ico)|*.ico",
+                            OverwritePrompt = true
+                        };
+
+                        if (fileSaveDialog.ShowDialog() == true)
+                        {
+                           
+                            
+
+                            using (var stream = new System.IO.FileStream(fileSaveDialog.FileName, System.IO.FileMode.Create))
+                            {
+                                                              
+                                IconFactory.SavePngsAsIcon(IcoOptionViewModel.IconBitmaps.ToArray(), stream);
+                                foreach (var bm in IcoOptionViewModel.IconBitmaps)
+                                {
+                                    bm.Dispose();
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                await dialogCoordinator.ShowMessageAsync(MainViewModel, "Error", e.Message);
+            }
+
+            await progress.CloseAsync();
+        }
 
         private async void SaveAsBitmapExecute(BitmapEncoder encoder)
         {
@@ -466,6 +528,7 @@ namespace IconPacks.Browser.ViewModels
     public interface IIconViewModel
     {
         string Name { get; set; }
+        string FullName { get; }
         string IconPackName { get; }
         string Description { get; set; }
         Type IconPackType { get; set; }
@@ -484,6 +547,7 @@ namespace IconPacks.Browser.ViewModels
         public IconViewModel(Type enumType, Type packType, Enum k, MetaDataAttribute metaData)
         {
             Name = k.ToString();
+            FullName = enumType.FullName + "." + k.ToString();
             Description = GetDescription(k);
             IconPackType = packType;
             IconType = enumType;
@@ -501,6 +565,7 @@ namespace IconPacks.Browser.ViewModels
         public string CopyToClipboardAsGeometryText => ExportHelper.FillTemplate(ExportHelper.ClipboardData, new ExportParameters(this)); // GetPackIconControlBase().Data;
 
         public string Name { get; set; }
+        public string FullName { get; }
 
         public string IconPackName => IconPackType.Name.Replace("PackIcon", "");
 

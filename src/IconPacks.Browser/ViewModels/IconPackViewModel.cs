@@ -74,6 +74,11 @@ namespace IconPacks.Browser.ViewModels
             this.LoadAllEnumsAsync(enumTypes, packTypes).SafeFireAndForget();
         }
 
+        //For Design Mode
+        public IconPackViewModel()
+        {
+        }
+
         private async Task LoadEnumsAsync(Type enumType, Type packType)
         {
             var collection = await Task.Run(() => GetIcons(enumType, packType).OrderBy(i => i.Name, StringComparer.InvariantCultureIgnoreCase).ToList());
@@ -410,53 +415,41 @@ namespace IconPacks.Browser.ViewModels
 
             try
             {
-                var fileSaveDialog = new SaveFileDialog()
+                if (SelectedIcon is IconViewModel icon)
                 {
-                    AddExtension = true,
-                    FileName = $"{SelectedIcon.IconPackName}-{SelectedIcon.Name}",
-                    Filter = "Ico-File (*.ico)|*.ico",
-                    OverwritePrompt = true
-                };
+                    
 
-
-
-                if (fileSaveDialog.ShowDialog() == true && SelectedIcon is IconViewModel icon)
-                {
-                    var background = new SolidColorBrush(Settings.Default.IconBackground);
-
-                    var frm = new ExportIconView();
-                    var vm = new ExportIconViewModel();
-                    vm.Preview = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(GetBitmapStream(new PngBitmapEncoder(), icon, background, 200)) ;
-                    frm.DataContext = vm;
-                    if (frm.ShowDialog() == true)
+                    var IcoOptionsView = new ExportIconView();
+                    var IcoOptionViewModel = new ExportIconViewModel() { Frm = IcoOptionsView, Icon = icon };
+                    IcoOptionsView.DataContext = IcoOptionViewModel;
+                    if (IcoOptionsView.ShowDialog() == true && IcoOptionViewModel.IconBitmaps.Count != 0)
                     {
-                        using (var png16 = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(GetBitmapStream(new PngBitmapEncoder(), icon, background, 16)))
-                        using (var png24 = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(GetBitmapStream(new PngBitmapEncoder(), icon, background, 24)))
-                        using (var png32 = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(GetBitmapStream(new PngBitmapEncoder(), icon, background, 32)))
-                        using (var png48 = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(GetBitmapStream(new PngBitmapEncoder(), icon, background, 48)))
-                        using (var png64 = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(GetBitmapStream(new PngBitmapEncoder(), icon, background, 64)))
-                        using (var png72 = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(GetBitmapStream(new PngBitmapEncoder(), icon, background, 72)))
-                        using (var png96 = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(GetBitmapStream(new PngBitmapEncoder(), icon, background, 96)))
-                        using (var png128 = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(GetBitmapStream(new PngBitmapEncoder(), icon, background, 128)))
-                        using (var png180 = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(GetBitmapStream(new PngBitmapEncoder(), icon, background, 180)))
-                        using (var png256 = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(GetBitmapStream(new PngBitmapEncoder(), icon, background, 256)))
-                        using (var stream = new System.IO.FileStream(fileSaveDialog.FileName, System.IO.FileMode.Create))
-                        {
-                            List<System.Drawing.Bitmap> l = new List<System.Drawing.Bitmap>();
-                            if (png16 != null) l.Add(png16);
-                            if (png24 != null) l.Add(png24);
-                            if (png32 != null) l.Add(png32);
-                            if (png48 != null) l.Add(png48);
-                            if (png64 != null) l.Add(png64);
-                            if (png72 != null) l.Add(png72);
-                            if (png96 != null) l.Add(png96);
-                            if (png128 != null) l.Add(png128);
-                            if (png180 != null) l.Add(png180);
-                            if (png256 != null) l.Add(png256);
-                            IconFactory.SavePngsAsIcon(l.ToArray(), stream);
-                        }
-                    }
 
+                        var fileSaveDialog = new SaveFileDialog()
+                        {
+                            AddExtension = true,
+                            FileName = $"{SelectedIcon.IconPackName}-{SelectedIcon.Name}",
+                            Filter = "Ico-File (*.ico)|*.ico",
+                            OverwritePrompt = true
+                        };
+
+                        if (fileSaveDialog.ShowDialog() == true)
+                        {
+                           
+                            
+
+                            using (var stream = new System.IO.FileStream(fileSaveDialog.FileName, System.IO.FileMode.Create))
+                            {
+                                                              
+                                IconFactory.SavePngsAsIcon(IcoOptionViewModel.IconBitmaps.ToArray(), stream);
+                                foreach (var bm in IcoOptionViewModel.IconBitmaps)
+                                {
+                                    bm.Dispose();
+                                }
+                            }
+                        }
+
+                    }
                 }
             }
             catch (Exception e)
@@ -491,14 +484,36 @@ namespace IconPacks.Browser.ViewModels
 
                 if (fileSaveDialog.ShowDialog() == true && SelectedIcon is IconViewModel icon)
                 {
-
-
-                    using var fileStream = new System.IO.FileStream(fileSaveDialog.FileName, System.IO.FileMode.Create);
-                    using var memstream = GetBitmapStream(encoder, icon, new SolidColorBrush(Settings.Default.IconBackground), Settings.Default.IconPreviewSize);
+                    var canvas = new Canvas
                     {
-                        memstream.WriteTo(fileStream);
-                    }
+                        Width = Settings.Default.IconPreviewSize,
+                        Height = Settings.Default.IconPreviewSize,
+                        Background = new SolidColorBrush(Settings.Default.IconBackground)
+                    };
 
+                    var packIconControl = new PackIconControl();
+                    packIconControl.BeginInit();
+                    packIconControl.Kind = icon.Value as Enum;
+                    packIconControl.Width = Settings.Default.IconPreviewSize;
+                    packIconControl.Height = Settings.Default.IconPreviewSize;
+                    packIconControl.Foreground = new SolidColorBrush(Settings.Default.IconForeground);
+
+                    packIconControl.EndInit();
+                    packIconControl.ApplyTemplate();
+
+                    canvas.Children.Add(packIconControl);
+
+                    var size = new Size(Settings.Default.IconPreviewSize, Settings.Default.IconPreviewSize);
+                    canvas.Measure(size);
+                    canvas.Arrange(new Rect(size));
+
+                    var renderTargetBitmap = new RenderTargetBitmap((int)size.Width, (int)size.Height, 96, 96, PixelFormats.Pbgra32);
+                    renderTargetBitmap.Render(canvas);
+
+                    encoder.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
+
+                    using var fileStream = new IO.FileStream(fileSaveDialog.FileName, IO.FileMode.Create);
+                    encoder.Save(fileStream);
                 }
             }
             catch (Exception e)
@@ -508,44 +523,7 @@ namespace IconPacks.Browser.ViewModels
 
             await progress.CloseAsync();
         }
-        private System.IO.MemoryStream GetBitmapStream(BitmapEncoder encoder, IconViewModel icon, System.Windows.Media.Brush background, double width)
-        {
-            var canvas = new Canvas
-            {
-                Width = width,
-                Height = width,
-                Background = background
-            };
-
-            var packIconControl = new PackIconControl();
-            packIconControl.BeginInit();
-            packIconControl.Kind = icon.Value as Enum;
-            packIconControl.Width = width;
-            packIconControl.Height = width;
-            packIconControl.Foreground = new SolidColorBrush(Settings.Default.IconForeground);
-
-            packIconControl.EndInit();
-            packIconControl.ApplyTemplate();
-
-            canvas.Children.Add(packIconControl);
-
-            var size = new System.Windows.Size(width, width);
-            canvas.Measure(size);
-            canvas.Arrange(new Rect(size));
-
-            var renderTargetBitmap = new RenderTargetBitmap((int)size.Width, (int)size.Height, 96, 96, PixelFormats.Pbgra32);
-            renderTargetBitmap.Render(canvas);
-
-            encoder.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
-            MemoryStream mem = new MemoryStream();
-            encoder.Save(mem);
-            mem.Seek(0, SeekOrigin.Begin);
-            return mem;
-        }
-
     }
-
-
 
     public interface IIconViewModel
     {

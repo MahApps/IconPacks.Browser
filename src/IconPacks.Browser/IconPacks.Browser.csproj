@@ -20,12 +20,12 @@
 
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
+        <PackageReference Include="MahApps.Metro" Version="2.4.10" />
         <PackageReference Include="WpfAnalyzers" Version="4.1.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
         <PackageReference Include="MahApps.Metro.IconPacks" Version="5.0.0" />
-        <PackageReference Include="MahApps.Metro" Version="2.4.10" />
         <PackageReference Include="AsyncAwaitBestPractices" Version="7.0.0" />
         <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
         <PackageReference Include="VirtualizingWrapPanel" Version="2.0.6" />
@@ -41,6 +41,11 @@
 
     <ItemGroup>
         <_SettingsFiles Remove="Properties\Settings.settings" />
+        <Compile Update="Properties\Settings.Designer.cs">
+          <DesignTimeSharedInput>True</DesignTimeSharedInput>
+          <AutoGen>True</AutoGen>
+          <DependentUpon>Settings.settings</DependentUpon>
+        </Compile>
         <None Update="ExportTemplates\Clipboard.WPF.Geometry.xml">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -70,6 +75,10 @@
         </None>
         <None Update="ExportTemplates\WPF.xml">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Properties\Settings.settings">
+          <Generator>SettingsSingleFileGenerator</Generator>
+          <LastGenOutput>Settings.Designer.cs</LastGenOutput>
         </None>
     </ItemGroup>
 

@@ -7,31 +7,18 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using MahApps.Metro.Controls.Dialogs;
 using MahApps.Metro.IconPacks;
 
 namespace IconPacks.Browser.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private readonly IDialogCoordinator dialogCoordinator;
         private readonly Dispatcher _dispatcher;
         private string _filterText;
         private IconPackViewModel _selectedIconPack;
-        private static MainViewModel _Instance;
 
         public MainViewModel(Dispatcher dispatcher)
         {
-            if (_Instance is null)
-            {
-                _Instance = this;
-            }
-            else
-            {
-                return;
-            }
-
-            this.dialogCoordinator = DialogCoordinator.Instance;
             this._dispatcher = dispatcher;
             this.AppVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
 
@@ -80,7 +67,7 @@ namespace IconPacks.Browser.ViewModels
 
             foreach (var (enumType, iconPackType) in availableIconPacks)
             {
-                coll.Add(new IconPackViewModel(this, enumType, iconPackType, dialogCoordinator));
+                coll.Add(new IconPackViewModel(this, enumType, iconPackType));
             }
 
             this.IconPacks = coll;
@@ -91,31 +78,13 @@ namespace IconPacks.Browser.ViewModels
                     this,
                     "All Icons",
                     availableIconPacks.Select(x => x.EnumType).ToArray(),
-                    availableIconPacks.Select(x => x.IconPackType).ToArray(),
-                    dialogCoordinator)
+                    availableIconPacks.Select(x => x.IconPackType).ToArray()
+                )
             });
 
             this.IconPacksVersion = FileVersionInfo.GetVersionInfo(Assembly.GetAssembly(typeof(PackIconMaterial)).Location).FileVersion;
 
-            this.Settings = new SettingsViewModel(this.dialogCoordinator);
-        }
-
-        private static async void OpenUrlLink(string link)
-        {
-            try
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = link ?? throw new ArgumentNullException(nameof(link)),
-                    // UseShellExecute is default to false on .NET Core while true on .NET Framework.
-                    // Only this value is set to true, the url link can be opened.
-                    UseShellExecute = true,
-                });
-            }
-            catch (Exception e)
-            {
-                await DialogCoordinator.Instance.ShowMessageAsync(MainViewModel._Instance, "Error", e.Message);
-            }
+            this.Settings = new SettingsViewModel();
         }
 
         public IconPackViewModel SelectedIconPack
@@ -137,13 +106,6 @@ namespace IconPacks.Browser.ViewModels
         public string AppVersion { get; }
 
         public string IconPacksVersion { get; }
-
-        public static ICommand OpenUrlCommand { get; } =
-            new SimpleCommand
-            {
-                CanExecuteDelegate = x => !string.IsNullOrWhiteSpace(x as string),
-                ExecuteDelegate = x => OpenUrlLink(x as string)
-            };
 
         public string FilterText
         {

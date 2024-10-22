@@ -234,7 +234,7 @@
                         </Style>
                     </Expander.Resources>
                     <StackPanel>
-                        <Button Command="{Binding SaveAsSvgCommand}" Content="Save as svg" />
+                        <Button Command="{Binding SaveAsSvgCommand}" Content="Save as Svg" />
                         <Button Command="{Binding SaveAsWpfCommand}" Content="Save as XAML (WPF)" />
                         <Button Command="{Binding SaveAsUwpCommand}" Content="Save as XAML (UWP)" />
                         <Button Command="{Binding SaveAsPngCommand}" Content="Save as Png" />

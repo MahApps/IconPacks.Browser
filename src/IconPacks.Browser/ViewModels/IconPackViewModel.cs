@@ -14,11 +14,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using AsyncAwaitBestPractices;
+using AsyncAwaitBestPractices.MVVM;
 using IconPacks.Browser.Model;
 using IconPacks.Browser.Properties;
 using JetBrains.Annotations;
 using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
 using MahApps.Metro.IconPacks;
 using Microsoft.Win32;
 using IO = System.IO;
@@ -32,25 +32,22 @@ namespace IconPacks.Browser.ViewModels
         private ICollectionView _iconsCollectionView;
         private string _filterText;
         private IIconViewModel _selectedIcon;
-        private readonly IDialogCoordinator dialogCoordinator;
 
-        private IconPackViewModel(MainViewModel mainViewModel, IDialogCoordinator dialogCoordinator)
+        private IconPackViewModel(MainViewModel mainViewModel)
         {
             this.MainViewModel = mainViewModel;
-            this.dialogCoordinator = dialogCoordinator;
 
             // Export commands
-            SaveAsSvgCommand = new SimpleCommand((_) => SaveAsSvg_Execute(), (_) => SelectedIcon is IconViewModel);
-            SaveAsWpfCommand = new SimpleCommand((_) => SaveAsWpf_Execute(), (_) => SelectedIcon is not null);
-            SaveAsUwpCommand = new SimpleCommand((_) => SaveAsUwp_Execute(), (_) => SelectedIcon is not null);
-
-            SaveAsPngCommand = new SimpleCommand((_) => SaveAsBitmapExecute(new PngBitmapEncoder()), (_) => SelectedIcon is not null);
-            SaveAsJpegCommand = new SimpleCommand((_) => SaveAsBitmapExecute(new JpegBitmapEncoder()), (_) => SelectedIcon is not null);
-            SaveAsBmpCommand = new SimpleCommand((_) => SaveAsBitmapExecute(new BmpBitmapEncoder()), (_) => SelectedIcon is not null);
+            SaveAsSvgCommand = new AsyncCommand(SaveAsSvgAsync, _ => SelectedIcon is IconViewModel);
+            SaveAsWpfCommand = new AsyncCommand(SaveAsWpfAsync, _ => SelectedIcon is IconViewModel);
+            SaveAsUwpCommand = new AsyncCommand(SaveAsUwpAsync, _ => SelectedIcon is IconViewModel);
+            SaveAsPngCommand = new AsyncCommand(() => SaveAsBitmapAsync(new PngBitmapEncoder()), _ => SelectedIcon is IconViewModel);
+            SaveAsJpegCommand = new AsyncCommand(() => SaveAsBitmapAsync(new JpegBitmapEncoder()), _ => SelectedIcon is IconViewModel);
+            SaveAsBmpCommand = new AsyncCommand(() => SaveAsBitmapAsync(new BmpBitmapEncoder()), _ => SelectedIcon is IconViewModel);
         }
 
-        public IconPackViewModel(MainViewModel mainViewModel, Type enumType, Type packType, IDialogCoordinator dialogCoordinator)
-            : this(mainViewModel, dialogCoordinator)
+        public IconPackViewModel(MainViewModel mainViewModel, Type enumType, Type packType)
+            : this(mainViewModel)
         {
             // Get the Name of the IconPack via Attributes
             this.MetaData = Attribute.GetCustomAttribute(packType, typeof(MetaDataAttribute)) as MetaDataAttribute;
@@ -60,8 +57,8 @@ namespace IconPacks.Browser.ViewModels
             this.LoadEnumsAsync(enumType, packType).SafeFireAndForget();
         }
 
-        public IconPackViewModel(MainViewModel mainViewModel, string caption, Type[] enumTypes, Type[] packTypes, IDialogCoordinator dialogCoordinator)
-            : this(mainViewModel, dialogCoordinator)
+        public IconPackViewModel(MainViewModel mainViewModel, string caption, Type[] enumTypes, Type[] packTypes)
+            : this(mainViewModel)
         {
             this.MainViewModel = mainViewModel;
 
@@ -183,13 +180,20 @@ namespace IconPacks.Browser.ViewModels
                 if (Set(ref _selectedIcon, value))
                 {
                     CommandManager.InvalidateRequerySuggested();
+
+                    SaveAsSvgCommand?.RaiseCanExecuteChanged();
+                    SaveAsWpfCommand?.RaiseCanExecuteChanged();
+                    SaveAsUwpCommand?.RaiseCanExecuteChanged();
+                    SaveAsPngCommand?.RaiseCanExecuteChanged();
+                    SaveAsJpegCommand?.RaiseCanExecuteChanged();
+                    SaveAsBmpCommand?.RaiseCanExecuteChanged();
                 }
             }
         }
 
-        public ICommand SaveAsSvgCommand { get; }
+        public IAsyncCommand SaveAsSvgCommand { get; }
 
-        private async void SaveAsSvg_Execute()
+        private async Task SaveAsSvgAsync()
         {
             var progress = await dialogCoordinator.ShowProgressAsync(MainViewModel, "Export", "Saving selected icon as SVG-file");
             progress.SetIndeterminate();
@@ -253,7 +257,11 @@ namespace IconPacks.Browser.ViewModels
 
                     var svgFileContent = ExportHelper.FillTemplate(svgFileTemplate, parameters);
 
+#if NETFRAMEWORK
                     using IO.StreamWriter file = new IO.StreamWriter(fileSaveDialog.FileName);
+#else
+                    await using IO.StreamWriter file = new IO.StreamWriter(fileSaveDialog.FileName);
+#endif
                     await file.WriteAsync(svgFileContent);
                 }
             }
@@ -265,9 +273,9 @@ namespace IconPacks.Browser.ViewModels
             await progress.CloseAsync();
         }
 
-        public ICommand SaveAsWpfCommand { get; }
+        public IAsyncCommand SaveAsWpfCommand { get; }
 
-        private async void SaveAsWpf_Execute()
+        private async Task SaveAsWpfAsync()
         {
             var progress = await dialogCoordinator.ShowProgressAsync(MainViewModel, "Export", "Saving selected icon as WPF-XAML-file");
             progress.SetIndeterminate();
@@ -317,7 +325,11 @@ namespace IconPacks.Browser.ViewModels
 
                     var wpfFileContent = ExportHelper.FillTemplate(wpfFileTemplate, parameters);
 
+#if NETFRAMEWORK
                     using IO.StreamWriter file = new IO.StreamWriter(fileSaveDialog.FileName);
+#else
+                    await using IO.StreamWriter file = new IO.StreamWriter(fileSaveDialog.FileName);
+#endif
                     await file.WriteAsync(wpfFileContent);
                 }
             }
@@ -329,9 +341,9 @@ namespace IconPacks.Browser.ViewModels
             await progress.CloseAsync();
         }
 
-        public ICommand SaveAsUwpCommand { get; }
+        public IAsyncCommand SaveAsUwpCommand { get; }
 
-        private async void SaveAsUwp_Execute()
+        private async Task SaveAsUwpAsync()
         {
             var progress = await dialogCoordinator.ShowProgressAsync(MainViewModel, "Export", "Saving selected icon as WPF-XAML-file");
             progress.SetIndeterminate();
@@ -380,7 +392,11 @@ namespace IconPacks.Browser.ViewModels
 
                     var wpfFileContent = ExportHelper.FillTemplate(wpfFileTemplate, parameters);
 
+#if NETFRAMEWORK
                     using IO.StreamWriter file = new IO.StreamWriter(fileSaveDialog.FileName);
+#else
+                    await using IO.StreamWriter file = new IO.StreamWriter(fileSaveDialog.FileName);
+#endif
                     await file.WriteAsync(wpfFileContent);
                 }
             }
@@ -392,13 +408,13 @@ namespace IconPacks.Browser.ViewModels
             await progress.CloseAsync();
         }
 
-        public ICommand SaveAsPngCommand { get; }
+        public IAsyncCommand SaveAsPngCommand { get; }
 
-        public ICommand SaveAsJpegCommand { get; }
+        public IAsyncCommand SaveAsJpegCommand { get; }
 
-        public ICommand SaveAsBmpCommand { get; }
+        public IAsyncCommand SaveAsBmpCommand { get; }
 
-        private async void SaveAsBitmapExecute(BitmapEncoder encoder)
+        private async Task SaveAsBitmapAsync(BitmapEncoder encoder)
         {
             var progress = await dialogCoordinator.ShowProgressAsync(MainViewModel, "Export", "Saving selected icon as bitmap image");
             progress.SetIndeterminate();
@@ -450,7 +466,11 @@ namespace IconPacks.Browser.ViewModels
 
                     encoder.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
 
+#if NETFRAMEWORK
                     using var fileStream = new IO.FileStream(fileSaveDialog.FileName, IO.FileMode.Create);
+#else
+                    await using var fileStream = new IO.FileStream(fileSaveDialog.FileName, IO.FileMode.Create);
+#endif
                     encoder.Save(fileStream);
                 }
             }

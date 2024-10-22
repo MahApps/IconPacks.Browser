@@ -233,7 +233,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="mah:TextBoxHelper.ButtonCommand" Value="{x:Static vm:MainViewModel.OpenUrlCommand}" />
+        <Setter Property="mah:TextBoxHelper.ButtonCommand" Value="{Binding OpenUrlCommand, Mode=OneWay}" />
         <Setter Property="mah:TextBoxHelper.ButtonCommandParameter" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Text}" />
         <Setter Property="mah:TextBoxHelper.ButtonContentTemplate">
             <Setter.Value>

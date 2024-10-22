@@ -6,18 +6,17 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Resources;
+using System.Threading.Tasks;
 using System.Windows.Media;
+using AsyncAwaitBestPractices.MVVM;
 using ControlzEx.Theming;
 using IconPacks.Browser.Properties;
-using MahApps.Metro.Controls.Dialogs;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace IconPacks.Browser.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
-        private readonly IDialogCoordinator dialogCoordinator;
-
         static SettingsViewModel()
         {
             AccentColorNamesDictionary = new Dictionary<Color?, string>();
@@ -46,12 +45,14 @@ namespace IconPacks.Browser.ViewModels
             AccentColors = new List<Color?>(AccentColorNamesDictionary.Keys);
         }
 
-        public SettingsViewModel(IDialogCoordinator dialogCoordinator)
+        public SettingsViewModel()
         {
-            this.dialogCoordinator = dialogCoordinator;
-            CopyOriginalTemplatesCommand = new SimpleCommand((_) => CopyOriginalTemplatesCommand_Executed(), (_) => Directory.Exists(Settings.Default.ExportTemplatesDir));
-            SelectTemplateFolderCommand = new SimpleCommand((_) => SelectTemplateFolderCommand_Executed());
-            ClearTemplatesDirCommand = new SimpleCommand((_) => ClearTemplatesDirCommand_Executed(), (_) => !string.IsNullOrEmpty(Settings.Default.ExportTemplatesDir));
+            CopyOriginalTemplatesCommand = new AsyncCommand(CopyOriginalTemplatesAsync, _ => Directory.Exists(Settings.Default.ExportTemplatesDir));
+            SelectTemplateFolderCommand = new AsyncCommand(SelectTemplateFolderAsync);
+            ClearTemplatesDirCommand = new AsyncCommand(ClearTemplatesAsync, (_) => !string.IsNullOrEmpty(Settings.Default.ExportTemplatesDir));
+
+            CopyOriginalTemplatesCommand.RaiseCanExecuteChanged();
+            ClearTemplatesDirCommand.RaiseCanExecuteChanged();
         }
 
         public static Dictionary<Color?, string> AccentColorNamesDictionary { get; }
@@ -64,22 +65,24 @@ namespace IconPacks.Browser.ViewModels
             ThemeManager.Current.ChangeTheme(System.Windows.Application.Current, newTheme);
         }
 
-        public SimpleCommand SelectTemplateFolderCommand { get; }
+        public IAsyncCommand SelectTemplateFolderCommand { get; }
 
-        private async void SelectTemplateFolderCommand_Executed()
+        private async Task SelectTemplateFolderAsync()
         {
             try
             {
-                CommonOpenFileDialog dialog = new CommonOpenFileDialog()
+                var fileDialog = new CommonOpenFileDialog()
                 {
                     IsFolderPicker = true,
                     Multiselect = false,
                     Title = "Select the Template Folder"
                 };
 
-                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                if (fileDialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    Settings.Default.ExportTemplatesDir = dialog.FileName;
+                    Settings.Default.ExportTemplatesDir = fileDialog.FileName;
+                    CopyOriginalTemplatesCommand?.RaiseCanExecuteChanged();
+                    ClearTemplatesDirCommand?.RaiseCanExecuteChanged();
                 }
             }
             catch (Exception e)
@@ -88,17 +91,17 @@ namespace IconPacks.Browser.ViewModels
             }
         }
 
-        public SimpleCommand CopyOriginalTemplatesCommand { get; }
+        public IAsyncCommand CopyOriginalTemplatesCommand { get; }
 
-        private async void CopyOriginalTemplatesCommand_Executed()
+        private async Task CopyOriginalTemplatesAsync()
         {
-            List<string> failedItems = new List<string>();
-            string[] originalTemplates = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExportTemplates"));
+            var failedItems = new List<string>();
+            var originalTemplates = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExportTemplates"));
 
-            foreach (string template in originalTemplates)
+            foreach (var template in originalTemplates)
             {
                 //Do your job with "file"  
-                string destination = Path.Combine(Settings.Default.ExportTemplatesDir, Path.GetFileName(template));
+                var destination = Path.Combine(Settings.Default.ExportTemplatesDir, Path.GetFileName(template));
                 if (!File.Exists(destination))
                 {
                     File.Copy(template, destination);
@@ -111,17 +114,26 @@ namespace IconPacks.Browser.ViewModels
 
             if (failedItems.Count > 0)
             {
-                await dialogCoordinator.ShowMessageAsync(this, "Templates already exists", $"The following files already exist in the templates folder. Either delete them or choose an empty folder. \n\n{string.Join(Environment.NewLine, failedItems)}");
+                await dialogCoordinator.ShowMessageAsync(
+                    this,
+                    "Templates already exists",
+                    $"The following files already exist in the templates folder. Either delete them or choose an empty folder. \n\n{string.Join(Environment.NewLine, failedItems)}"
+                );
             }
 
-            MainViewModel.OpenUrlCommand.Execute(Settings.Default.ExportTemplatesDir);
+            await this.OpenUrlLink(Settings.Default.ExportTemplatesDir);
         }
 
-        public SimpleCommand ClearTemplatesDirCommand { get; }
+        public IAsyncCommand ClearTemplatesDirCommand { get; }
 
-        private void ClearTemplatesDirCommand_Executed()
+        private Task ClearTemplatesAsync()
         {
             Settings.Default.ExportTemplatesDir = null;
+
+            CopyOriginalTemplatesCommand?.RaiseCanExecuteChanged();
+            ClearTemplatesDirCommand?.RaiseCanExecuteChanged();
+
+            return Task.CompletedTask;
         }
     }
 }

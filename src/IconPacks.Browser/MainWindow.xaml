@@ -195,7 +195,7 @@
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
             <ToggleButton x:Name="ToggleButtonOpenSettings" Content="{iconPacks:Modern Kind=Settings}" />
-            <Button Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
+            <Button Command="{Binding OpenUrlCommand, Mode=OneWay}"
                     CommandParameter="https://github.com/MahApps/MahApps.Metro.IconPacks"
                     Content="{iconPacks:Modern SocialGithubOctocat,
                                                Width=22,
@@ -358,7 +358,7 @@
                         <Button Style="{StaticResource LinkButtonStyle}"
                                 Margin="0 0 4 0"
                                 VerticalAlignment="Center"
-                                Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
+                                Command="{Binding OpenUrlCommand, Mode=OneWay}"
                                 CommandParameter="{Binding SelectedIcon.MetaData.ProjectUrl, Mode=OneWay}">
                             <Button.ContentTemplate>
                                 <DataTemplate>
@@ -390,7 +390,7 @@
                         <Button Style="{StaticResource LinkButtonStyle}"
                                 Margin="0 0 4 0"
                                 VerticalAlignment="Center"
-                                Command="{x:Static viewModels:MainViewModel.OpenUrlCommand}"
+                                Command="{Binding OpenUrlCommand, Mode=OneWay}"
                                 CommandParameter="{Binding SelectedIcon.MetaData.LicenseUrl, Mode=OneWay}">
                             <Button.ContentTemplate>
                                 <DataTemplate>

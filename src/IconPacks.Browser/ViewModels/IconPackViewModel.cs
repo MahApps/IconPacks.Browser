@@ -117,10 +117,10 @@ namespace IconPacks.Browser.ViewModels
 
                 foreach (var filterSubString in filterSubStrings)
                 {
-                    var filterOrSubStrings = filterSubString.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                    var filterOrSubStrings = filterSubString.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-                    var isInName = filterOrSubStrings.Any(x => iconViewModel.Name.IndexOf(x.Trim(), StringComparison.CurrentCultureIgnoreCase) >= 0);
-                    var isInDescription = filterOrSubStrings.Any(x => (iconViewModel.Description?.IndexOf(x.Trim(), StringComparison.CurrentCultureIgnoreCase) ?? -1) >= 0);
+                    var isInName = filterOrSubStrings.Exists(x => iconViewModel.Name.IndexOf(x.Trim(), StringComparison.CurrentCultureIgnoreCase) >= 0);
+                    var isInDescription = filterOrSubStrings.Exists(x => (iconViewModel.Description?.IndexOf(x.Trim(), StringComparison.CurrentCultureIgnoreCase) ?? -1) >= 0);
 
                     if (!(isInName || isInDescription)) return false;
                 }
@@ -491,14 +491,14 @@ namespace IconPacks.Browser.ViewModels
             MetaData = metaData;
         }
 
-        public string CopyToClipboardText => ExportHelper.FillTemplate(ExportHelper.ClipboardWpf, new ExportParameters(this)); // $"<iconPacks:{IconPackType.Name} Kind=\"{Name}\" />";
-        public string CopyToClipboardWpfGeometry => ExportHelper.FillTemplate(ExportHelper.ClipboardWpfGeometry, new ExportParameters(this)); // $"<iconPacks:{IconPackType.Name} Kind=\"{Name}\" />";
+        public string CopyToClipboardText => ExportHelper.FillTemplate(ExportHelper.ClipboardWpf, new ExportParameters(this));
+        public string CopyToClipboardWpfGeometry => ExportHelper.FillTemplate(ExportHelper.ClipboardWpfGeometry, new ExportParameters(this));
 
-        public string CopyToClipboardAsContentText => ExportHelper.FillTemplate(ExportHelper.ClipboardContent, new ExportParameters(this)); // $"{{iconPacks:{IconPackType.Name.Replace("PackIcon", "")} Kind={Name}}}";
+        public string CopyToClipboardAsContentText => ExportHelper.FillTemplate(ExportHelper.ClipboardContent, new ExportParameters(this));
 
-        public string CopyToClipboardAsPathIconText => ExportHelper.FillTemplate(ExportHelper.ClipboardUwp, new ExportParameters(this)); // $"<iconPacks:{IconPackType.Name.Replace("PackIcon", "PathIcon")} Kind=\"{Name}\" />";
+        public string CopyToClipboardAsPathIconText => ExportHelper.FillTemplate(ExportHelper.ClipboardUwp, new ExportParameters(this));
 
-        public string CopyToClipboardAsGeometryText => ExportHelper.FillTemplate(ExportHelper.ClipboardData, new ExportParameters(this)); // GetPackIconControlBase().Data;
+        public string CopyToClipboardAsGeometryText => ExportHelper.FillTemplate(ExportHelper.ClipboardData, new ExportParameters(this));
 
         public string Name { get; set; }
 

@@ -214,7 +214,7 @@ namespace IconPacks.Browser.ViewModels
             {
                 CanExecuteDelegate = x => (x is IIconViewModel),
                 ExecuteDelegate = x => DoCopyTextToClipboard(((IIconViewModel)x).CopyToClipboardAsGeometryText)
-            };  
+            };
 
         public SettingsViewModel Settings { get; }
     }

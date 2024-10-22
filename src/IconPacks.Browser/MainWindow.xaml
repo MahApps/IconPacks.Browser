@@ -283,6 +283,7 @@
                          FocusVisualStyle="{x:Null}"
                          ItemTemplate="{StaticResource IconPacksBrowser.DataTemplates.ListBox.IconViewModel}"
                          ItemsSource="{Binding ElementName=NavigationListBox, Path=SelectedItem.Icons, Mode=OneWay}"
+                         PreviewKeyDown="OnIconListPreviewKeyDown"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          SelectedItem="{Binding ElementName=NavigationListBox, Path=SelectedItem.SelectedIcon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False, NotifyOnValidationError=False}"

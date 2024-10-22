@@ -26,23 +26,21 @@
         </PackageReference>
         <PackageReference Include="MahApps.Metro.IconPacks" Version="5.0.0" />
         <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+        <PackageReference Include="MahApps.Metro" Version="3.0.0-alpha0492" />
         <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="8.0.0" />
         <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
         <PackageReference Include="VirtualizingWrapPanel" Version="2.0.11" />
-    </ItemGroup>
-    <ItemGroup Condition="$(DefineConstants.Contains(NETCOREAPP)) == true">
-        <PackageReference Include="MaterialDesignThemes" Version="4.6.1" />
-        <PackageReference Include="MaterialDesignColors" Version="2.0.9" />
-    </ItemGroup>
-    <ItemGroup Condition="$(DefineConstants.Contains(NETCOREAPP)) == false">
-        <PackageReference Include="MaterialDesignThemes" Version="3.0.1" />
-        <PackageReference Include="MaterialDesignColors" Version="1.2.7" />
+
+        <PackageReference Include="MaterialDesignThemes" Version="3.0.1" Condition=" $(DefineConstants.Contains(NETCOREAPP)) == false " />
+        <PackageReference Include="MaterialDesignColors" Version="1.2.7" Condition=" $(DefineConstants.Contains(NETCOREAPP)) == false " />
+        <PackageReference Include="MaterialDesignThemes" Version="4.9.0" Condition=" $(DefineConstants.Contains(NETCOREAPP)) == true " />
+        <PackageReference Include="MaterialDesignColors" Version="2.1.4" Condition=" $(DefineConstants.Contains(NETCOREAPP)) == true " />
     </ItemGroup>
 
     <ItemGroup>
         <_SettingsFiles Remove="Properties\Settings.settings" />
         <None Update="ExportTemplates\Clipboard.WPF.Geometry.xml">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="ExportTemplates\Clipboard.Content.xml">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

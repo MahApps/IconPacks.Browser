@@ -19,7 +19,7 @@
                  d:DesignWidth="600"
                  mah:DialogParticipation.Register="{Binding}"
                  BorderBrush="{DynamicResource MahApps.Brushes.Accent}"
-                 BorderThickness="1"
+                 GlowColor="{DynamicResource MahApps.Colors.Accent}"
                  ResizeMode="CanResizeWithGrip"
                  TitleCharacterCasing="Normal"
                  WindowStartupLocation="CenterScreen"

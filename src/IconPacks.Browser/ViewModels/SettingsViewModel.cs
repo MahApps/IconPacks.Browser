@@ -19,7 +19,7 @@ namespace IconPacks.Browser.ViewModels
     {
         static SettingsViewModel()
         {
-            AccentColorNamesDictionary = new Dictionary<Color?, string>();
+            AccentColorNamesDictionary = new Dictionary<Color, string>();
 
             ResourceManager rm = new ResourceManager(typeof(AccentColorNames));
             ResourceSet resourceSet = rm.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
@@ -32,7 +32,7 @@ namespace IconPacks.Browser.ViewModels
                     {
                         if (ColorConverter.ConvertFromString(entry.Key.ToString()) is Color color)
                         {
-                            AccentColorNamesDictionary.Add(color, entry.Value.ToString());
+                            AccentColorNamesDictionary.Add(color, entry.Value?.ToString());
                         }
                     }
                     catch (Exception)
@@ -42,7 +42,7 @@ namespace IconPacks.Browser.ViewModels
                 }
             }
 
-            AccentColors = new List<Color?>(AccentColorNamesDictionary.Keys);
+            AccentColors = AccentColorNamesDictionary.Keys.ToList();
         }
 
         public SettingsViewModel()
@@ -55,9 +55,9 @@ namespace IconPacks.Browser.ViewModels
             ClearTemplatesDirCommand.RaiseCanExecuteChanged();
         }
 
-        public static Dictionary<Color?, string> AccentColorNamesDictionary { get; }
+        public static Dictionary<Color, string> AccentColorNamesDictionary { get; }
 
-        public static List<Color?> AccentColors { get; }
+        public static List<Color> AccentColors { get; }
 
         public static void SetTheme()
         {

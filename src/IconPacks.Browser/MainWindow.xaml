@@ -1,4 +1,4 @@
-﻿<mah:MetroWindow x:Class="IconPacks.Browser.MainWindow"
+<mah:MetroWindow x:Class="IconPacks.Browser.MainWindow"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:controls="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
@@ -285,7 +285,7 @@
                          ItemsSource="{Binding ElementName=NavigationListBox, Path=SelectedItem.Icons, Mode=OneWay}"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
-                         SelectedValue="{Binding ElementName=NavigationListBox, Path=SelectedItem.SelectedIcon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False, NotifyOnValidationError=False}"
+                         SelectedItem="{Binding ElementName=NavigationListBox, Path=SelectedItem.SelectedIcon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False, NotifyOnValidationError=False}"
                          Validation.ErrorTemplate="{x:Null}"
                          VirtualizingPanel.CacheLengthUnit="Item"
                          VirtualizingPanel.ScrollUnit="Item"
@@ -295,8 +295,9 @@
                             <controls:VirtualizingWrapPanel IsItemsHost="True"
                                                             ItemSize="128,128"
                                                             MouseWheelDelta="1"
-                                                            Orientation="Vertical"
+                                                            Orientation="Horizontal"
                                                             ScrollLineDelta="1"
+                                                            MouseWheelDeltaItem="1"
                                                             SpacingMode="BetweenItemsOnly"
                                                             StretchItems="False" />
                         </ItemsPanelTemplate>

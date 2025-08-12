@@ -97,12 +97,10 @@
                             <ctrls:CopyToClipboardTextBox TextToCopy="{Binding SelectedIcon.Description}" />
                         </mah:MetroHeader>
                         <mah:MetroHeader Header="Homepage">
-                            <TextBox Style="{DynamicResource IconPacksBrowser.Styles.TextBox.Hyperlink}"
-                                     Text="{Binding SelectedIcon.MetaData.ProjectUrl, Mode=OneWay}" />
+                            <TextBox Style="{DynamicResource IconPacksBrowser.Styles.TextBox.Hyperlink}" Text="{Binding SelectedIcon.MetaData.ProjectUrl, Mode=OneWay}" />
                         </mah:MetroHeader>
                         <mah:MetroHeader Header="License URL">
-                            <TextBox Style="{DynamicResource IconPacksBrowser.Styles.TextBox.Hyperlink}"
-                                     Text="{Binding SelectedIcon.MetaData.LicenseUrl, Mode=OneWay}" />
+                            <TextBox Style="{DynamicResource IconPacksBrowser.Styles.TextBox.Hyperlink}" Text="{Binding SelectedIcon.MetaData.LicenseUrl, Mode=OneWay}" />
                         </mah:MetroHeader>
                     </StackPanel>
                 </Expander>

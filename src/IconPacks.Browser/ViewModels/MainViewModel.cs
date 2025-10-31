@@ -26,6 +26,7 @@ namespace IconPacks.Browser.ViewModels
                 new[]
                 {
                     (typeof(PackIconBootstrapIconsKind), typeof(PackIconBootstrapIcons)),
+                    (typeof(PackIconBoxIcons2Kind), typeof(PackIconBoxIcons2)),
                     (typeof(PackIconBoxIconsKind), typeof(PackIconBoxIcons)),
                     (typeof(PackIconCircumIconsKind), typeof(PackIconCircumIcons)),
                     (typeof(PackIconCodiconsKind), typeof(PackIconCodicons)),

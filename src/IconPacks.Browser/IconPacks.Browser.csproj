@@ -19,8 +19,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="JetBrains.Annotations" Version="2025.2.0" />
-        <PackageReference Include="MahApps.Metro.IconPacks" Version="6.1.0" />
+        <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
+        <PackageReference Include="MahApps.Metro.IconPacks" Version="6.2.0" />
         <PackageReference Include="WpfAnalyzers" Version="4.1.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -28,7 +28,7 @@
         <PackageReference Include="MahApps.Metro" Version="3.0.0-rc0516" />
         <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="8.0.0" />
         <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
-        <PackageReference Include="VirtualizingWrapPanel" Version="2.3.1" />
+        <PackageReference Include="VirtualizingWrapPanel" Version="2.3.2" />
 
         <PackageReference Include="MaterialDesignThemes" Version="3.0.1" Condition=" $(DefineConstants.Contains(NETCOREAPP)) == false " />
         <PackageReference Include="MaterialDesignColors" Version="1.2.7" Condition=" $(DefineConstants.Contains(NETCOREAPP)) == false " />

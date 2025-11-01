@@ -21,7 +21,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 [GitHubActions(
     "ci",
     GitHubActionsImage.WindowsLatest,
-    AutoGenerate = true,
+    AutoGenerate = false,
     FetchDepth = 0,
     OnPushBranches = new[] { "main" },
     OnPullRequestBranches = new[] { "main" },
